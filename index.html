@@ -1,0 +1,395 @@
+import { useState } from "react";
+
+const fmt  = (n) => "$" + Math.round(n).toLocaleString();
+const pct  = (n) => n + "%";
+
+// Graduated margin tier
+const getMarginTier = (m) => {
+  if (m < 30) return { rate:0,    label:"No Pool",           color:"#dc2626", bg:"#fef2f2", border:"#fecaca", msg:"Below 30% — firm absorbing delivery cost. No pool." };
+  if (m < 35) return { rate:0.05, label:"Minimal Pool (5%)", color:"#d97706", bg:"#fffbeb", border:"#fde68a", msg:"30–34% margin — below floor. Minimal reward." };
+  if (m < 40) return { rate:0.08, label:"Partial Pool (8%)", color:"#2563eb", bg:"#eff6ff", border:"#bfdbfe", msg:"35–39% margin — below target. Partial reward." };
+  return           { rate:0.15,   label:"Full Pool (15%)",   color:"#059669", bg:"#f0fdf4", border:"#bbf7d0", msg:"40%+ margin — full pool active." };
+};
+
+// Tiered pool cap calculation
+// Net New / Inbound: full graduated rate, tiered
+// Known Continuation Phase 2: 10% base rate, tiered
+// Expansion: 5% of incremental value (flat, no tier needed at that rate)
+const calcTieredPool = (profit, baseRate) => {
+  if (baseRate === 0) return { pool: 0, breakdown: [] };
+  const t1 = Math.min(profit, 150000);
+  const t2 = Math.min(Math.max(profit - 150000, 0), 150000);
+  const t3 = Math.max(profit - 300000, 0);
+  const r1 = baseRate;
+  const r2 = Math.min(baseRate, 0.08);
+  const r3 = Math.min(baseRate, 0.05);
+  const a1 = t1 * r1;
+  const a2 = t2 * r2;
+  const a3 = t3 * r3;
+  const breakdown = [
+    { label:`First ${fmt(t1)} of profit`, rate: r1*100, amount: a1 },
+    ...(t2 > 0 ? [{ label:`Next ${fmt(t2)} of profit`, rate: r2*100, amount: a2 }] : []),
+    ...(t3 > 0 ? [{ label:`Above $300K`, rate: r3*100, amount: a3 }] : []),
+  ];
+  return { pool: a1 + a2 + a3, breakdown };
+};
+
+const MARGIN_TIERS = [
+  { range:"Below 30%", rate:0,    signal:"No pool — firm absorbing delivery cost" },
+  { range:"30–34%",    rate:0.05, signal:"Minimal reward" },
+  { range:"35–39%",    rate:0.08, signal:"Partial reward" },
+  { range:"40%+",      rate:0.15, signal:"Full pool — standard plan" },
+];
+
+const ROLES = [
+  { key:"source",  label:"Relationship Source",        pct:30, desc:"Originated or owned the client relationship" },
+  { key:"lead",    label:"Proposal / Conversion Lead", pct:40, desc:"Ran the proposal process, closed the deal" },
+  { key:"contrib", label:"Active Contributors",        pct:30, desc:"Calls, writing, research (min 3 hrs)" },
+];
+
+const CLASSIFICATIONS = [
+  { key:"netnew",   label:"Net New",              desc:"New client, no prior engagement" },
+  { key:"inbound",  label:"Inbound / Firm Source", desc:"Via website/marketing, no clear individual owner" },
+  { key:"cont",     label:"Known Continuation",    desc:"Phase 2 — anticipated follow-on from Phase 1" },
+  { key:"expansion",label:"Expansion / Renewal",   desc:"Existing client, not anticipated during prior phase" },
+];
+
+const Toggle = ({ active, onToggle, activeColor, activeBg, activeBorder, inactiveBg, inactiveBorder, inactiveTextColor, title, sub }) => (
+  <div onClick={onToggle} style={{ display:"flex", alignItems:"center", gap:10, background:active?activeBg:inactiveBg, border:`1px solid ${active?activeBorder:inactiveBorder}`, borderRadius:8, padding:"10px 14px", cursor:"pointer" }}>
+    <div style={{ width:18, height:18, borderRadius:4, border:`2px solid ${active?activeColor:"#94a3b8"}`, background:active?activeColor:"white", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+      {active && <span style={{ color:"white", fontSize:11, fontWeight:800 }}>✓</span>}
+    </div>
+    <div>
+      <div style={{ fontSize:12, fontWeight:700, color:active?activeColor:(inactiveTextColor||"#475569") }}>{title}</div>
+      {sub && <div style={{ fontSize:11, color:"#64748b" }}>{sub}</div>}
+    </div>
+  </div>
+);
+
+export default function App() {
+  const [contractValue, setContractValue] = useState(100000);
+  const [marginPct, setMarginPct]         = useState(45);
+  const [classification, setClassification] = useState("netnew");
+  const [priorValue, setPriorValue]       = useState(0);
+  const [engagementMonths, setEngMonths]  = useState(6);
+  const [tab, setTab]                     = useState("buckets");
+
+  const profit      = contractValue * (marginPct / 100);
+  const marginTier  = getMarginTier(marginPct);
+  const noPool      = marginTier.rate === 0;
+  const monthlyBill = contractValue / engagementMonths;
+  const midpointMonth = Math.round(engagementMonths / 2);
+
+  // Pool calculation based on classification
+  const isExpansion   = classification === "expansion";
+  const isCont        = classification === "cont";
+  const baseRate      = noPool ? 0 : isCont ? 0.10 : marginTier.rate;
+  const expansionBase = isExpansion && priorValue > 0 ? Math.max(0, contractValue - priorValue) : 0;
+  const { pool: salesPool, breakdown: poolBreakdown } = isExpansion
+    ? { pool: expansionBase * 0.05, breakdown: [{ label:"5% of incremental value", rate:5, amount: expansionBase * 0.05 }] }
+    : calcTieredPool(profit, baseRate);
+
+  const opsCost        = profit - salesPool;
+  const sourceSlice    = salesPool * 0.30;
+  const leadContrib    = salesPool * 0.70;
+  const midpointPayout = leadContrib * 0.50;
+  const finalPayout    = leadContrib * 0.50;
+
+  const tabs = [
+    ["buckets","Profit Buckets"],
+    ["pool","Incentive Pool"],
+    ["payout","Payout Schedule"],
+  ];
+
+  const Card = ({ label, val, sub, color }) => (
+    <div style={{ background:"white", border:"1px solid #e2e8f0", borderRadius:10, padding:"14px 16px" }}>
+      <div style={{ fontSize:11, fontWeight:600, color:"#64748b", textTransform:"uppercase", letterSpacing:"0.05em" }}>{label}</div>
+      <div style={{ fontSize:22, fontWeight:800, color:color||"#0f172a", margin:"4px 0 2px" }}>{val}</div>
+      <div style={{ fontSize:11, color:"#94a3b8" }}>{sub}</div>
+    </div>
+  );
+
+  return (
+    <div style={{ fontFamily:"'Inter',system-ui,sans-serif", maxWidth:720, margin:"0 auto", padding:"24px 20px", color:"#1e293b" }}>
+
+      {/* Header */}
+      <div style={{ marginBottom:24 }}>
+        <div style={{ fontSize:11, fontWeight:700, letterSpacing:"0.1em", textTransform:"uppercase", color:"#64748b", marginBottom:4 }}>Verge Talent Partners</div>
+        <h1 style={{ fontSize:22, fontWeight:700, margin:0, color:"#0f172a" }}>Sales Incentive Calculator</h1>
+      </div>
+
+      {/* Inputs */}
+      <div style={{ background:"#f8fafc", border:"1px solid #e2e8f0", borderRadius:12, padding:20, marginBottom:20 }}>
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 }}>
+          <div>
+            <label style={{ fontSize:12, fontWeight:600, color:"#475569", display:"block", marginBottom:6 }}>Contract Value</label>
+            <div style={{ position:"relative" }}>
+              <span style={{ position:"absolute", left:10, top:"50%", transform:"translateY(-50%)", color:"#64748b", fontWeight:600 }}>$</span>
+              <input type="number" value={contractValue} onChange={e => setContractValue(Number(e.target.value))}
+                style={{ width:"100%", padding:"8px 8px 8px 24px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:15, fontWeight:600, boxSizing:"border-box" }} />
+            </div>
+          </div>
+          <div>
+            <label style={{ fontSize:12, fontWeight:600, color:"#475569", display:"block", marginBottom:6 }}>
+              Contribution Margin: <span style={{ color:marginTier.color, fontWeight:800 }}>{marginPct}%</span>
+            </label>
+            <input type="range" min={20} max={70} value={marginPct} onChange={e => setMarginPct(Number(e.target.value))}
+              style={{ width:"100%", accentColor:marginTier.color, cursor:"pointer" }} />
+            <div style={{ display:"flex", justifyContent:"space-between", fontSize:11, color:"#94a3b8" }}>
+              <span>20%</span><span style={{ color:"#dc2626", fontWeight:600 }}>30% min</span><span style={{ color:"#d97706", fontWeight:600 }}>40% target</span><span>70%</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Margin tier indicator */}
+        <div style={{ marginTop:14, background:marginTier.bg, border:`1px solid ${marginTier.border}`, borderRadius:8, padding:"10px 14px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+          <span style={{ fontSize:12, color:marginTier.color, fontWeight:600 }}>{marginTier.msg}</span>
+          <span style={{ fontSize:13, fontWeight:800, color:marginTier.color, whiteSpace:"nowrap", marginLeft:12 }}>{marginTier.label}</span>
+        </div>
+
+        {/* Engagement classification */}
+        <div style={{ marginTop:16 }}>
+          <label style={{ fontSize:12, fontWeight:600, color:"#475569", display:"block", marginBottom:8 }}>Engagement Classification</label>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
+            {CLASSIFICATIONS.map(c => (
+              <div key={c.key} onClick={() => setClassification(c.key)} style={{ padding:"10px 12px", borderRadius:8, border:`1.5px solid ${classification===c.key?"#2563eb":"#e2e8f0"}`, background:classification===c.key?"#eff6ff":"white", cursor:"pointer" }}>
+                <div style={{ fontSize:12, fontWeight:700, color:classification===c.key?"#1d4ed8":"#475569" }}>{c.label}</div>
+                <div style={{ fontSize:11, color:"#94a3b8", marginTop:2 }}>{c.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Expansion prior value */}
+        {isExpansion && (
+          <div style={{ marginTop:14 }}>
+            <label style={{ fontSize:12, fontWeight:600, color:"#475569", display:"block", marginBottom:6 }}>Prior Contract Value</label>
+            <div style={{ position:"relative", maxWidth:260 }}>
+              <span style={{ position:"absolute", left:10, top:"50%", transform:"translateY(-50%)", color:"#64748b", fontWeight:600 }}>$</span>
+              <input type="number" value={priorValue} onChange={e => setPriorValue(Number(e.target.value))}
+                style={{ width:"100%", padding:"8px 8px 8px 24px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:15, fontWeight:600, boxSizing:"border-box" }} />
+            </div>
+            <div style={{ fontSize:11, color:"#94a3b8", marginTop:6 }}>Expansion bonus = 5% of incremental value ({fmt(expansionBase)})</div>
+          </div>
+        )}
+
+        {/* Known continuation note */}
+        {isCont && !noPool && (
+          <div style={{ marginTop:14, background:"#fffbeb", border:"1px solid #fde68a", borderRadius:8, padding:"10px 14px", fontSize:12, color:"#92400e" }}>
+            <strong>Known Continuation:</strong> Phase 2 pool calculated at 10% of profit (vs. 15% for Net New), reflecting that sourcing was rewarded in Phase 1. Tiered cap still applies.
+          </div>
+        )}
+
+        {/* Engagement length */}
+        <div style={{ marginTop:16 }}>
+          <label style={{ fontSize:12, fontWeight:600, color:"#475569", display:"block", marginBottom:8 }}>Engagement Length</label>
+          <div style={{ display:"flex", gap:8 }}>
+            {[3,4,6,9,12].map(m => (
+              <button key={m} onClick={() => setEngMonths(m)} style={{ padding:"7px 16px", borderRadius:8, border:`1.5px solid ${engagementMonths===m?"#2563eb":"#cbd5e1"}`, background:engagementMonths===m?"#eff6ff":"white", color:engagementMonths===m?"#1d4ed8":"#475569", fontWeight:700, fontSize:13, cursor:"pointer" }}>{m}mo</button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Summary cards */}
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:12, marginBottom:20 }}>
+        <Card label="Contract Value" val={fmt(contractValue)} sub={`${fmt(monthlyBill)}/mo · ${engagementMonths} months`} />
+        <Card label="Total Profit"   val={fmt(profit)}        sub={`${marginPct}% margin`} />
+        <Card label="Sales Pool"     val={fmt(salesPool)}     sub={noPool ? "No pool at this margin" : `${CLASSIFICATIONS.find(c=>c.key===classification).label}`} color={noPool?"#dc2626":marginTier.color} />
+      </div>
+
+      {/* Tabs */}
+      <div style={{ display:"flex", gap:4, marginBottom:16, background:"#f1f5f9", borderRadius:10, padding:4 }}>
+        {tabs.map(([key,label]) => (
+          <button key={key} onClick={() => setTab(key)} style={{ flex:1, padding:"8px 10px", borderRadius:8, border:"none", cursor:"pointer", fontSize:12, fontWeight:600, background:tab===key?"white":"transparent", color:tab===key?"#0f172a":"#64748b", boxShadow:tab===key?"0 1px 3px rgba(0,0,0,0.1)":"none" }}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {/* ── Buckets tab ── */}
+      {tab === "buckets" && (
+        <div>
+          <div style={{ background:"white", border:"1px solid #e2e8f0", borderRadius:12, overflow:"hidden", marginBottom:14 }}>
+            <div style={{ padding:"12px 18px", borderBottom:"1px solid #f1f5f9", display:"grid", gridTemplateColumns:"1fr 80px 100px", gap:8 }}>
+              {["Allocation","Rate","Amount"].map((h,i) => <span key={h} style={{ fontSize:11, fontWeight:700, color:"#94a3b8", textTransform:"uppercase", textAlign:i>0?"right":"left" }}>{h}</span>)}
+            </div>
+
+            {/* Sales pool row — expands to show tier breakdown */}
+            <div style={{ background:"#fff7ed" }}>
+              <div style={{ padding:"14px 18px", display:"grid", gridTemplateColumns:"1fr 80px 100px", gap:8, alignItems:"center" }}>
+                <div>
+                  <div style={{ display:"flex", alignItems:"center", gap:8, flexWrap:"wrap" }}>
+                    <div style={{ width:10, height:10, borderRadius:"50%", background:"#dc2626", flexShrink:0 }} />
+                    <span style={{ fontSize:13, fontWeight:600 }}>Sales Incentive Pool ★</span>
+                    <span style={{ fontSize:10, background:marginTier.bg, color:marginTier.color, padding:"1px 6px", borderRadius:4, fontWeight:600 }}>{CLASSIFICATIONS.find(c=>c.key===classification).label}</span>
+                  </div>
+                  <div style={{ fontSize:11, color:"#94a3b8", marginLeft:18, marginTop:1 }}>Tiered by profit size — see breakdown below</div>
+                </div>
+                <div style={{ textAlign:"right", fontSize:13, fontWeight:700, color:marginTier.color }}>Tiered</div>
+                <div style={{ textAlign:"right", fontSize:14, fontWeight:700, color:"#dc2626" }}>{fmt(salesPool)}</div>
+              </div>
+              {/* Tier breakdown */}
+              {poolBreakdown.map((row, i) => (
+                <div key={i} style={{ padding:"6px 18px 6px 36px", display:"grid", gridTemplateColumns:"1fr 80px 100px", gap:8, alignItems:"center", borderTop:"1px solid #fed7aa" }}>
+                  <span style={{ fontSize:11, color:"#92400e" }}>{row.label}</span>
+                  <span style={{ textAlign:"right", fontSize:11, color:"#92400e" }}>{row.rate}%</span>
+                  <span style={{ textAlign:"right", fontSize:12, fontWeight:600, color:"#c2410c" }}>{fmt(row.amount)}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Operating costs row */}
+            <div style={{ padding:"14px 18px", display:"grid", gridTemplateColumns:"1fr 80px 100px", gap:8, alignItems:"center" }}>
+              <div>
+                <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+                  <div style={{ width:10, height:10, borderRadius:"50%", background:"#2563eb", flexShrink:0 }} />
+                  <span style={{ fontSize:13, fontWeight:600 }}>Operating Costs</span>
+                </div>
+                <div style={{ fontSize:11, color:"#94a3b8", marginLeft:18, marginTop:1 }}>Payroll, contractors, taxes, tooling, reserves — managed at firm level</div>
+              </div>
+              <div style={{ textAlign:"right", fontSize:13, fontWeight:700, color:"#475569" }}>—</div>
+              <div style={{ textAlign:"right", fontSize:14, fontWeight:700 }}>{fmt(opsCost)}</div>
+            </div>
+
+            {/* Total */}
+            <div style={{ padding:"12px 18px", background:"#f8fafc", borderTop:"1px solid #f1f5f9", display:"grid", gridTemplateColumns:"1fr 80px 100px", gap:8 }}>
+              <span style={{ fontSize:13, fontWeight:700 }}>Total Profit</span>
+              <span style={{ textAlign:"right", fontSize:13, fontWeight:700 }}>100%</span>
+              <span style={{ textAlign:"right", fontSize:14, fontWeight:800 }}>{fmt(profit)}</span>
+            </div>
+          </div>
+
+          {/* Margin tier reference */}
+          <div style={{ background:"white", border:"1px solid #e2e8f0", borderRadius:12, overflow:"hidden" }}>
+            <div style={{ padding:"12px 18px", borderBottom:"1px solid #f1f5f9" }}>
+              <span style={{ fontSize:12, fontWeight:700, color:"#475569", textTransform:"uppercase", letterSpacing:"0.05em" }}>Margin Tiers</span>
+            </div>
+            {MARGIN_TIERS.map((t,i) => {
+              const active = (t.rate===0&&marginPct<30)||(t.rate===0.05&&marginPct>=30&&marginPct<35)||(t.rate===0.08&&marginPct>=35&&marginPct<40)||(t.rate===0.15&&marginPct>=40);
+              return (
+                <div key={i} style={{ padding:"10px 18px", borderBottom:i<MARGIN_TIERS.length-1?"1px solid #f8fafc":"none", display:"grid", gridTemplateColumns:"100px 60px 1fr", gap:12, alignItems:"center", background:active?marginTier.bg:"white" }}>
+                  <span style={{ fontSize:13, fontWeight:active?700:500, color:active?marginTier.color:"#475569" }}>{t.range}</span>
+                  <span style={{ fontSize:13, fontWeight:700, color:active?marginTier.color:"#94a3b8", textAlign:"right" }}>{t.rate*100}%</span>
+                  <span style={{ fontSize:12, color:active?marginTier.color:"#94a3b8" }}>{t.signal}{active?" ◀ current":""}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* ── Pool tab ── */}
+      {tab === "pool" && (
+        <div>
+          {noPool && (
+            <div style={{ background:"#fef2f2", border:"1px solid #fecaca", borderRadius:10, padding:"14px 18px", marginBottom:14, display:"flex", gap:10 }}>
+              <span style={{ fontSize:18 }}>⚠️</span>
+              <div>
+                <div style={{ fontWeight:700, color:"#dc2626", fontSize:13 }}>No Pool at This Margin</div>
+                <div style={{ fontSize:12, color:"#7f1d1d", marginTop:2 }}>Below 30% the firm is absorbing a cost to deliver. Adjust the margin slider to see pool splits.</div>
+              </div>
+            </div>
+          )}
+          <div style={{ background:"white", border:"1px solid #e2e8f0", borderRadius:12, overflow:"hidden", marginBottom:14 }}>
+            <div style={{ padding:"12px 18px", borderBottom:"1px solid #f1f5f9", display:"grid", gridTemplateColumns:"1fr 70px 100px", gap:8 }}>
+              {["Role","%","Amount"].map((h,i) => <span key={h} style={{ fontSize:11, fontWeight:700, color:"#94a3b8", textTransform:"uppercase", textAlign:i>0?"right":"left" }}>{h}</span>)}
+            </div>
+            {ROLES.map((r,i) => (
+              <div key={r.key} style={{ padding:"12px 18px", borderBottom:i<ROLES.length-1?"1px solid #f8fafc":"none", display:"grid", gridTemplateColumns:"1fr 70px 100px", gap:8, alignItems:"center" }}>
+                <div>
+                  <div style={{ fontSize:13, fontWeight:600 }}>{r.label}</div>
+                  <div style={{ fontSize:11, color:"#94a3b8" }}>{r.desc}</div>
+                </div>
+                <div style={{ textAlign:"right", fontSize:13, fontWeight:600, color:"#475569" }}>{r.pct}%</div>
+                <div style={{ textAlign:"right", fontSize:14, fontWeight:700 }}>{fmt(salesPool*(r.pct/100))}</div>
+              </div>
+            ))}
+            <div style={{ padding:"12px 18px", background:"#f8fafc", display:"grid", gridTemplateColumns:"1fr 70px 100px", gap:8 }}>
+              <span style={{ fontSize:13, fontWeight:700 }}>Total Pool</span>
+              <span style={{ textAlign:"right", fontSize:13, fontWeight:700 }}>100%</span>
+              <span style={{ textAlign:"right", fontSize:14, fontWeight:800, color:marginTier.color }}>{fmt(salesPool)}</span>
+            </div>
+          </div>
+          <div style={{ background:"#fffbeb", border:"1px solid #fde68a", borderRadius:10, padding:"14px 16px" }}>
+            <div style={{ fontSize:12, fontWeight:700, color:"#92400e", marginBottom:8 }}>Common Scenarios</div>
+            {[
+              { label:"Network person sources + leads",    note:`One person earns ${fmt(salesPool*0.70)} (70% of pool)` },
+              { label:"Separate source and proposal lead", note:`Source: ${fmt(salesPool*0.30)} · Lead: ${fmt(salesPool*0.40)}` },
+              { label:"Lead + active contributors",        note:`Lead: ${fmt(salesPool*0.40)} · Contributors share ${fmt(salesPool*0.30)}` },
+            ].map((s,i) => (
+              <div key={i} style={{ marginBottom:i<2?8:0, padding:"8px 10px", background:"white", borderRadius:8, border:"1px solid #fde68a" }}>
+                <div style={{ fontSize:12, fontWeight:600, color:"#78350f" }}>{s.label}</div>
+                <div style={{ fontSize:12, color:"#92400e", marginTop:2 }}>{s.note}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── Payout tab ── */}
+      {tab === "payout" && (
+        <div>
+          {noPool && (
+            <div style={{ background:"#fef2f2", border:"1px solid #fecaca", borderRadius:10, padding:"12px 16px", marginBottom:14, fontSize:12, color:"#7f1d1d" }}>
+              <strong>No pool at this margin.</strong> Adjust the margin slider above 30% to see payout schedules.
+            </div>
+          )}
+          <div style={{ background:"#eff6ff", border:"1px solid #bfdbfe", borderRadius:10, padding:"12px 16px", marginBottom:14, fontSize:12, color:"#1e40af" }}>
+            <strong>How it works:</strong> The Relationship Source is paid at signing. The Proposal Lead and Active Contributors split their payout 50/50 across midpoint and final invoice collections.
+          </div>
+          <div style={{ background:"white", border:"1px solid #e2e8f0", borderRadius:12, padding:20, marginBottom:14 }}>
+            <div style={{ fontSize:12, fontWeight:700, color:"#475569", marginBottom:16, textTransform:"uppercase", letterSpacing:"0.05em" }}>Payment Timeline</div>
+            <div style={{ position:"relative" }}>
+              <div style={{ position:"absolute", top:18, left:18, right:18, height:2, background:"#e2e8f0" }} />
+              <div style={{ display:"flex", justifyContent:"space-between", position:"relative" }}>
+                {[
+                  { label:"Signing",       sub:`Month 0`,                      amount:sourceSlice,    color:"#7c3aed", detail:"Relationship Source" },
+                  { label:"Midpoint",      sub:`~Month ${midpointMonth}`,      amount:midpointPayout, color:"#2563eb", detail:"50% of Lead + Contributors" },
+                  { label:"Final Invoice", sub:`~Month ${engagementMonths+1}`, amount:finalPayout,    color:"#059669", detail:"50% of Lead + Contributors" },
+                ].map((ev,i) => (
+                  <div key={i} style={{ display:"flex", flexDirection:"column", alignItems:"center", width:"30%" }}>
+                    <div style={{ width:36, height:36, borderRadius:"50%", background:ev.color, display:"flex", alignItems:"center", justifyContent:"center", marginBottom:8 }}>
+                      <span style={{ color:"white", fontSize:13, fontWeight:800 }}>{i+1}</span>
+                    </div>
+                    <div style={{ fontSize:13, fontWeight:700, textAlign:"center" }}>{ev.label}</div>
+                    <div style={{ fontSize:11, color:"#94a3b8", marginBottom:4 }}>{ev.sub}</div>
+                    <div style={{ fontSize:16, fontWeight:800, color:ev.color }}>{fmt(ev.amount)}</div>
+                    <div style={{ fontSize:10, color:"#94a3b8", textAlign:"center", marginTop:2 }}>{ev.detail}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div style={{ background:"white", border:"1px solid #e2e8f0", borderRadius:12, overflow:"hidden", marginBottom:14 }}>
+            <div style={{ padding:"12px 18px", borderBottom:"1px solid #f1f5f9", display:"grid", gridTemplateColumns:"1fr 1fr 100px", gap:8 }}>
+              {["Event","What's Paid","Amount"].map((h,i) => <span key={h} style={{ fontSize:11, fontWeight:700, color:"#94a3b8", textTransform:"uppercase", textAlign:i===2?"right":"left" }}>{h}</span>)}
+            </div>
+            {[
+              { event:`Contract Signed (Month 0)`,                    what:"Relationship Source (30%)",           amount:sourceSlice,    color:"#7c3aed" },
+              { event:`Midpoint Invoice (~Month ${midpointMonth})`,   what:"50% of Lead + Contributor pool",      amount:midpointPayout, color:"#2563eb" },
+              { event:`Final Invoice (~Month ${engagementMonths+1})`, what:"Remaining 50% of Lead + Contributor", amount:finalPayout,    color:"#059669" },
+            ].map((row,i) => (
+              <div key={i} style={{ padding:"12px 18px", borderBottom:i<2?"1px solid #f8fafc":"none", display:"grid", gridTemplateColumns:"1fr 1fr 100px", gap:8, alignItems:"center" }}>
+                <div style={{ fontSize:12, fontWeight:600 }}>{row.event}</div>
+                <div style={{ fontSize:12, color:"#64748b" }}>{row.what}</div>
+                <div style={{ textAlign:"right", fontSize:14, fontWeight:700, color:row.color }}>{fmt(row.amount)}</div>
+              </div>
+            ))}
+            <div style={{ padding:"12px 18px", background:"#f8fafc", display:"grid", gridTemplateColumns:"1fr 1fr 100px", gap:8 }}>
+              <span style={{ fontSize:13, fontWeight:700 }}>Total Pool</span><span />
+              <span style={{ textAlign:"right", fontSize:14, fontWeight:800, color:marginTier.color }}>{fmt(salesPool)}</span>
+            </div>
+          </div>
+          <div style={{ background:"#fef2f2", border:"1px solid #fecaca", borderRadius:10, padding:"12px 16px", fontSize:12, color:"#7f1d1d" }}>
+            <strong>Early cancellation rule:</strong> Payouts already made are retained. No further distributions beyond what's been proportionally earned.
+          </div>
+        </div>
+      )}
+
+      <div style={{ marginTop:28, paddingTop:20, borderTop:"1px solid #f1f5f9", fontSize:11, color:"#94a3b8", textAlign:"center" }}>
+        Verge Talent Partners · Sales Incentive Plan · Internal Use Only
+      </div>
+    </div>
+  );
+}
