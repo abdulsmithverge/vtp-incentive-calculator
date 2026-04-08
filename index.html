@@ -210,8 +210,8 @@ const fmt = n => "$" + Math.round(n).toLocaleString();
 
 const MONTHS = [3,4,6,9,12];
 const ROLES = [
-  {label:"Relationship Source",        pct:15, desc:"Originated or owned the client relationship"},
-  {label:"Proposal / Conversion Lead", pct:55, desc:"Ran the proposal process, closed the deal"},
+  {label:"Relationship Source",        pct:10, desc:"Originated or owned the client relationship"},
+  {label:"Proposal / Conversion Lead", pct:60, desc:"Ran the proposal process, closed the deal"},
   {label:"Active Contributors",        pct:30, desc:"Calls, writing, research (min 3 hrs)"},
 ];
 const MARGIN_TIERS = [
@@ -323,8 +323,8 @@ function update() {
   const opsCost=profit-salesPool;
   const monthlyBill=cv/state.months;
   const midpoint=Math.round(state.months/2);
-  const sourceSlice=salesPool*0.15;
-  const leadContrib=salesPool*0.85;
+  const sourceSlice=salesPool*0.10;
+  const leadContrib=salesPool*0.90;
   const midPayout=leadContrib*0.50;
   const finalPayout=leadContrib*0.50;
 
@@ -423,9 +423,9 @@ function update() {
   </div></div>`;
   poolHtml+=`<div class="scenario-box"><div class="stitle">Common Scenarios</div>
     ${[
-      {label:"Network person sources + leads",    note:`Source: ${fmt(salesPool*.15)} · Lead earns ${fmt(salesPool*.55)} · Contributors share ${fmt(salesPool*.30)}`},
+      {label:"Network person sources + leads",    note:`Source: ${fmt(salesPool*.10)} · Lead earns ${fmt(salesPool*.60)} · Contributors share ${fmt(salesPool*.30)}`},
       {label:"Source and lead are same person",   note:`That person earns ${fmt(salesPool*.70)} (70% of pool)`},
-      {label:"Lead only, no network source",      note:`Lead earns ${fmt(salesPool*.55)} · Contributors share ${fmt(salesPool*.30)}`},
+      {label:"Lead only, no network source",      note:`Lead earns ${fmt(salesPool*.60)} · Contributors share ${fmt(salesPool*.30)}`},
     ].map(s=>`<div class="si"><div class="sl">${s.label}</div><div class="sn">${s.note}</div></div>`).join('')}
   </div>`;
   document.getElementById('panel-pool').innerHTML=poolHtml;
@@ -439,7 +439,7 @@ function update() {
       <div class="tl-line"></div>
       <div class="tl-steps">
         ${[
-          {label:"Signing",      sub:`Month 0`,             amount:sourceSlice, color:"#7c3aed", detail:"Relationship Source (15%)"},
+          {label:"Signing",      sub:`Month 0`,             amount:sourceSlice, color:"#7c3aed", detail:"Relationship Source (10%)"},
           {label:"Midpoint",     sub:`~Month ${midpoint}`,  amount:midPayout,   color:"#2563eb", detail:"50% of Lead + Contributors"},
           {label:"Final Invoice",sub:`~Month ${state.months+1}`,amount:finalPayout,color:"#059669",detail:"50% of Lead + Contributors"},
         ].map((ev,i)=>`<div class="tl-step">
@@ -455,7 +455,7 @@ function update() {
   payHtml+=`<div class="table-wrap">
     <div class="table-head c3c"><span>Event</span><span>What's Paid</span><span class="r">Amount</span></div>
     ${[
-      {event:`Contract Signed (Month 0)`,               what:"Relationship Source (15%)",           amount:sourceSlice, color:"#7c3aed"},
+      {event:`Contract Signed (Month 0)`,               what:"Relationship Source (10%)",           amount:sourceSlice, color:"#7c3aed"},
       {event:`Midpoint Invoice (~Month ${midpoint})`,   what:"50% of Lead + Contributor pool",      amount:midPayout,   color:"#2563eb"},
       {event:`Final Invoice (~Month ${state.months+1})`,what:"Remaining 50% of Lead + Contributor", amount:finalPayout, color:"#059669"},
     ].map((r,i)=>`<div class="tr c3c${i<2?' stripe':''}">
