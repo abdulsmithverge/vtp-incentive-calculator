@@ -9,84 +9,102 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:#f1f5f9;min-height:100vh;padding:32px 16px}
 .wrap{max-width:720px;margin:0 auto;background:white;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.08);padding:28px 28px 36px}
-.label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#64748b;margin-bottom:4px}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#64748b;margin-bottom:4px}
 h1{font-size:24px;font-weight:800;color:#0f172a;margin-bottom:24px}
 .inputs{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:20px;margin-bottom:20px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .field label{display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:6px}
 .input-wrap{position:relative}
-.input-wrap span{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#64748b;font-weight:600}
+.input-wrap .prefix{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#64748b;font-weight:600}
 input[type=number]{width:100%;padding:8px 8px 8px 24px;border:1px solid #cbd5e1;border-radius:8px;font-size:15px;font-weight:600;font-family:inherit}
 input[type=range]{width:100%;cursor:pointer;margin:4px 0}
 .range-labels{display:flex;justify-content:space-between;font-size:11px;color:#94a3b8}
 .tier-badge{margin-top:14px;border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px}
-.tier-badge .msg{font-size:12px;font-weight:600}
-.tier-badge .lbl{font-size:13px;font-weight:800;white-space:nowrap}
 .section-label{font-size:12px;font-weight:600;color:#475569;margin:16px 0 8px}
-.months{display:flex;gap:8px}
-.month-btn{padding:7px 16px;border-radius:8px;border:1.5px solid #cbd5e1;background:white;color:#475569;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
+.months{display:flex;gap:8px;flex-wrap:wrap}
+.month-btn{padding:7px 16px;border-radius:8px;border:1.5px solid #cbd5e1;background:white;color:#475569;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;transition:all .15s}
 .month-btn.active{border-color:#2563eb;background:#eff6ff;color:#1d4ed8}
 .class-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
-.class-card{padding:10px 12px;border-radius:8px;border:1.5px solid #e2e8f0;background:white;cursor:pointer}
+.class-card{padding:10px 12px;border-radius:8px;border:1.5px solid #e2e8f0;background:white;cursor:pointer;transition:all .15s}
 .class-card.active{border-color:#2563eb;background:#eff6ff}
 .class-card .ctitle{font-size:12px;font-weight:700;color:#475569}
 .class-card.active .ctitle{color:#1d4ed8}
 .class-card .cdesc{font-size:11px;color:#94a3b8;margin-top:2px}
-.prior-wrap{margin-top:14px}
-.cont-note{margin-top:14px;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e}
+/* Two-key rule panel */
+.two-key{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin-top:16px}
+.two-key-title{font-size:12px;font-weight:700;color:#475569;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.two-key-title .lock{font-size:14px}
+.key-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.key-toggle{width:20px;height:20px;border-radius:4px;border:2px solid #94a3b8;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.key-toggle.on{background:#16a34a;border-color:#16a34a}
+.key-toggle .check{color:white;font-size:11px;font-weight:800;display:none}
+.key-toggle.on .check{display:block}
+.key-label{font-size:12px;color:#475569;flex:1}
+.rate-row{margin-top:14px;padding-top:14px;border-top:1px solid #e2e8f0}
+.rate-row label{font-size:12px;font-weight:600;color:#475569;display:flex;justify-content:space-between;margin-bottom:6px}
+.rate-row label span{font-weight:800}
+.rate-note{font-size:11px;color:#94a3b8;margin-top:4px}
+.locked-note{margin-top:10px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:8px 12px;font-size:11px;color:#7f1d1d}
+.unlocked-note{margin-top:10px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:8px 12px;font-size:11px;color:#14532d}
+/* Cards */
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
 .card{background:white;border:1px solid #e2e8f0;border-radius:10px;padding:14px 16px}
 .card .clabel{font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.05em}
 .card .cval{font-size:22px;font-weight:800;color:#0f172a;margin:4px 0 2px}
 .card .csub{font-size:11px;color:#94a3b8}
+/* Tabs */
 .tabs{display:flex;gap:4px;margin-bottom:16px;background:#f1f5f9;border-radius:10px;padding:4px}
-.tab-btn{flex:1;padding:8px 10px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:transparent;color:#64748b;font-family:inherit}
+.tab-btn{flex:1;padding:8px 10px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:transparent;color:#64748b;font-family:inherit;transition:all .15s}
 .tab-btn.active{background:white;color:#0f172a;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+/* Tables */
 .table-wrap{background:white;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;margin-bottom:14px}
 .table-head{padding:12px 18px;border-bottom:1px solid #f1f5f9;display:grid;gap:8px}
 .table-head span{font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase}
-.table-row{padding:12px 18px;display:grid;gap:8px;align-items:center}
-.table-row.highlight{background:#fff7ed}
-.table-row.tier-row{padding:6px 18px 6px 36px;border-top:1px solid #fed7aa;background:#fff7ed}
-.table-row.total{background:#f8fafc;border-top:1px solid #f1f5f9}
-.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.tr{padding:12px 18px;display:grid;gap:8px;align-items:center}
+.tr.alt{background:#fff7ed}
+.tr.tier-sub{padding:6px 18px 6px 36px;border-top:1px solid #fed7aa;background:#fff7ed}
+.tr.total{background:#f8fafc;border-top:1px solid #f1f5f9}
+.tr.stripe{border-bottom:1px solid #f8fafc}
+.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;display:inline-block}
 .row-title{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .row-title span{font-size:13px;font-weight:600}
 .row-note{font-size:11px;color:#94a3b8;margin-left:18px;margin-top:1px}
 .badge{font-size:10px;padding:1px 6px;border-radius:4px;font-weight:600}
-.right{text-align:right}
-.col3{grid-template-columns:1fr 80px 100px}
-.col3b{grid-template-columns:1fr 70px 100px}
-.col3c{grid-template-columns:1fr 1fr 100px}
-.scenario-box{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 16px}
+.r{text-align:right}
+.c3a{grid-template-columns:1fr 80px 100px}
+.c3b{grid-template-columns:1fr 70px 100px}
+.c3c{grid-template-columns:1fr 1fr 100px}
+.c3d{grid-template-columns:100px 60px 1fr}
+/* Scenarios */
+.scenario-box{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 16px;margin-bottom:14px}
 .scenario-box .stitle{font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
-.scenario-item{margin-bottom:8px;padding:8px 10px;background:white;border-radius:8px;border:1px solid #fde68a}
-.scenario-item:last-child{margin-bottom:0}
-.scenario-item .sl{font-size:12px;font-weight:600;color:#78350f}
-.scenario-item .sn{font-size:12px;color:#92400e;margin-top:2px}
-.timeline{padding:20px;margin-bottom:14px}
-.timeline-inner{position:relative}
-.timeline-line{position:absolute;top:18px;left:18px;right:18px;height:2px;background:#e2e8f0}
-.timeline-steps{display:flex;justify-content:space-between;position:relative}
-.timeline-step{display:flex;flex-direction:column;align-items:center;width:30%}
-.step-circle{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
-.step-circle span{color:white;font-size:13px;font-weight:800}
-.step-label{font-size:13px;font-weight:700;text-align:center}
-.step-sub{font-size:11px;color:#94a3b8;margin-bottom:4px}
-.step-amount{font-size:16px;font-weight:800}
-.step-detail{font-size:10px;color:#94a3b8;text-align:center;margin-top:2px}
-.cancel-note{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:12px 16px;font-size:12px;color:#7f1d1d}
+.si{margin-bottom:8px;padding:8px 10px;background:white;border-radius:8px;border:1px solid #fde68a}
+.si:last-child{margin-bottom:0}
+.si .sl{font-size:12px;font-weight:600;color:#78350f}
+.si .sn{font-size:12px;color:#92400e;margin-top:2px}
+/* Timeline */
+.tl-wrap{padding:20px;margin-bottom:14px}
+.tl-inner{position:relative}
+.tl-line{position:absolute;top:18px;left:18px;right:18px;height:2px;background:#e2e8f0}
+.tl-steps{display:flex;justify-content:space-between;position:relative}
+.tl-step{display:flex;flex-direction:column;align-items:center;width:30%}
+.tl-circle{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.tl-circle span{color:white;font-size:13px;font-weight:800}
+.tl-label{font-size:13px;font-weight:700;text-align:center}
+.tl-sub{font-size:11px;color:#94a3b8;margin-bottom:4px}
+.tl-amt{font-size:16px;font-weight:800}
+.tl-detail{font-size:10px;color:#94a3b8;text-align:center;margin-top:2px}
+/* Notes */
 .info-note{background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px 16px;margin-bottom:14px;font-size:12px;color:#1e40af}
+.warn-note{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:12px 16px;font-size:12px;color:#7f1d1d}
 .warn-box{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:14px 18px;margin-bottom:14px;display:flex;gap:10px}
-.warn-box .icon{font-size:18px}
-.warn-box .wtitle{font-weight:700;color:#dc2626;font-size:13px}
-.warn-box .wmsg{font-size:12px;color:#7f1d1d;margin-top:2px}
+.cont-note{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e;margin-top:14px}
 .footer{margin-top:28px;padding-top:20px;border-top:1px solid #f1f5f9;font-size:11px;color:#94a3b8;text-align:center}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="label">Verge Talent Partners</div>
+  <div class="eyebrow">Verge Talent Partners</div>
   <h1>Sales Incentive Calculator</h1>
 
   <div class="inputs">
@@ -94,7 +112,7 @@ input[type=range]{width:100%;cursor:pointer;margin:4px 0}
       <div class="field">
         <label>Contract Value</label>
         <div class="input-wrap">
-          <span>$</span>
+          <span class="prefix">$</span>
           <input type="number" id="contractValue" value="100000" oninput="update()"/>
         </div>
       </div>
@@ -132,19 +150,40 @@ input[type=range]{width:100%;cursor:pointer;margin:4px 0}
       </div>
     </div>
 
-    <div id="priorWrap" class="prior-wrap" style="display:none">
+    <div id="priorWrap" style="display:none;margin-top:14px">
       <div class="field">
         <label>Prior Contract Value</label>
         <div class="input-wrap">
-          <span>$</span>
+          <span class="prefix">$</span>
           <input type="number" id="priorValue" value="0" oninput="update()"/>
         </div>
       </div>
       <div id="expansionNote" style="font-size:11px;color:#94a3b8;margin-top:6px"></div>
     </div>
-
     <div id="contNote" class="cont-note" style="display:none">
-      <strong>Known Continuation:</strong> Phase 2 pool calculated at 10% of profit (vs. 15% for Net New), reflecting that sourcing was rewarded in Phase 1. Tiered cap still applies.
+      <strong>Known Continuation:</strong> Phase 2 pool at 10% of profit (vs. standard rate for Net New). Tiered cap still applies.
+    </div>
+
+    <!-- Two-Key Rule -->
+    <div class="two-key">
+      <div class="two-key-title"><span class="lock">🔑</span> Variable Pool Rate — Two-Key Rule</div>
+      <div class="key-row">
+        <div class="key-toggle" id="key1" onclick="toggleKey(1)"><span class="check">✓</span></div>
+        <div class="key-label">Trailing 3-month P&L is at or above breakeven</div>
+      </div>
+      <div class="key-row">
+        <div class="key-toggle" id="key2" onclick="toggleKey(2)"><span class="check">✓</span></div>
+        <div class="key-label">EOY projection or 6-month runway points to breakeven or net profit</div>
+      </div>
+
+      <div id="rateRow" class="rate-row" style="display:none">
+        <label>Active Pool Rate: <span id="rateLabel">15%</span></label>
+        <input type="range" id="rateSlider" min="15" max="25" value="15" oninput="update()" style="accent-color:#059669"/>
+        <div class="range-labels"><span>15% (base)</span><span>25% (max)</span></div>
+        <div class="rate-note">Both conditions met — founders may set rate between 15% and 25% for this period.</div>
+      </div>
+      <div id="lockedNote" class="locked-note">Both conditions must be met to unlock a rate above 15%. Pool rate is currently locked at base (15%).</div>
+      <div id="unlockedNote" class="unlocked-note" style="display:none"></div>
     </div>
 
     <div class="section-label">Engagement Length</div>
@@ -171,31 +210,26 @@ const fmt = n => "$" + Math.round(n).toLocaleString();
 
 const MONTHS = [3,4,6,9,12];
 const ROLES = [
-  {label:"Relationship Source",       pct:30, desc:"Originated or owned the client relationship"},
-  {label:"Proposal / Conversion Lead",pct:40, desc:"Ran the proposal process, closed the deal"},
-  {label:"Active Contributors",       pct:30, desc:"Calls, writing, research (min 3 hrs)"},
+  {label:"Relationship Source",        pct:15, desc:"Originated or owned the client relationship"},
+  {label:"Proposal / Conversion Lead", pct:55, desc:"Ran the proposal process, closed the deal"},
+  {label:"Active Contributors",        pct:30, desc:"Calls, writing, research (min 3 hrs)"},
 ];
 const MARGIN_TIERS = [
   {range:"Below 30%", rate:0,    signal:"No pool — firm absorbing delivery cost"},
   {range:"30–34%",    rate:0.05, signal:"Minimal reward"},
   {range:"35–39%",    rate:0.08, signal:"Partial reward"},
-  {range:"40%+",      rate:0.15, signal:"Full pool — standard plan"},
+  {range:"40%+",      rate:null, signal:"Full pool — rate set by Two-Key Rule"},
 ];
+const CLS_LABELS = {netnew:"Net New",inbound:"Inbound / Firm",cont:"Known Continuation",expansion:"Expansion"};
 
-let state = {
-  contractValue: 100000,
-  marginPct: 45,
-  classification: "netnew",
-  priorValue: 0,
-  months: 6,
-  tab: "buckets"
-};
+let keys = {k1:false, k2:false};
+let state = {contractValue:100000, marginPct:45, classification:"netnew", priorValue:0, months:6, tab:"buckets", activeRate:15};
 
 function getMarginTier(m) {
   if (m < 30) return {rate:0,    label:"No Pool",           color:"#dc2626", bg:"#fef2f2", border:"#fecaca", msg:"Below 30% — firm absorbing delivery cost. No pool."};
   if (m < 35) return {rate:0.05, label:"Minimal Pool (5%)", color:"#d97706", bg:"#fffbeb", border:"#fde68a", msg:"30–34% margin — below floor. Minimal reward."};
   if (m < 40) return {rate:0.08, label:"Partial Pool (8%)", color:"#2563eb", bg:"#eff6ff", border:"#bfdbfe", msg:"35–39% margin — below target. Partial reward."};
-  return           {rate:0.15,   label:"Full Pool (15%)",   color:"#059669", bg:"#f0fdf4", border:"#bbf7d0", msg:"40%+ margin — full pool active."};
+  return           {rate:null,   label:"Full Pool",         color:"#059669", bg:"#f0fdf4", border:"#bbf7d0", msg:"40%+ margin — full pool active."};
 }
 
 function calcTieredPool(profit, baseRate) {
@@ -203,216 +237,239 @@ function calcTieredPool(profit, baseRate) {
   const t1 = Math.min(profit, 150000);
   const t2 = Math.min(Math.max(profit-150000,0),150000);
   const t3 = Math.max(profit-300000,0);
-  const r1 = baseRate, r2 = Math.min(baseRate,0.08), r3 = Math.min(baseRate,0.05);
+  const r1=baseRate, r2=Math.min(baseRate,0.08), r3=Math.min(baseRate,0.05);
   const a1=t1*r1, a2=t2*r2, a3=t3*r3;
-  const bd = [{label:`First ${fmt(t1)} of profit`, rate:r1*100, amount:a1}];
-  if (t2>0) bd.push({label:`Next ${fmt(t2)} of profit`, rate:r2*100, amount:a2});
-  if (t3>0) bd.push({label:`Above $300K`, rate:r3*100, amount:a3});
+  const bd=[{label:`First ${fmt(t1)} of profit`,rate:+(r1*100).toFixed(1),amount:a1}];
+  if(t2>0) bd.push({label:`Next ${fmt(t2)} of profit`,rate:+(r2*100).toFixed(1),amount:a2});
+  if(t3>0) bd.push({label:`Above $300K`,rate:+(r3*100).toFixed(1),amount:a3});
   return {pool:a1+a2+a3, breakdown:bd};
 }
 
+function toggleKey(k) {
+  if(k===1) keys.k1=!keys.k1;
+  else keys.k2=!keys.k2;
+  document.getElementById('key1').classList.toggle('on',keys.k1);
+  document.getElementById('key2').classList.toggle('on',keys.k2);
+  const unlocked = keys.k1 && keys.k2;
+  document.getElementById('rateRow').style.display = unlocked?'block':'none';
+  document.getElementById('lockedNote').style.display = unlocked?'none':'block';
+  document.getElementById('unlockedNote').style.display = unlocked?'block':'none';
+  if(!unlocked) { document.getElementById('rateSlider').value=15; state.activeRate=15; }
+  update();
+}
+
 function setClass(c) {
-  state.classification = c;
-  document.querySelectorAll('.class-card').forEach(el => el.classList.remove('active'));
+  state.classification=c;
+  document.querySelectorAll('.class-card').forEach(el=>el.classList.remove('active'));
   document.getElementById('cls-'+c).classList.add('active');
-  document.getElementById('priorWrap').style.display = c==='expansion' ? 'block' : 'none';
-  document.getElementById('contNote').style.display = c==='cont' ? 'block' : 'none';
+  document.getElementById('priorWrap').style.display=c==='expansion'?'block':'none';
+  document.getElementById('contNote').style.display=c==='cont'?'block':'none';
   update();
 }
 
 function setTab(t) {
-  state.tab = t;
-  ['buckets','pool','payout'].forEach(id => {
-    document.getElementById('panel-'+id).style.display = id===t ? 'block' : 'none';
-    document.getElementById('tab-'+id).classList.toggle('active', id===t);
+  state.tab=t;
+  ['buckets','pool','payout'].forEach(id=>{
+    document.getElementById('panel-'+id).style.display=id===t?'block':'none';
+    document.getElementById('tab-'+id).classList.toggle('active',id===t);
   });
 }
 
 function setMonth(m) {
-  state.months = m;
-  document.querySelectorAll('.month-btn').forEach(btn => {
-    btn.classList.toggle('active', parseInt(btn.dataset.m)===m);
-  });
+  state.months=m;
+  document.querySelectorAll('.month-btn').forEach(btn=>btn.classList.toggle('active',parseInt(btn.dataset.m)===m));
   update();
 }
 
-// Build month buttons once
-(function() {
-  const wrap = document.getElementById('monthBtns');
-  MONTHS.forEach(m => {
-    const btn = document.createElement('button');
-    btn.className = 'month-btn' + (m===6?' active':'');
-    btn.textContent = m+'mo';
-    btn.dataset.m = m;
-    btn.onclick = () => setMonth(m);
+(function(){
+  const wrap=document.getElementById('monthBtns');
+  MONTHS.forEach(m=>{
+    const btn=document.createElement('button');
+    btn.className='month-btn'+(m===6?' active':'');
+    btn.textContent=m+'mo';
+    btn.dataset.m=m;
+    btn.onclick=()=>setMonth(m);
     wrap.appendChild(btn);
   });
 })();
 
 function update() {
-  const cv = parseFloat(document.getElementById('contractValue').value)||0;
-  const mp = parseInt(document.getElementById('marginSlider').value)||0;
-  const pv = parseFloat(document.getElementById('priorValue').value)||0;
-  state.contractValue = cv;
-  state.marginPct = mp;
-  state.priorValue = pv;
+  const cv=parseFloat(document.getElementById('contractValue').value)||0;
+  const mp=parseInt(document.getElementById('marginSlider').value)||0;
+  const pv=parseFloat(document.getElementById('priorValue').value)||0;
+  const ar=parseInt(document.getElementById('rateSlider').value)||15;
+  state.contractValue=cv; state.marginPct=mp; state.priorValue=pv; state.activeRate=ar;
 
-  const tier = getMarginTier(mp);
-  const profit = cv * (mp/100);
-  const isExp  = state.classification === 'expansion';
-  const isCont = state.classification === 'cont';
-  const noPool = tier.rate === 0;
+  const tier=getMarginTier(mp);
+  const profit=cv*(mp/100);
+  const unlocked=keys.k1&&keys.k2;
+  const isExp=state.classification==='expansion';
+  const isCont=state.classification==='cont';
+  const noPool=mp<30;
 
-  const baseRate = noPool ? 0 : isCont ? 0.10 : tier.rate;
-  const expansionBase = isExp && pv>0 ? Math.max(0, cv-pv) : 0;
-  const {pool:salesPool, breakdown} = isExp
-    ? {pool: expansionBase*0.05, breakdown:[{label:"5% of incremental value", rate:5, amount:expansionBase*0.05}]}
-    : calcTieredPool(profit, baseRate);
-  const opsCost = profit - salesPool;
-  const monthlyBill = cv / state.months;
-  const midpoint = Math.round(state.months/2);
-  const sourceSlice = salesPool*0.30;
-  const leadContrib = salesPool*0.70;
-  const midPayout = leadContrib*0.50;
-  const finalPayout = leadContrib*0.50;
+  // Determine effective base rate
+  let baseRate=0;
+  if(!noPool){
+    if(mp<35) baseRate=0.05;
+    else if(mp<40) baseRate=0.08;
+    else baseRate = unlocked ? ar/100 : 0.15;
+    if(isCont) baseRate=Math.min(baseRate,0.10);
+  }
 
-  // Margin label + slider color
-  document.getElementById('marginLabel').textContent = mp+'%';
-  document.getElementById('marginLabel').style.color = tier.color;
-  document.getElementById('marginSlider').style.accentColor = tier.color;
+  const expansionBase=isExp&&pv>0?Math.max(0,cv-pv):0;
+  const {pool:salesPool,breakdown}=isExp
+    ?{pool:expansionBase*0.05,breakdown:[{label:"5% of incremental value",rate:5,amount:expansionBase*0.05}]}
+    :calcTieredPool(profit,baseRate);
+  const opsCost=profit-salesPool;
+  const monthlyBill=cv/state.months;
+  const midpoint=Math.round(state.months/2);
+  const sourceSlice=salesPool*0.15;
+  const leadContrib=salesPool*0.85;
+  const midPayout=leadContrib*0.50;
+  const finalPayout=leadContrib*0.50;
+
+  // Margin label
+  document.getElementById('marginLabel').textContent=mp+'%';
+  document.getElementById('marginLabel').style.color=tier.color;
+  document.getElementById('marginSlider').style.accentColor=tier.color;
+
+  // Rate slider label
+  document.getElementById('rateLabel').textContent=ar+'%';
 
   // Tier badge
-  document.getElementById('tierBadge').style.cssText = `margin-top:14px;border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;background:${tier.bg};border:1px solid ${tier.border}`;
-  document.getElementById('tierBadge').innerHTML = `<span class="msg" style="color:${tier.color}">${tier.msg}</span><span class="lbl" style="color:${tier.color}">${tier.label}</span>`;
+  const fullLabel = mp>=40 ? `Full Pool (${unlocked?ar:15}%)` : tier.label;
+  document.getElementById('tierBadge').style.cssText=`margin-top:14px;border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;background:${tier.bg};border:1px solid ${tier.border}`;
+  document.getElementById('tierBadge').innerHTML=`<span style="font-size:12px;font-weight:600;color:${tier.color}">${tier.msg}</span><span style="font-size:13px;font-weight:800;color:${tier.color};white-space:nowrap">${fullLabel}</span>`;
+
+  // Unlocked note
+  if(unlocked) document.getElementById('unlockedNote').textContent=`Both conditions met — pool rate set to ${ar}%. Applies to all deals closing this period.`;
 
   // Expansion note
-  if (isExp) document.getElementById('expansionNote').textContent = `Expansion bonus = 5% of incremental value (${fmt(expansionBase)})`;
+  if(isExp) document.getElementById('expansionNote').textContent=`Expansion bonus = 5% of incremental value (${fmt(expansionBase)})`;
 
   // Summary cards
-  const clsLabels = {netnew:"Net New",inbound:"Inbound / Firm",cont:"Known Continuation",expansion:"Expansion"};
-  document.getElementById('summaryCards').innerHTML = [
-    {label:"Contract Value", val:fmt(cv),        sub:`${fmt(monthlyBill)}/mo · ${state.months} months`, color:"#0f172a"},
-    {label:"Total Profit",   val:fmt(profit),     sub:`${mp}% margin`,                                  color:"#0f172a"},
-    {label:"Sales Pool",     val:fmt(salesPool),  sub:noPool?"No pool at this margin":clsLabels[state.classification], color:tier.color},
+  document.getElementById('summaryCards').innerHTML=[
+    {label:"Contract Value",val:fmt(cv),      sub:`${fmt(monthlyBill)}/mo · ${state.months} months`,color:"#0f172a"},
+    {label:"Total Profit",  val:fmt(profit),   sub:`${mp}% margin`,                                  color:"#0f172a"},
+    {label:"Sales Pool",    val:fmt(salesPool),sub:noPool?"No pool at this margin":CLS_LABELS[state.classification],color:tier.color},
   ].map(c=>`<div class="card"><div class="clabel">${c.label}</div><div class="cval" style="color:${c.color}">${c.val}</div><div class="csub">${c.sub}</div></div>`).join('');
 
   // ── Buckets panel ──
-  let bkHtml = `<div class="table-wrap">
-    <div class="table-head col3"><span>Allocation</span><span class="right">Rate</span><span class="right">Amount</span></div>
-    <div class="table-row highlight col3">
+  let bkHtml=`<div class="table-wrap">
+    <div class="table-head c3a"><span>Allocation</span><span class="r">Rate</span><span class="r">Amount</span></div>
+    <div class="tr alt c3a">
       <div>
         <div class="row-title">
-          <div class="dot" style="background:#dc2626"></div>
+          <span class="dot" style="background:#dc2626"></span>
           <span>Sales Incentive Pool ★</span>
-          <span class="badge" style="background:${tier.bg};color:${tier.color}">${clsLabels[state.classification]}</span>
+          <span class="badge" style="background:${tier.bg};color:${tier.color}">${CLS_LABELS[state.classification]}</span>
         </div>
         <div class="row-note">Tiered by profit size — see breakdown below</div>
       </div>
-      <div class="right" style="font-size:13px;font-weight:700;color:${tier.color}">Tiered</div>
-      <div class="right" style="font-size:14px;font-weight:700;color:#dc2626">${fmt(salesPool)}</div>
+      <div class="r" style="font-size:13px;font-weight:700;color:${tier.color}">Tiered</div>
+      <div class="r" style="font-size:14px;font-weight:700;color:#dc2626">${fmt(salesPool)}</div>
     </div>`;
-  breakdown.forEach(row => {
-    bkHtml += `<div class="table-row tier-row col3">
+  breakdown.forEach(row=>{
+    bkHtml+=`<div class="tr tier-sub c3a">
       <span style="font-size:11px;color:#92400e">${row.label}</span>
-      <span class="right" style="font-size:11px;color:#92400e">${row.rate}%</span>
-      <span class="right" style="font-size:12px;font-weight:600;color:#c2410c">${fmt(row.amount)}</span>
+      <span class="r" style="font-size:11px;color:#92400e">${row.rate}%</span>
+      <span class="r" style="font-size:12px;font-weight:600;color:#c2410c">${fmt(row.amount)}</span>
     </div>`;
   });
-  bkHtml += `<div class="table-row col3">
+  bkHtml+=`<div class="tr c3a">
     <div>
-      <div class="row-title"><div class="dot" style="background:#2563eb"></div><span>Operating Costs</span></div>
+      <div class="row-title"><span class="dot" style="background:#2563eb"></span><span>Operating Costs</span></div>
       <div class="row-note">Payroll, contractors, taxes, tooling, reserves — managed at firm level</div>
     </div>
-    <div class="right" style="font-size:13px;font-weight:700;color:#475569">—</div>
-    <div class="right" style="font-size:14px;font-weight:700">${fmt(opsCost)}</div>
+    <div class="r" style="font-size:13px;font-weight:700;color:#475569">—</div>
+    <div class="r" style="font-size:14px;font-weight:700">${fmt(opsCost)}</div>
   </div>
-  <div class="table-row total col3">
+  <div class="tr total c3a">
     <span style="font-size:13px;font-weight:700">Total Profit</span>
-    <span class="right" style="font-size:13px;font-weight:700">100%</span>
-    <span class="right" style="font-size:14px;font-weight:800">${fmt(profit)}</span>
+    <span class="r" style="font-size:13px;font-weight:700">100%</span>
+    <span class="r" style="font-size:14px;font-weight:800">${fmt(profit)}</span>
   </div></div>`;
 
   // Margin tier reference
-  bkHtml += `<div class="table-wrap"><div class="table-head" style="grid-template-columns:100px 60px 1fr"><span>Margin</span><span class="right">Pool</span><span>Signal</span></div>`;
-  MARGIN_TIERS.forEach(t => {
-    const active = (t.rate===0&&mp<30)||(t.rate===0.05&&mp>=30&&mp<35)||(t.rate===0.08&&mp>=35&&mp<40)||(t.rate===0.15&&mp>=40);
-    bkHtml += `<div class="table-row" style="grid-template-columns:100px 60px 1fr;background:${active?tier.bg:'white'}">
+  bkHtml+=`<div class="table-wrap"><div class="table-head c3d"><span>Margin</span><span class="r">Pool</span><span>Signal</span></div>`;
+  MARGIN_TIERS.forEach((t,i)=>{
+    const active=(t.rate===0&&mp<30)||(t.rate===0.05&&mp>=30&&mp<35)||(t.rate===0.08&&mp>=35&&mp<40)||(t.rate===null&&mp>=40);
+    const rateLabel=t.rate===null?(unlocked?`${ar}%`:'15%'):(t.rate*100)+'%';
+    bkHtml+=`<div class="tr c3d" style="background:${active?tier.bg:'white'};border-bottom:${i<3?'1px solid #f8fafc':'none'}">
       <span style="font-size:13px;font-weight:${active?700:500};color:${active?tier.color:'#475569'}">${t.range}</span>
-      <span class="right" style="font-size:13px;font-weight:700;color:${active?tier.color:'#94a3b8'}">${t.rate*100}%</span>
+      <span class="r" style="font-size:13px;font-weight:700;color:${active?tier.color:'#94a3b8'}">${rateLabel}</span>
       <span style="font-size:12px;color:${active?tier.color:'#94a3b8'}">${t.signal}${active?' ◀ current':''}</span>
     </div>`;
   });
-  bkHtml += `</div>`;
-  document.getElementById('panel-buckets').innerHTML = bkHtml;
+  bkHtml+=`</div>`;
+  document.getElementById('panel-buckets').innerHTML=bkHtml;
 
   // ── Pool panel ──
-  let poolHtml = '';
-  if (noPool) {
-    poolHtml += `<div class="warn-box"><div class="icon">⚠️</div><div><div class="wtitle">No Pool at This Margin</div><div class="wmsg">Below 30% the firm is absorbing delivery cost. Adjust the margin slider to see splits.</div></div></div>`;
-  }
-  poolHtml += `<div class="table-wrap">
-    <div class="table-head col3b"><span>Role</span><span class="right">%</span><span class="right">Amount</span></div>`;
-  ROLES.forEach((r,i) => {
-    poolHtml += `<div class="table-row col3b" style="border-bottom:${i<2?'1px solid #f8fafc':'none'}">
+  let poolHtml='';
+  if(noPool) poolHtml+=`<div class="warn-box"><div style="font-size:18px">⚠️</div><div><div style="font-weight:700;color:#dc2626;font-size:13px">No Pool at This Margin</div><div style="font-size:12px;color:#7f1d1d;margin-top:2px">Below 30% the firm is absorbing delivery cost. Adjust the margin slider to see splits.</div></div></div>`;
+  poolHtml+=`<div class="table-wrap">
+    <div class="table-head c3b"><span>Role</span><span class="r">%</span><span class="r">Amount</span></div>`;
+  ROLES.forEach((r,i)=>{
+    poolHtml+=`<div class="tr c3b${i<2?' stripe':''}">
       <div><div style="font-size:13px;font-weight:600">${r.label}</div><div style="font-size:11px;color:#94a3b8">${r.desc}</div></div>
-      <div class="right" style="font-size:13px;font-weight:600;color:#475569">${r.pct}%</div>
-      <div class="right" style="font-size:14px;font-weight:700">${fmt(salesPool*(r.pct/100))}</div>
+      <div class="r" style="font-size:13px;font-weight:600;color:#475569">${r.pct}%</div>
+      <div class="r" style="font-size:14px;font-weight:700">${fmt(salesPool*(r.pct/100))}</div>
     </div>`;
   });
-  poolHtml += `<div class="table-row total col3b">
+  poolHtml+=`<div class="tr total c3b">
     <span style="font-size:13px;font-weight:700">Total Pool</span>
-    <span class="right" style="font-size:13px;font-weight:700">100%</span>
-    <span class="right" style="font-size:14px;font-weight:800;color:${tier.color}">${fmt(salesPool)}</span>
+    <span class="r" style="font-size:13px;font-weight:700">100%</span>
+    <span class="r" style="font-size:14px;font-weight:800;color:${tier.color}">${fmt(salesPool)}</span>
   </div></div>`;
-  poolHtml += `<div class="scenario-box"><div class="stitle">Common Scenarios</div>
+  poolHtml+=`<div class="scenario-box"><div class="stitle">Common Scenarios</div>
     ${[
-      {label:"Network person sources + leads",    note:`One person earns ${fmt(salesPool*.70)} (70% of pool)`},
-      {label:"Separate source and proposal lead", note:`Source: ${fmt(salesPool*.30)} · Lead: ${fmt(salesPool*.40)}`},
-      {label:"Lead + active contributors",        note:`Lead: ${fmt(salesPool*.40)} · Contributors share ${fmt(salesPool*.30)}`},
-    ].map(s=>`<div class="scenario-item"><div class="sl">${s.label}</div><div class="sn">${s.note}</div></div>`).join('')}
+      {label:"Network person sources + leads",    note:`Source: ${fmt(salesPool*.15)} · Lead earns ${fmt(salesPool*.55)} · Contributors share ${fmt(salesPool*.30)}`},
+      {label:"Source and lead are same person",   note:`That person earns ${fmt(salesPool*.70)} (70% of pool)`},
+      {label:"Lead only, no network source",      note:`Lead earns ${fmt(salesPool*.55)} · Contributors share ${fmt(salesPool*.30)}`},
+    ].map(s=>`<div class="si"><div class="sl">${s.label}</div><div class="sn">${s.note}</div></div>`).join('')}
   </div>`;
-  document.getElementById('panel-pool').innerHTML = poolHtml;
+  document.getElementById('panel-pool').innerHTML=poolHtml;
 
   // ── Payout panel ──
-  let payHtml = '';
-  if (noPool) payHtml += `<div class="cancel-note" style="margin-bottom:14px"><strong>No pool at this margin.</strong> Adjust the slider above 30% to see payout schedule.</div>`;
-  payHtml += `<div class="info-note"><strong>How it works:</strong> The Relationship Source is paid at signing. The Proposal Lead and Active Contributors split their payout 50/50 across midpoint and final invoice collections.</div>`;
-  payHtml += `<div class="table-wrap timeline">
-    <div class="timeline-inner">
-      <div class="timeline-line"></div>
-      <div class="timeline-steps">
+  let payHtml='';
+  if(noPool) payHtml+=`<div class="warn-note" style="margin-bottom:14px"><strong>No pool at this margin.</strong> Adjust the slider above 30% to see payout schedule.</div>`;
+  payHtml+=`<div class="info-note"><strong>How it works:</strong> The Relationship Source is paid at signing. The Proposal Lead and Active Contributors split their payout 50/50 across midpoint and final invoice collections.</div>`;
+  payHtml+=`<div class="table-wrap tl-wrap">
+    <div class="tl-inner">
+      <div class="tl-line"></div>
+      <div class="tl-steps">
         ${[
-          {label:"Signing",      sub:`Month 0`,           amount:sourceSlice, color:"#7c3aed", detail:"Relationship Source"},
-          {label:"Midpoint",     sub:`~Month ${midpoint}`, amount:midPayout,  color:"#2563eb", detail:"50% of Lead + Contributors"},
+          {label:"Signing",      sub:`Month 0`,             amount:sourceSlice, color:"#7c3aed", detail:"Relationship Source (15%)"},
+          {label:"Midpoint",     sub:`~Month ${midpoint}`,  amount:midPayout,   color:"#2563eb", detail:"50% of Lead + Contributors"},
           {label:"Final Invoice",sub:`~Month ${state.months+1}`,amount:finalPayout,color:"#059669",detail:"50% of Lead + Contributors"},
-        ].map((ev,i)=>`<div class="timeline-step">
-          <div class="step-circle" style="background:${ev.color}"><span>${i+1}</span></div>
-          <div class="step-label">${ev.label}</div>
-          <div class="step-sub">${ev.sub}</div>
-          <div class="step-amount" style="color:${ev.color}">${fmt(ev.amount)}</div>
-          <div class="step-detail">${ev.detail}</div>
+        ].map((ev,i)=>`<div class="tl-step">
+          <div class="tl-circle" style="background:${ev.color}"><span>${i+1}</span></div>
+          <div class="tl-label">${ev.label}</div>
+          <div class="tl-sub">${ev.sub}</div>
+          <div class="tl-amt" style="color:${ev.color}">${fmt(ev.amount)}</div>
+          <div class="tl-detail">${ev.detail}</div>
         </div>`).join('')}
       </div>
     </div>
   </div>`;
-  payHtml += `<div class="table-wrap">
-    <div class="table-head col3c"><span>Event</span><span>What's Paid</span><span class="right">Amount</span></div>
+  payHtml+=`<div class="table-wrap">
+    <div class="table-head c3c"><span>Event</span><span>What's Paid</span><span class="r">Amount</span></div>
     ${[
-      {event:`Contract Signed (Month 0)`,              what:"Relationship Source (30%)",           amount:sourceSlice, color:"#7c3aed"},
-      {event:`Midpoint Invoice (~Month ${midpoint})`,  what:"50% of Lead + Contributor pool",      amount:midPayout,   color:"#2563eb"},
-      {event:`Final Invoice (~Month ${state.months+1})`,what:"Remaining 50% of Lead + Contributor",amount:finalPayout, color:"#059669"},
-    ].map((r,i)=>`<div class="table-row col3c" style="border-bottom:${i<2?'1px solid #f8fafc':'none'}">
+      {event:`Contract Signed (Month 0)`,               what:"Relationship Source (15%)",           amount:sourceSlice, color:"#7c3aed"},
+      {event:`Midpoint Invoice (~Month ${midpoint})`,   what:"50% of Lead + Contributor pool",      amount:midPayout,   color:"#2563eb"},
+      {event:`Final Invoice (~Month ${state.months+1})`,what:"Remaining 50% of Lead + Contributor", amount:finalPayout, color:"#059669"},
+    ].map((r,i)=>`<div class="tr c3c${i<2?' stripe':''}">
       <div style="font-size:12px;font-weight:600">${r.event}</div>
       <div style="font-size:12px;color:#64748b">${r.what}</div>
-      <div class="right" style="font-size:14px;font-weight:700;color:${r.color}">${fmt(r.amount)}</div>
+      <div class="r" style="font-size:14px;font-weight:700;color:${r.color}">${fmt(r.amount)}</div>
     </div>`).join('')}
-    <div class="table-row total col3c">
+    <div class="tr total c3c">
       <span style="font-size:13px;font-weight:700">Total Pool</span><span></span>
-      <span class="right" style="font-size:14px;font-weight:800;color:${tier.color}">${fmt(salesPool)}</span>
+      <span class="r" style="font-size:14px;font-weight:800;color:${tier.color}">${fmt(salesPool)}</span>
     </div>
   </div>`;
-  payHtml += `<div class="cancel-note"><strong>Early cancellation rule:</strong> Payouts already made are retained. No further distributions beyond what's been proportionally earned.</div>`;
-  document.getElementById('panel-payout').innerHTML = payHtml;
+  payHtml+=`<div class="warn-note"><strong>Early cancellation rule:</strong> Payouts already made are retained. No further distributions beyond what's been proportionally earned.</div>`;
+  document.getElementById('panel-payout').innerHTML=payHtml;
 }
 
 update();
