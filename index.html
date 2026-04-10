@@ -323,10 +323,14 @@ function update() {
   const opsCost=profit-salesPool;
   const monthlyBill=cv/state.months;
   const midpoint=Math.round(state.months/2);
-  const sourceSlice=salesPool*0.10;
-  const leadContrib=salesPool*0.90;
-  const midPayout=leadContrib*0.50;
-  const finalPayout=leadContrib*0.50;
+  // Quarterly payout schedule for lead + contributors
+  const leadContribPool = salesPool * 0.90;
+  const quarterlyEvents = [];
+  // Start after first full invoice (month 1), then every 2 months
+  for (let m = 1; m <= state.months; m += 2) {
+    quarterlyEvents.push(m);
+  }
+  const perEvent = quarterlyEvents.length > 0 ? leadContribPool / quarterlyEvents.length : 0;
 
   // Margin label
   document.getElementById('marginLabel').textContent=mp+'%';
@@ -433,40 +437,56 @@ function update() {
   // ── Payout panel ──
   let payHtml='';
   if(noPool) payHtml+=`<div class="warn-note" style="margin-bottom:14px"><strong>No pool at this margin.</strong> Adjust the slider above 30% to see payout schedule.</div>`;
-  payHtml+=`<div class="info-note"><strong>How it works:</strong> The Relationship Source is paid at signing. The Proposal Lead and Active Contributors split their payout 50/50 across midpoint and final invoice collections.</div>`;
+  payHtml+=`<div class="info-note"><strong>How it works:</strong> The Relationship Source (10%) is paid at signing. The remaining 90% (Lead + Contributors) is split equally across quarterly payout events starting after the first full invoice is collected.</div>`;
+
+  // Timeline — signing + up to 4 quarterly events (show max 4 for layout)
+  const timelineEvents = [
+    {label:"Signing", sub:"Month 0", amount:sourceSlice, color:"#7c3aed", detail:"Relationship Source (10%)"},
+    ...quarterlyEvents.slice(0,3).map((m,i) => ({
+      label: i===0?"1st Payout": i===1?"2nd Payout":"3rd Payout",
+      sub:`Month ${m}`,
+      amount: perEvent,
+      color: i===0?"#2563eb": i===1?"#059669":"#d97706",
+      detail:`${fmt(perEvent)} (1/${quarterlyEvents.length} of pool)`
+    }))
+  ];
+
   payHtml+=`<div class="table-wrap tl-wrap">
     <div class="tl-inner">
       <div class="tl-line"></div>
-      <div class="tl-steps">
-        ${[
-          {label:"Signing",      sub:`Month 0`,             amount:sourceSlice, color:"#7c3aed", detail:"Relationship Source (10%)"},
-          {label:"Midpoint",     sub:`~Month ${midpoint}`,  amount:midPayout,   color:"#2563eb", detail:"50% of Lead + Contributors"},
-          {label:"Final Invoice",sub:`~Month ${state.months+1}`,amount:finalPayout,color:"#059669",detail:"50% of Lead + Contributors"},
-        ].map((ev,i)=>`<div class="tl-step">
+      <div class="tl-steps" style="justify-content:${timelineEvents.length<=3?'space-around':'space-between'}">
+        ${timelineEvents.map((ev,i)=>`<div class="tl-step" style="width:${100/timelineEvents.length-2}%">
           <div class="tl-circle" style="background:${ev.color}"><span>${i+1}</span></div>
-          <div class="tl-label">${ev.label}</div>
+          <div class="tl-label" style="font-size:12px">${ev.label}</div>
           <div class="tl-sub">${ev.sub}</div>
-          <div class="tl-amt" style="color:${ev.color}">${fmt(ev.amount)}</div>
+          <div class="tl-amt" style="color:${ev.color};font-size:14px">${fmt(ev.amount)}</div>
           <div class="tl-detail">${ev.detail}</div>
         </div>`).join('')}
       </div>
     </div>
   </div>`;
+
+  // Full payout table
   payHtml+=`<div class="table-wrap">
     <div class="table-head c3c"><span>Event</span><span>What's Paid</span><span class="r">Amount</span></div>
-    ${[
-      {event:`Contract Signed (Month 0)`,               what:"Relationship Source (10%)",           amount:sourceSlice, color:"#7c3aed"},
-      {event:`Midpoint Invoice (~Month ${midpoint})`,   what:"50% of Lead + Contributor pool",      amount:midPayout,   color:"#2563eb"},
-      {event:`Final Invoice (~Month ${state.months+1})`,what:"Remaining 50% of Lead + Contributor", amount:finalPayout, color:"#059669"},
-    ].map((r,i)=>`<div class="tr c3c${i<2?' stripe':''}">
-      <div style="font-size:12px;font-weight:600">${r.event}</div>
-      <div style="font-size:12px;color:#64748b">${r.what}</div>
-      <div class="r" style="font-size:14px;font-weight:700;color:${r.color}">${fmt(r.amount)}</div>
+    <div class="tr stripe c3c">
+      <div style="font-size:12px;font-weight:600">Contract Signed (Month 0)</div>
+      <div style="font-size:12px;color:#64748b">Relationship Source (10%)</div>
+      <div class="r" style="font-size:14px;font-weight:700;color:#7c3aed">${fmt(sourceSlice)}</div>
+    </div>
+    ${quarterlyEvents.map((m,i)=>`<div class="tr${i<quarterlyEvents.length-1?' stripe':''} c3c">
+      <div style="font-size:12px;font-weight:600">Quarterly Payout ${i+1} (Month ${m})</div>
+      <div style="font-size:12px;color:#64748b">1/${quarterlyEvents.length} of Lead + Contributor pool</div>
+      <div class="r" style="font-size:14px;font-weight:700;color:#2563eb">${fmt(perEvent)}</div>
     </div>`).join('')}
     <div class="tr total c3c">
       <span style="font-size:13px;font-weight:700">Total Pool</span><span></span>
       <span class="r" style="font-size:14px;font-weight:800;color:${tier.color}">${fmt(salesPool)}</span>
     </div>
+  </div>`;
+
+  payHtml+=`<div class="info-note" style="margin-bottom:14px">
+    <strong>W-2 employees only.</strong> Contractors are not eligible for SIP distributions.
   </div>`;
   payHtml+=`<div class="warn-note"><strong>Early cancellation rule:</strong> Payouts already made are retained. No further distributions beyond what's been proportionally earned.</div>`;
   document.getElementById('panel-payout').innerHTML=payHtml;
