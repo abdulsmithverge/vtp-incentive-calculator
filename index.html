@@ -4,99 +4,130 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>VTP Sales Incentive Calculator</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet"/>
 <style>
+:root{
+  --pink:#E918C2;--navy:#18169E;--teal:#1AE5D0;
+  --pink-light:#fce8f9;--pink-border:#f0a8e8;
+  --navy-light:#e8e8f9;--navy-border:#a8a7e0;
+  --teal-light:#e4fdfb;--teal-border:#8af0e8;
+  --gray:#f8f8fe;--border:#e0e0f0;--muted:#6b6b8a;--hint:#9999b8;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:#f1f5f9;min-height:100vh;padding:32px 16px}
-.wrap{max-width:720px;margin:0 auto;background:white;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.08);padding:28px 28px 36px}
-.eyebrow{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#64748b;margin-bottom:4px}
-h1{font-size:24px;font-weight:800;color:#0f172a;margin-bottom:24px}
-.inputs{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:20px;margin-bottom:20px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.field label{display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:6px}
+body{font-family:'Roboto',sans-serif;background:var(--gray);min-height:100vh;padding:32px 16px;color:#1a1a2e}
+.wrap{max-width:720px;margin:0 auto;background:white;border-radius:16px;box-shadow:0 4px 24px rgba(24,22,158,.08);padding:28px 28px 36px}
+.vtp-header{display:flex;align-items:center;gap:14px;margin-bottom:24px;padding-bottom:20px;border-bottom:2px solid var(--teal)}
+.vtp-logo{width:38px;height:38px;border-radius:8px;background:var(--navy);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.vtp-logo span{color:white;font-size:12px;font-weight:900;letter-spacing:-.5px}
+.eyebrow{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--pink);margin-bottom:2px}
+h1{font-size:22px;font-weight:700;color:var(--navy)}
+.inputs{background:white;border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field label{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
 .input-wrap{position:relative}
-.input-wrap .prefix{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#64748b;font-weight:600}
-input[type=number]{width:100%;padding:8px 8px 8px 24px;border:1px solid #cbd5e1;border-radius:8px;font-size:15px;font-weight:600;font-family:inherit}
-input[type=range]{width:100%;cursor:pointer;margin:4px 0}
-.range-labels{display:flex;justify-content:space-between;font-size:11px;color:#94a3b8}
+.input-wrap .prefix{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:500;font-size:14px}
+input[type=number]{width:100%;padding:8px 8px 8px 24px;border:1.5px solid #d0d0e8;border-radius:8px;font-size:15px;font-weight:600;font-family:'Roboto',sans-serif;color:var(--navy)}
+input[type=number]:focus{outline:none;border-color:var(--navy)}
+input[type=range]{width:100%;margin:4px 0;cursor:pointer}
+.range-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--hint)}
 .tier-badge{margin-top:14px;border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px}
-.section-label{font-size:12px;font-weight:600;color:#475569;margin:16px 0 8px}
-.months{display:flex;gap:8px;flex-wrap:wrap}
-.month-btn{padding:7px 16px;border-radius:8px;border:1.5px solid #cbd5e1;background:white;color:#475569;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
-.month-btn.active{border-color:#2563eb;background:#eff6ff;color:#1d4ed8}
+.section-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:14px 0 8px}
+.months{display:flex;gap:6px;flex-wrap:wrap}
+.mbtn{padding:6px 14px;border-radius:6px;border:1.5px solid #d0d0e8;background:white;color:var(--muted);font-weight:600;font-size:12px;cursor:pointer;font-family:'Roboto',sans-serif;transition:all .15s}
+.mbtn.active{border-color:var(--navy);background:var(--navy);color:white}
 .class-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
-.class-card{padding:10px 12px;border-radius:8px;border:1.5px solid #e2e8f0;background:white;cursor:pointer}
-.class-card.active{border-color:#2563eb;background:#eff6ff}
-.class-card .ctitle{font-size:12px;font-weight:700;color:#475569}
-.class-card.active .ctitle{color:#1d4ed8}
-.class-card .cdesc{font-size:11px;color:#94a3b8;margin-top:2px}
-.two-key{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin-top:16px}
-.two-key-title{font-size:12px;font-weight:700;color:#475569;margin-bottom:12px}
-.key-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.key-toggle{width:20px;height:20px;border-radius:4px;border:2px solid #94a3b8;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.key-toggle.on{background:#16a34a;border-color:#16a34a}
-.key-toggle .check{color:white;font-size:11px;font-weight:800;display:none}
+.class-card{padding:10px 12px;border-radius:8px;border:1.5px solid var(--border);background:white;cursor:pointer;transition:all .15s}
+.class-card.active{border-color:var(--navy);background:var(--navy-light)}
+.class-card .ctitle{font-size:12px;font-weight:700;color:var(--muted)}
+.class-card.active .ctitle{color:var(--navy)}
+.class-card .cdesc{font-size:11px;color:var(--hint);margin-top:2px}
+.two-key{background:var(--navy-light);border:1px solid var(--navy-border);border-radius:10px;padding:14px;margin-top:14px}
+.two-key-title{font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.key-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.key-row:last-of-type{margin-bottom:0}
+.key-toggle{width:18px;height:18px;border-radius:4px;border:2px solid var(--hint);background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.key-toggle.on{background:var(--navy);border-color:var(--navy)}
+.key-toggle .check{color:white;font-size:10px;font-weight:700;display:none}
 .key-toggle.on .check{display:block}
-.key-label{font-size:12px;color:#475569;flex:1}
-.rate-row{margin-top:14px;padding-top:14px;border-top:1px solid #e2e8f0}
-.rate-row label{font-size:12px;font-weight:600;color:#475569;display:flex;justify-content:space-between;margin-bottom:6px}
-.rate-note{font-size:11px;color:#94a3b8;margin-top:4px}
+.key-label{font-size:12px;color:var(--navy)}
+.rate-row{margin-top:14px;padding-top:14px;border-top:1px solid var(--navy-border)}
+.rate-row .rlabel{font-size:12px;font-weight:600;color:var(--navy);display:flex;justify-content:space-between;margin-bottom:6px}
+.rate-note{font-size:11px;color:var(--muted);margin-top:4px}
 .locked-note{margin-top:10px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:8px 12px;font-size:11px;color:#7f1d1d}
-.unlocked-note{margin-top:10px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:8px 12px;font-size:11px;color:#14532d}
-.cont-note{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e;margin-top:14px}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
-.card{background:white;border:1px solid #e2e8f0;border-radius:10px;padding:14px 16px}
-.card .clabel{font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.05em}
-.card .cval{font-size:22px;font-weight:800;color:#0f172a;margin:4px 0 2px}
-.card .csub{font-size:11px;color:#94a3b8}
-.tabs{display:flex;gap:4px;margin-bottom:16px;background:#f1f5f9;border-radius:10px;padding:4px}
-.tab-btn{flex:1;padding:8px 10px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:transparent;color:#64748b;font-family:inherit}
-.tab-btn.active{background:white;color:#0f172a;box-shadow:0 1px 3px rgba(0,0,0,.1)}
-.table-wrap{background:white;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;margin-bottom:14px}
-.table-head{padding:12px 18px;border-bottom:1px solid #f1f5f9;display:grid;gap:8px}
-.table-head span{font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase}
-.tr{padding:12px 18px;display:grid;gap:8px;align-items:center}
-.tr.alt{background:#fff7ed}
-.tr.tier-sub{padding:6px 18px 6px 36px;border-top:1px solid #fed7aa;background:#fff7ed}
-.tr.total{background:#f8fafc;border-top:1px solid #f1f5f9}
-.tr.stripe{border-bottom:1px solid #f8fafc}
-.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;display:inline-block}
-.row-title{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.row-title span{font-size:13px;font-weight:600}
-.row-note{font-size:11px;color:#94a3b8;margin-left:18px;margin-top:1px}
-.badge{font-size:10px;padding:1px 6px;border-radius:4px;font-weight:600}
+.unlocked-note{margin-top:10px;background:var(--teal-light);border:1px solid var(--teal-border);border-radius:8px;padding:8px 12px;font-size:11px;color:#0a7a70;font-weight:500;display:none}
+.cont-note{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e;margin-top:14px;display:none}
+.prior-wrap{display:none;margin-top:14px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.card{border-radius:10px;padding:14px}
+.card-primary{background:var(--navy);color:white}
+.card-secondary{background:white;border:1px solid var(--border)}
+.card-accent{background:var(--teal-light);border:1px solid var(--teal-border)}
+.card .clabel{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.card-primary .clabel{color:rgba(255,255,255,.65)}
+.card-secondary .clabel{color:var(--muted)}
+.card-accent .clabel{color:#0a7a70}
+.card .cval{font-size:20px;font-weight:700;margin-bottom:2px}
+.card-primary .cval{color:white}
+.card-secondary .cval{color:var(--navy)}
+.card-accent .cval{color:#0a7a70}
+.card .csub{font-size:11px;opacity:.65}
+.tabs{display:flex;margin-bottom:16px;background:white;border-radius:10px;border:1px solid var(--border);overflow:hidden}
+.tab-btn{flex:1;padding:10px 8px;border:none;border-right:1px solid var(--border);cursor:pointer;font-size:12px;font-weight:600;background:transparent;color:var(--muted);font-family:'Roboto',sans-serif;transition:all .15s}
+.tab-btn:last-child{border-right:none}
+.tab-btn.active{background:var(--navy);color:white}
+.table-wrap{background:white;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:12px}
+.th{padding:10px 16px;border-bottom:1px solid #f0f0f8;display:grid;gap:8px}
+.th span{font-size:10px;font-weight:700;color:var(--hint);text-transform:uppercase;letter-spacing:.06em}
+.tr{padding:12px 16px;display:grid;gap:8px;align-items:center}
+.tr.stripe{border-bottom:1px solid #f8f8fe}
+.tr.pool-row{background:var(--pink-light)}
+.tr.tier-sub{padding:6px 16px 6px 32px;background:var(--pink-light);border-top:1px solid var(--pink-border)}
+.tr.ops-row{border-bottom:none}
+.tr.total{background:var(--gray);border-top:1px solid var(--border)}
+.tr.hl{background:var(--teal-light)}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block}
+.rtitle{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rtitle .rname{font-size:13px;font-weight:600;color:var(--navy)}
+.rnote{font-size:11px;color:var(--hint);margin-left:16px;margin-top:1px}
+.badge{font-size:10px;padding:2px 7px;border-radius:4px;font-weight:700}
 .r{text-align:right}
-.c3a{grid-template-columns:1fr 80px 100px}
-.c3b{grid-template-columns:1fr 70px 100px}
-.c3c{grid-template-columns:1fr 1fr 100px}
-.c3d{grid-template-columns:100px 60px 1fr}
-.scenario-box{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 16px;margin-bottom:14px}
-.scenario-box .stitle{font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px}
+.c3a{grid-template-columns:1fr 70px 90px}
+.c3b{grid-template-columns:1fr 60px 90px}
+.c3c{grid-template-columns:1fr 1fr 90px}
+.c3d{grid-template-columns:90px 50px 1fr}
+.scenario-box{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px;margin-bottom:12px}
+.scenario-box .stitle{font-size:11px;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
 .si{margin-bottom:8px;padding:8px 10px;background:white;border-radius:8px;border:1px solid #fde68a}
 .si:last-child{margin-bottom:0}
 .si .sl{font-size:12px;font-weight:600;color:#78350f}
 .si .sn{font-size:12px;color:#92400e;margin-top:2px}
-.tl-wrap{padding:20px;margin-bottom:14px}
-.tl-inner{position:relative}
-.tl-line{position:absolute;top:18px;left:18px;right:18px;height:2px;background:#e2e8f0}
-.tl-steps{display:flex;justify-content:space-between;position:relative}
-.tl-step{display:flex;flex-direction:column;align-items:center}
-.tl-circle{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
-.tl-circle span{color:white;font-size:13px;font-weight:800}
-.tl-label{font-size:12px;font-weight:700;text-align:center}
-.tl-sub{font-size:11px;color:#94a3b8;margin-bottom:4px}
-.tl-amt{font-size:14px;font-weight:800}
-.tl-detail{font-size:10px;color:#94a3b8;text-align:center;margin-top:2px}
-.info-note{background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px 16px;margin-bottom:14px;font-size:12px;color:#1e40af}
-.warn-note{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:12px 16px;font-size:12px;color:#7f1d1d}
-.warn-box{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:14px 18px;margin-bottom:14px;display:flex;gap:10px}
-.footer{margin-top:28px;padding-top:20px;border-top:1px solid #f1f5f9;font-size:11px;color:#94a3b8;text-align:center}
+.info-note{background:var(--navy-light);border:1px solid var(--navy-border);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--navy)}
+.success-note{background:var(--teal-light);border:1px solid var(--teal-border);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#0a7a70;font-weight:500}
+.warn-note{background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:10px 14px;font-size:12px;color:#7f1d1d}
+.warn-box{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:14px;margin-bottom:12px;display:flex;gap:10px}
+.qcal{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.qcal-item{border-radius:8px;padding:10px 8px;text-align:center;border:1px solid var(--border);background:white}
+.qcal-item.active{border-color:var(--navy);background:var(--navy-light)}
+.qcal-q{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:2px}
+.qcal-item.active .qcal-q{color:var(--navy)}
+.qcal-range{font-size:10px;color:var(--hint);margin-bottom:4px}
+.qcal-arrow{font-size:14px;color:var(--hint);margin:2px 0}
+.qcal-item.active .qcal-arrow{color:var(--teal)}
+.qcal-payout{font-size:10px;font-weight:600;color:var(--muted)}
+.qcal-item.active .qcal-payout{color:var(--navy)}
+.footer{margin-top:28px;padding-top:18px;border-top:2px solid var(--teal);font-size:11px;color:var(--hint);text-align:center;display:flex;align-items:center;justify-content:center;gap:8px}
+.footer-dot{width:6px;height:6px;border-radius:50%;background:var(--pink);display:inline-block}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="eyebrow">Verge Talent Partners</div>
-  <h1>Sales Incentive Calculator</h1>
+  <div class="vtp-header">
+    <div class="vtp-logo"><span>VTP</span></div>
+    <div>
+      <div class="eyebrow">Verge Talent Partners</div>
+      <h1>Sales Incentive Calculator</h1>
+    </div>
+  </div>
 
   <div class="inputs">
     <div class="grid2">
@@ -108,36 +139,27 @@ input[type=range]{width:100%;cursor:pointer;margin:4px 0}
         </div>
       </div>
       <div class="field">
-        <label>Contribution Margin: <span id="marginLabel" style="font-weight:800">45%</span></label>
-        <input type="range" id="marginSlider" min="20" max="70" value="45" oninput="update()"/>
+        <label>Contribution Margin: <span id="marginLabel" style="color:var(--teal);font-weight:700">45%</span></label>
+        <input type="range" id="marginSlider" min="20" max="70" value="45" oninput="update()" style="accent-color:var(--navy)"/>
         <div class="range-labels">
           <span>20%</span>
-          <span style="color:#dc2626;font-weight:600">30% min</span>
-          <span style="color:#d97706;font-weight:600">40% target</span>
+          <span style="color:var(--pink);font-weight:600">30% min</span>
+          <span style="color:var(--pink);font-weight:600">40% target</span>
           <span>70%</span>
         </div>
       </div>
     </div>
-
     <div id="tierBadge" class="tier-badge"></div>
 
     <div class="section-label">Engagement Classification</div>
     <div class="class-grid">
-      <div class="class-card active" id="cls-netnew" onclick="setClass('netnew')">
-        <div class="ctitle">Net New</div><div class="cdesc">New client, no prior engagement</div>
-      </div>
-      <div class="class-card" id="cls-inbound" onclick="setClass('inbound')">
-        <div class="ctitle">Inbound / Firm Source</div><div class="cdesc">Via website/marketing, no clear owner</div>
-      </div>
-      <div class="class-card" id="cls-cont" onclick="setClass('cont')">
-        <div class="ctitle">Known Continuation</div><div class="cdesc">Phase 2 — anticipated follow-on</div>
-      </div>
-      <div class="class-card" id="cls-expansion" onclick="setClass('expansion')">
-        <div class="ctitle">Expansion / Renewal</div><div class="cdesc">Existing client, not anticipated</div>
-      </div>
+      <div class="class-card active" id="cls-netnew" onclick="setClass('netnew')"><div class="ctitle">Net New</div><div class="cdesc">New client, no prior engagement</div></div>
+      <div class="class-card" id="cls-inbound" onclick="setClass('inbound')"><div class="ctitle">Inbound / Firm Source</div><div class="cdesc">Via website/marketing, no clear owner</div></div>
+      <div class="class-card" id="cls-cont" onclick="setClass('cont')"><div class="ctitle">Known Continuation</div><div class="cdesc">Phase 2 — anticipated follow-on</div></div>
+      <div class="class-card" id="cls-expansion" onclick="setClass('expansion')"><div class="ctitle">Expansion / Renewal</div><div class="cdesc">Existing client, not anticipated</div></div>
     </div>
 
-    <div id="priorWrap" style="display:none;margin-top:14px">
+    <div class="prior-wrap" id="priorWrap">
       <div class="field">
         <label>Prior Contract Value</label>
         <div class="input-wrap">
@@ -145,14 +167,12 @@ input[type=range]{width:100%;cursor:pointer;margin:4px 0}
           <input type="number" id="priorValue" value="0" oninput="update()"/>
         </div>
       </div>
-      <div id="expansionNote" style="font-size:11px;color:#94a3b8;margin-top:6px"></div>
+      <div id="expansionNote" style="font-size:11px;color:var(--hint);margin-top:6px"></div>
     </div>
-    <div id="contNote" class="cont-note" style="display:none">
-      <strong>Known Continuation:</strong> Phase 2 pool at 10% of profit (vs. standard rate for Net New). Tiered cap still applies.
-    </div>
+    <div class="cont-note" id="contNote"><strong>Known Continuation:</strong> Phase 2 pool at 10% of profit (vs. standard rate for Net New). Tiered cap still applies.</div>
 
     <div class="two-key">
-      <div class="two-key-title">🔑 Variable Pool Rate — Two-Key Rule</div>
+      <div class="two-key-title">Variable Pool Rate — Two-Key Rule</div>
       <div class="key-row">
         <div class="key-toggle" id="key1" onclick="toggleKey(1)"><span class="check">✓</span></div>
         <div class="key-label">Trailing 3-month P&L is at or above breakeven</div>
@@ -161,18 +181,21 @@ input[type=range]{width:100%;cursor:pointer;margin:4px 0}
         <div class="key-toggle" id="key2" onclick="toggleKey(2)"><span class="check">✓</span></div>
         <div class="key-label">EOY projection or 6-month runway points to breakeven or net profit</div>
       </div>
-      <div id="rateRow" class="rate-row" style="display:none">
-        <label>Active Pool Rate: <span id="rateLabel">15%</span></label>
-        <input type="range" id="rateSlider" min="15" max="25" value="15" oninput="update()" style="accent-color:#059669"/>
+      <div class="rate-row" id="rateRow" style="display:none">
+        <div class="rlabel">Active Pool Rate: <span id="rateLabel">15%</span></div>
+        <input type="range" id="rateSlider" min="15" max="25" value="15" oninput="update()" style="accent-color:var(--teal)"/>
         <div class="range-labels"><span>15% (base)</span><span>25% (max)</span></div>
         <div class="rate-note">Both conditions met — founders may set rate between 15% and 25% for this period.</div>
       </div>
-      <div id="lockedNote" class="locked-note">Both conditions must be met to unlock a rate above 15%. Pool rate is locked at base (15%).</div>
-      <div id="unlockedNote" class="unlocked-note" style="display:none"></div>
+      <div class="locked-note" id="lockedNote">Both conditions must be met to unlock a rate above 15%. Pool rate is locked at base (15%).</div>
+      <div class="unlocked-note" id="unlockedNote"></div>
     </div>
 
     <div class="section-label">Engagement Length</div>
     <div class="months" id="monthBtns"></div>
+
+    <div class="section-label">Deal Start Quarter</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px" id="qBtns"></div>
   </div>
 
   <div class="cards" id="summaryCards"></div>
@@ -187,12 +210,23 @@ input[type=range]{width:100%;cursor:pointer;margin:4px 0}
   <div id="panel-pool" style="display:none"></div>
   <div id="panel-payout" style="display:none"></div>
 
-  <div class="footer">Verge Talent Partners · Sales Incentive Plan · Internal Use Only</div>
+  <div class="footer">
+    <span class="footer-dot"></span>
+    Verge Talent Partners &nbsp;·&nbsp; Sales Incentive Plan &nbsp;·&nbsp; Internal Use Only
+    <span class="footer-dot"></span>
+  </div>
 </div>
 
 <script>
 const fmt = n => "$" + Math.round(n).toLocaleString();
 const MONTHS = [3,4,6,9,12];
+const QUARTERS = [
+  {label:"Q1",range:"Jan–Mar",payout:"Paid end of Q2 (Jun 30)"},
+  {label:"Q2",range:"Apr–Jun",payout:"Paid end of Q3 (Sep 30)"},
+  {label:"Q3",range:"Jul–Sep",payout:"Paid end of Q4 (Dec 31)"},
+  {label:"Q4",range:"Oct–Dec",payout:"Paid end of Q1 next yr (Mar 31)"},
+];
+const Q_PAYOUT = ["Jun 30","Sep 30","Dec 31","Mar 31 (next yr)"];
 const ROLES = [
   {label:"Relationship Source",        pct:10, desc:"Originated or owned the client relationship"},
   {label:"Proposal / Conversion Lead", pct:60, desc:"Ran the proposal process, closed the deal"},
@@ -205,42 +239,52 @@ const MARGIN_TIERS = [
   {range:"40%+",      rate:null, signal:"Full pool — rate set by Two-Key Rule"},
 ];
 const CLS_LABELS = {netnew:"Net New",inbound:"Inbound / Firm",cont:"Known Continuation",expansion:"Expansion"};
-const STEP_COLORS = ["#7c3aed","#2563eb","#059669","#d97706","#db2777","#0891b2"];
 
-let keys = {k1:false, k2:false};
-let state = {cv:100000, mp:45, cls:"netnew", pv:0, months:6, tab:"buckets", rate:15};
+let keys={k1:false,k2:false};
+let state={cv:100000,mp:45,cls:"netnew",pv:0,months:6,tab:"buckets",rate:15,startQ:0};
 
-function getMarginTier(m) {
+function getMarginTier(m){
   if(m<30) return {rate:0,    label:"No Pool",           color:"#dc2626",bg:"#fef2f2",border:"#fecaca",msg:"Below 30% — firm absorbing delivery cost. No pool."};
   if(m<35) return {rate:0.05, label:"Minimal Pool (5%)", color:"#d97706",bg:"#fffbeb",border:"#fde68a",msg:"30–34% margin — below floor. Minimal reward."};
-  if(m<40) return {rate:0.08, label:"Partial Pool (8%)", color:"#2563eb",bg:"#eff6ff",border:"#bfdbfe",msg:"35–39% margin — below target. Partial reward."};
-  return         {rate:null,  label:"Full Pool",         color:"#059669",bg:"#f0fdf4",border:"#bbf7d0",msg:"40%+ margin — full pool active."};
+  if(m<40) return {rate:0.08, label:"Partial Pool (8%)", color:"var(--navy)",bg:"var(--navy-light)",border:"var(--navy-border)",msg:"35–39% margin — below target. Partial reward."};
+  return         {rate:null,  label:"Full Pool",         color:"#0a7a70",bg:"var(--teal-light)",border:"var(--teal-border)",msg:"40%+ margin — full pool active."};
 }
 
-function calcTieredPool(profit, baseRate) {
+function calcPool(profit, baseRate){
   if(baseRate===0) return {pool:0,breakdown:[]};
-  const t1=Math.min(profit,150000), t2=Math.min(Math.max(profit-150000,0),150000), t3=Math.max(profit-300000,0);
-  const r1=baseRate, r2=Math.min(baseRate,0.08), r3=Math.min(baseRate,0.05);
-  const a1=t1*r1, a2=t2*r2, a3=t3*r3;
+  const t1=Math.min(profit,150000),t2=Math.min(Math.max(profit-150000,0),150000),t3=Math.max(profit-300000,0);
+  const r1=baseRate,r2=Math.min(baseRate,0.08),r3=Math.min(baseRate,0.05);
+  const a1=t1*r1,a2=t2*r2,a3=t3*r3;
   const bd=[{label:`First ${fmt(t1)} of profit`,rate:+(r1*100).toFixed(1),amount:a1}];
   if(t2>0) bd.push({label:`Next ${fmt(t2)} of profit`,rate:+(r2*100).toFixed(1),amount:a2});
   if(t3>0) bd.push({label:`Above $300K`,rate:+(r3*100).toFixed(1),amount:a3});
   return {pool:a1+a2+a3,breakdown:bd};
 }
 
-function toggleKey(k) {
+function getPayoutSchedule(startQ, months){
+  const n=Math.ceil(months/3);
+  const events=[];
+  for(let i=0;i<n;i++){
+    const aq=(startQ+i)%4;
+    const pd=Q_PAYOUT[aq];
+    if(!events.find(e=>e.payoutDate===pd)) events.push({activityQ:aq,label:QUARTERS[aq].label+" activity",payoutDate:pd});
+  }
+  return events;
+}
+
+function toggleKey(k){
   if(k===1) keys.k1=!keys.k1; else keys.k2=!keys.k2;
   document.getElementById('key1').classList.toggle('on',keys.k1);
   document.getElementById('key2').classList.toggle('on',keys.k2);
-  const unlocked=keys.k1&&keys.k2;
-  document.getElementById('rateRow').style.display=unlocked?'block':'none';
-  document.getElementById('lockedNote').style.display=unlocked?'none':'block';
-  document.getElementById('unlockedNote').style.display=unlocked?'block':'none';
-  if(!unlocked){document.getElementById('rateSlider').value=15; state.rate=15;}
+  const u=keys.k1&&keys.k2;
+  document.getElementById('rateRow').style.display=u?'block':'none';
+  document.getElementById('lockedNote').style.display=u?'none':'block';
+  document.getElementById('unlockedNote').style.display=u?'block':'none';
+  if(!u){document.getElementById('rateSlider').value=15;state.rate=15;}
   update();
 }
 
-function setClass(c) {
+function setClass(c){
   state.cls=c;
   document.querySelectorAll('.class-card').forEach(el=>el.classList.remove('active'));
   document.getElementById('cls-'+c).classList.add('active');
@@ -249,7 +293,7 @@ function setClass(c) {
   update();
 }
 
-function setTab(t) {
+function setTab(t){
   state.tab=t;
   ['buckets','pool','payout'].forEach(id=>{
     document.getElementById('panel-'+id).style.display=id===t?'block':'none';
@@ -257,39 +301,39 @@ function setTab(t) {
   });
 }
 
-function setMonth(m) {
+function setMonth(m){
   state.months=m;
-  document.querySelectorAll('.month-btn').forEach(btn=>btn.classList.toggle('active',parseInt(btn.dataset.m)===m));
+  document.querySelectorAll('.mbtn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.m)===m));
+  update();
+}
+
+function setStartQ(q){
+  state.startQ=q;
+  document.querySelectorAll('.qbtn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.q)===q));
   update();
 }
 
 (function(){
-  const wrap=document.getElementById('monthBtns');
-  MONTHS.forEach(m=>{
-    const btn=document.createElement('button');
-    btn.className='month-btn'+(m===6?' active':'');
-    btn.textContent=m+'mo'; btn.dataset.m=m;
-    btn.onclick=()=>setMonth(m);
-    wrap.appendChild(btn);
-  });
+  const mw=document.getElementById('monthBtns');
+  MONTHS.forEach(m=>{const b=document.createElement('button');b.className='mbtn'+(m===6?' active':'');b.textContent=m+'mo';b.dataset.m=m;b.onclick=()=>setMonth(m);mw.appendChild(b);});
+  const qw=document.getElementById('qBtns');
+  QUARTERS.forEach((q,i)=>{const b=document.createElement('button');b.className='mbtn qbtn'+(i===0?' active':'');b.textContent=q.label;b.dataset.q=i;b.onclick=()=>setStartQ(i);qw.appendChild(b);});
 })();
 
-function update() {
-  // Read inputs
-  const cv  = parseFloat(document.getElementById('contractValue').value)||0;
-  const mp  = parseInt(document.getElementById('marginSlider').value)||0;
-  const pv  = parseFloat(document.getElementById('priorValue').value)||0;
-  const ar  = parseInt(document.getElementById('rateSlider').value)||15;
-  state.cv=cv; state.mp=mp; state.pv=pv; state.rate=ar;
+function update(){
+  const cv=parseFloat(document.getElementById('contractValue').value)||0;
+  const mp=parseInt(document.getElementById('marginSlider').value)||0;
+  const pv=parseFloat(document.getElementById('priorValue').value)||0;
+  const ar=parseInt(document.getElementById('rateSlider').value)||15;
+  state.cv=cv;state.mp=mp;state.pv=pv;state.rate=ar;
 
-  const unlocked = keys.k1&&keys.k2;
-  const tier     = getMarginTier(mp);
-  const profit   = cv*(mp/100);
-  const noPool   = mp<30;
-  const isExp    = state.cls==='expansion';
-  const isCont   = state.cls==='cont';
+  const unlocked=keys.k1&&keys.k2;
+  const tier=getMarginTier(mp);
+  const profit=cv*(mp/100);
+  const noPool=mp<30;
+  const isExp=state.cls==='expansion';
+  const isCont=state.cls==='cont';
 
-  // Effective base rate
   let baseRate=0;
   if(!noPool){
     if(mp<35) baseRate=0.05;
@@ -298,28 +342,21 @@ function update() {
     if(isCont) baseRate=Math.min(baseRate,0.10);
   }
 
-  // Pool calculation
-  const expansionBase = isExp&&pv>0?Math.max(0,cv-pv):0;
-  const {pool:salesPool,breakdown} = isExp
-    ?{pool:expansionBase*0.05,breakdown:[{label:"5% of incremental value",rate:5,amount:expansionBase*0.05}]}
-    :calcTieredPool(profit,baseRate);
+  const expBase=isExp&&pv>0?Math.max(0,cv-pv):0;
+  const {pool:salesPool,breakdown}=isExp
+    ?{pool:expBase*0.05,breakdown:[{label:"5% of incremental value",rate:5,amount:expBase*0.05}]}
+    :calcPool(profit,baseRate);
 
-  const opsCost    = profit-salesPool;
-  const monthlyBill= cv/state.months;
+  const opsCost=profit-salesPool;
+  const monthlyBill=cv/state.months;
+  const sourceSlice=salesPool*0.10;
+  const lcPool=salesPool*0.90;
+  const payEvents=getPayoutSchedule(state.startQ,state.months);
+  const perEvent=payEvents.length>0?lcPool/payEvents.length:0;
+  const isShort=state.months<=3;
 
-  // Payout schedule
-  const sourceSlice     = salesPool*0.10;
-  const leadContribPool = salesPool*0.90;
-  const qEvents = [];
-  for(let m=1; m<=state.months; m+=2) qEvents.push(m);
-  const perEvent = qEvents.length>0 ? leadContribPool/qEvents.length : 0;
-
-  // ── UI Updates ──
-
-  // Margin label + slider
+  // Margin label
   document.getElementById('marginLabel').textContent=mp+'%';
-  document.getElementById('marginLabel').style.color=tier.color;
-  document.getElementById('marginSlider').style.accentColor=tier.color;
 
   // Rate label
   document.getElementById('rateLabel').textContent=ar+'%';
@@ -327,84 +364,78 @@ function update() {
   // Tier badge
   const fullLabel=mp>=40?`Full Pool (${unlocked?ar:15}%)`:tier.label;
   document.getElementById('tierBadge').style.cssText=`margin-top:14px;border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;background:${tier.bg};border:1px solid ${tier.border}`;
-  document.getElementById('tierBadge').innerHTML=`<span style="font-size:12px;font-weight:600;color:${tier.color}">${tier.msg}</span><span style="font-size:13px;font-weight:800;color:${tier.color};white-space:nowrap">${fullLabel}</span>`;
+  document.getElementById('tierBadge').innerHTML=`<span style="font-size:12px;font-weight:500;color:${tier.color}">${tier.msg}</span><span style="font-size:12px;font-weight:700;color:${tier.color};white-space:nowrap">${fullLabel}</span>`;
 
-  // Unlocked note
   if(unlocked) document.getElementById('unlockedNote').textContent=`Both conditions met — pool rate set to ${ar}%. Applies to all deals closing this period.`;
-
-  // Expansion note
-  if(isExp) document.getElementById('expansionNote').textContent=`Expansion bonus = 5% of incremental value (${fmt(expansionBase)})`;
+  if(isExp) document.getElementById('expansionNote').textContent=`Expansion bonus = 5% of incremental value (${fmt(expBase)})`;
 
   // Summary cards
-  document.getElementById('summaryCards').innerHTML=[
-    {label:"Contract Value",val:fmt(cv),       sub:`${fmt(monthlyBill)}/mo · ${state.months} months`,color:"#0f172a"},
-    {label:"Total Profit",  val:fmt(profit),    sub:`${mp}% margin`,                                 color:"#0f172a"},
-    {label:"Sales Pool",    val:fmt(salesPool), sub:noPool?"No pool at this margin":CLS_LABELS[state.cls],color:tier.color},
-  ].map(c=>`<div class="card"><div class="clabel">${c.label}</div><div class="cval" style="color:${c.color}">${c.val}</div><div class="csub">${c.sub}</div></div>`).join('');
+  document.getElementById('summaryCards').innerHTML=`
+    <div class="card card-primary"><div class="clabel">Contract Value</div><div class="cval">${fmt(cv)}</div><div class="csub">${fmt(monthlyBill)}/mo · ${state.months} months</div></div>
+    <div class="card card-secondary"><div class="clabel">Total Profit</div><div class="cval">${fmt(profit)}</div><div class="csub">${mp}% margin</div></div>
+    <div class="card card-accent"><div class="clabel">Sales Pool</div><div class="cval">${fmt(salesPool)}</div><div class="csub">${noPool?"No pool at this margin":CLS_LABELS[state.cls]}</div></div>`;
 
-  // ── BUCKETS PANEL ──
+  // ── BUCKETS ──
   let bk=`<div class="table-wrap">
-    <div class="table-head c3a"><span>Allocation</span><span class="r">Rate</span><span class="r">Amount</span></div>
-    <div class="tr alt c3a">
+    <div class="th c3a"><span>Allocation</span><span class="r">Rate</span><span class="r">Amount</span></div>
+    <div class="tr pool-row c3a">
       <div>
-        <div class="row-title">
-          <span class="dot" style="background:#dc2626"></span>
-          <span>Sales Incentive Pool ★</span>
-          <span class="badge" style="background:${tier.bg};color:${tier.color}">${CLS_LABELS[state.cls]}</span>
-        </div>
-        <div class="row-note">Tiered by profit size — see breakdown below</div>
+        <div class="rtitle"><span class="dot" style="background:var(--pink)"></span><span class="rname">Sales Incentive Pool</span>
+        <span class="badge" style="background:var(--pink-light);color:var(--pink)">${CLS_LABELS[state.cls]}</span></div>
+        <div class="rnote">Tiered by profit size — see breakdown below</div>
       </div>
-      <div class="r" style="font-size:13px;font-weight:700;color:${tier.color}">Tiered</div>
-      <div class="r" style="font-size:14px;font-weight:700;color:#dc2626">${fmt(salesPool)}</div>
+      <div class="r" style="font-size:13px;font-weight:700;color:var(--pink)">Tiered</div>
+      <div class="r" style="font-size:14px;font-weight:700;color:var(--pink)">${fmt(salesPool)}</div>
     </div>`;
   breakdown.forEach(row=>{
     bk+=`<div class="tr tier-sub c3a">
-      <span style="font-size:11px;color:#92400e">${row.label}</span>
-      <span class="r" style="font-size:11px;color:#92400e">${row.rate}%</span>
-      <span class="r" style="font-size:12px;font-weight:600;color:#c2410c">${fmt(row.amount)}</span>
+      <span style="font-size:11px;color:var(--pink)">${row.label}</span>
+      <span class="r" style="font-size:11px;color:var(--pink)">${row.rate}%</span>
+      <span class="r" style="font-size:12px;font-weight:600;color:var(--pink)">${fmt(row.amount)}</span>
     </div>`;
   });
-  bk+=`<div class="tr c3a">
+  bk+=`<div class="tr ops-row c3a">
     <div>
-      <div class="row-title"><span class="dot" style="background:#2563eb"></span><span>Operating Costs</span></div>
-      <div class="row-note">Payroll, contractors, taxes, tooling, reserves — managed at firm level</div>
+      <div class="rtitle"><span class="dot" style="background:var(--navy)"></span><span class="rname">Operating Costs</span></div>
+      <div class="rnote">Payroll, contractors, taxes, tooling, reserves — managed at firm level</div>
     </div>
-    <div class="r" style="font-size:13px;font-weight:700;color:#475569">—</div>
-    <div class="r" style="font-size:14px;font-weight:700">${fmt(opsCost)}</div>
+    <div class="r" style="font-size:13px;font-weight:600;color:var(--muted)">—</div>
+    <div class="r" style="font-size:14px;font-weight:700;color:var(--navy)">${fmt(opsCost)}</div>
   </div>
   <div class="tr total c3a">
-    <span style="font-size:13px;font-weight:700">Total Profit</span>
-    <span class="r" style="font-size:13px;font-weight:700">100%</span>
-    <span class="r" style="font-size:14px;font-weight:800">${fmt(profit)}</span>
+    <span style="font-size:13px;font-weight:700;color:var(--navy)">Total Profit</span>
+    <span class="r" style="font-size:13px;font-weight:700;color:var(--navy)">100%</span>
+    <span class="r" style="font-size:14px;font-weight:700;color:var(--navy)">${fmt(profit)}</span>
   </div></div>`;
-  bk+=`<div class="table-wrap"><div class="table-head c3d"><span>Margin</span><span class="r">Pool</span><span>Signal</span></div>`;
+  bk+=`<div class="table-wrap"><div class="th c3d"><span>Margin</span><span class="r">Pool</span><span>Signal</span></div>`;
   MARGIN_TIERS.forEach((t,i)=>{
     const active=(t.rate===0&&mp<30)||(t.rate===0.05&&mp>=30&&mp<35)||(t.rate===0.08&&mp>=35&&mp<40)||(t.rate===null&&mp>=40);
     const rl=t.rate===null?(unlocked?`${ar}%`:'15%'):(t.rate*100)+'%';
-    bk+=`<div class="tr c3d" style="background:${active?tier.bg:'white'};border-bottom:${i<3?'1px solid #f8fafc':'none'}">
-      <span style="font-size:13px;font-weight:${active?700:500};color:${active?tier.color:'#475569'}">${t.range}</span>
-      <span class="r" style="font-size:13px;font-weight:700;color:${active?tier.color:'#94a3b8'}">${rl}</span>
-      <span style="font-size:12px;color:${active?tier.color:'#94a3b8'}">${t.signal}${active?' ◀ current':''}</span>
+    const tc=active?tier.color:'var(--hint)';
+    bk+=`<div class="tr c3d" style="background:${active?tier.bg:'white'};border-bottom:${i<3?'1px solid #f8f8fe':'none'}">
+      <span style="font-size:13px;font-weight:${active?700:400};color:${active?tier.color:'var(--muted)'}">${t.range}</span>
+      <span class="r" style="font-size:13px;font-weight:700;color:${tc}">${rl}</span>
+      <span style="font-size:12px;color:${tc}">${t.signal}${active?' ◀ current':''}</span>
     </div>`;
   });
   bk+=`</div>`;
   document.getElementById('panel-buckets').innerHTML=bk;
 
-  // ── POOL PANEL ──
+  // ── POOL ──
   let pl='';
-  if(noPool) pl+=`<div class="warn-box"><div style="font-size:18px">⚠️</div><div><div style="font-weight:700;color:#dc2626;font-size:13px">No Pool at This Margin</div><div style="font-size:12px;color:#7f1d1d;margin-top:2px">Below 30% the firm is absorbing delivery cost. Adjust the margin slider.</div></div></div>`;
-  pl+=`<div class="table-wrap"><div class="table-head c3b"><span>Role</span><span class="r">%</span><span class="r">Amount</span></div>`;
+  if(noPool) pl+=`<div class="warn-box"><div style="font-size:16px">⚠</div><div><div style="font-weight:700;color:#dc2626;font-size:13px">No Pool at This Margin</div><div style="font-size:12px;color:#7f1d1d;margin-top:2px">Below 30% the firm is absorbing delivery cost. Adjust the margin slider.</div></div></div>`;
+  pl+=`<div class="table-wrap"><div class="th c3b"><span>Role</span><span class="r">%</span><span class="r">Amount</span></div>`;
   ROLES.forEach((r,i)=>{
     pl+=`<div class="tr c3b${i<2?' stripe':''}">
-      <div><div style="font-size:13px;font-weight:600">${r.label}</div><div style="font-size:11px;color:#94a3b8">${r.desc}</div></div>
-      <div class="r" style="font-size:13px;font-weight:600;color:#475569">${r.pct}%</div>
-      <div class="r" style="font-size:14px;font-weight:700">${fmt(salesPool*(r.pct/100))}</div>
+      <div><div style="font-size:13px;font-weight:600;color:var(--navy)">${r.label}</div><div style="font-size:11px;color:var(--hint);margin-top:1px">${r.desc}</div></div>
+      <div class="r" style="font-size:13px;font-weight:600;color:var(--muted)">${r.pct}%</div>
+      <div class="r" style="font-size:14px;font-weight:700;color:var(--navy)">${fmt(salesPool*(r.pct/100))}</div>
     </div>`;
   });
   pl+=`<div class="tr total c3b">
-    <span style="font-size:13px;font-weight:700">Total Pool</span>
-    <span class="r" style="font-size:13px;font-weight:700">100%</span>
-    <span class="r" style="font-size:14px;font-weight:800;color:${tier.color}">${fmt(salesPool)}</span>
+    <span style="font-size:13px;font-weight:700;color:var(--navy)">Total Pool</span>
+    <span class="r" style="font-size:13px;font-weight:700;color:var(--navy)">100%</span>
+    <span class="r" style="font-size:14px;font-weight:700;color:var(--navy)">${fmt(salesPool)}</span>
   </div></div>`;
   pl+=`<div class="scenario-box"><div class="stitle">Common Scenarios</div>
     ${[
@@ -415,53 +446,43 @@ function update() {
   </div>`;
   document.getElementById('panel-pool').innerHTML=pl;
 
-  // ── PAYOUT PANEL ──
+  // ── PAYOUT ──
   let py='';
-  if(noPool) py+=`<div class="warn-note" style="margin-bottom:14px"><strong>No pool at this margin.</strong> Adjust the slider above 30% to see payout schedule.</div>`;
-  py+=`<div class="info-note"><strong>How it works:</strong> The Relationship Source (10%) is paid at signing. The remaining 90% is split equally across quarterly payout events, starting after the first full invoice is collected (end of Month 1).</div>`;
+  if(noPool) py+=`<div class="warn-note" style="margin-bottom:12px"><strong>No pool at this margin.</strong> Adjust the slider above 30% to see payout schedule.</div>`;
+  py+=`<div class="info-note"><strong>How it works:</strong> The Relationship Source (10%) is paid at contract signing. The Lead + Contributor pool (90%) is distributed at the end of the quarter following each quarter of active work.</div>`;
+  py+=`<div class="qcal">`;
+  QUARTERS.forEach((q,i)=>{
+    const active=i===state.startQ;
+    py+=`<div class="qcal-item${active?' active':''}">
+      <div class="qcal-q">${q.label}</div>
+      <div class="qcal-range">${q.range}</div>
+      <div class="qcal-arrow">↓</div>
+      <div class="qcal-payout">${q.payout}</div>
+    </div>`;
+  });
+  py+=`</div>`;
+  if(isShort) py+=`<div class="success-note"><strong>Short engagement carve-out applies.</strong> Full Lead + Contributor balance settled at the next scheduled payout date.</div>`;
 
-  // Build all payout steps: signing + quarterly events
-  const allSteps = [
-    {label:"Signing", sub:"Month 0", amount:sourceSlice, color:STEP_COLORS[0], detail:"Relationship Source (10%)"},
-    ...qEvents.map((m,i)=>({
-      label:`Payout ${i+1}`,
-      sub:`Month ${m}`,
-      amount:perEvent,
-      color:STEP_COLORS[Math.min(i+1,STEP_COLORS.length-1)],
-      detail:`1/${qEvents.length} of Lead + Contributors`
-    }))
-  ];
-
-  // Timeline — show signing + first 3 quarterly events max for layout
-  const tlSteps = allSteps.slice(0,4);
-  const pct = Math.floor(100/tlSteps.length)-2;
-  py+=`<div class="table-wrap tl-wrap"><div class="tl-inner">
-    <div class="tl-line"></div>
-    <div class="tl-steps">
-      ${tlSteps.map((ev,i)=>`<div class="tl-step" style="width:${pct}%">
-        <div class="tl-circle" style="background:${ev.color}"><span>${i+1}</span></div>
-        <div class="tl-label">${ev.label}</div>
-        <div class="tl-sub">${ev.sub}</div>
-        <div class="tl-amt" style="color:${ev.color}">${fmt(ev.amount)}</div>
-        <div class="tl-detail">${ev.detail}</div>
-      </div>`).join('')}
-    </div>
-  </div></div>`;
-
-  // Full payout table — all events
-  py+=`<div class="table-wrap"><div class="table-head c3c"><span>Event</span><span>What's Paid</span><span class="r">Amount</span></div>`;
-  allSteps.forEach((s,i)=>{
-    py+=`<div class="tr c3c${i<allSteps.length-1?' stripe':''}">
-      <div style="font-size:12px;font-weight:600">${s.label} (${s.sub})</div>
-      <div style="font-size:12px;color:#64748b">${s.detail}</div>
-      <div class="r" style="font-size:14px;font-weight:700;color:${s.color}">${fmt(s.amount)}</div>
+  const pColors=["var(--navy)","var(--pink)","#0a7a70","#d97706"];
+  py+=`<div class="table-wrap"><div class="th c3c"><span>Event</span><span>Payout Date</span><span class="r">Amount</span></div>`;
+  py+=`<div class="tr stripe c3c">
+    <div style="font-size:12px;font-weight:600;color:var(--navy)">Contract signed</div>
+    <div style="font-size:12px;color:var(--muted)">At signing — Relationship Source (10%)</div>
+    <div class="r" style="font-size:14px;font-weight:700;color:var(--pink)">${fmt(sourceSlice)}</div>
+  </div>`;
+  payEvents.forEach((ev,i)=>{
+    const note=`1/${payEvents.length} of Lead + Contributor pool`;
+    py+=`<div class="tr${i<payEvents.length-1?' stripe':''} c3c${ev.isShort?' hl':''}">
+      <div style="font-size:12px;font-weight:600;color:var(--navy)">${ev.label}</div>
+      <div style="font-size:12px;color:var(--muted)">${ev.payoutDate} — ${note}</div>
+      <div class="r" style="font-size:14px;font-weight:700;color:${pColors[i%pColors.length]}">${fmt(perEvent)}</div>
     </div>`;
   });
   py+=`<div class="tr total c3c">
-    <span style="font-size:13px;font-weight:700">Total Pool</span><span></span>
-    <span class="r" style="font-size:14px;font-weight:800;color:${tier.color}">${fmt(salesPool)}</span>
+    <span style="font-size:13px;font-weight:700;color:var(--navy)">Total Pool</span><span></span>
+    <span class="r" style="font-size:14px;font-weight:700;color:var(--navy)">${fmt(salesPool)}</span>
   </div></div>`;
-  py+=`<div class="info-note" style="margin-bottom:14px"><strong>W-2 employees only.</strong> Contractors are not eligible for SIP distributions.</div>`;
+  py+=`<div class="info-note" style="margin-bottom:12px"><strong>W-2 employees only.</strong> Contractors are not eligible for SIP distributions.</div>`;
   py+=`<div class="warn-note"><strong>Early cancellation rule:</strong> Payouts already made are retained. No further distributions beyond what's been proportionally earned.</div>`;
   document.getElementById('panel-payout').innerHTML=py;
 }
