@@ -177,16 +177,7 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
         <div class="class-card" id="cls-expansion" onclick="setClass('expansion')"><div class="ctitle">Expansion / Renewal</div><div class="cdesc">Existing client, not anticipated</div></div>
       </div>
 
-      <div class="prior-wrap" id="priorWrap">
-        <div class="field">
-          <label>Prior Contract Value</label>
-          <div class="input-wrap">
-            <span class="prefix">$</span>
-            <input type="number" id="priorValue" value="0" oninput="update()"/>
-          </div>
-        </div>
-        <div id="expansionNote" style="font-size:11px;color:var(--hint);margin-top:6px"></div>
-      </div>
+      <div id="expNote" class="cont-note" style="display:none"><strong>Organic Growth / Extension:</strong> Bonus pool calculated at 8% of net profit. Same quarterly payout cycle applies. If contributors are contractors, their slice splits 50/50 between relationship owner and project lead.</div>
       <div class="cont-note" id="contNote"><strong>Known Continuation:</strong> Enter the combined Phase 1 + Phase 2 contract value and margin above. Standard 15% pool rate applies to the combined profit — one calculation.</div>
 
       <div class="two-key">
@@ -309,7 +300,7 @@ function setClass(c){
   state.cls=c;
   document.querySelectorAll('.class-card').forEach(el=>el.classList.remove('active'));
   document.getElementById('cls-'+c).classList.add('active');
-  document.getElementById('priorWrap').style.display=c==='expansion'?'block':'none';
+  document.getElementById('expNote').style.display = isExp ? 'block' : 'none';
   document.getElementById('contNote').style.display=c==='cont'?'block':'none';
   update();
 }
@@ -375,9 +366,9 @@ function update(){
     // No special rate for Known Continuation — same as standard
   }
 
-  const expBase   = isExp&&pv>0 ? Math.max(0,cv-pv) : 0;
+  const expBase   = isExp ? profit * 0.08 : 0;
   const {pool:salesPool,breakdown} = isExp
-    ? {pool:expBase*0.05, breakdown:[{label:"5% of incremental value",rate:5,amount:expBase*0.05}]}
+    ? {pool:expBase, breakdown:[{label:"8% of net profit",rate:8,amount:expBase}]}
     : calcPool(profit,baseRate);
 
   const opsCost     = profit-salesPool;
