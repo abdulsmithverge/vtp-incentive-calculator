@@ -392,7 +392,7 @@ function update(){
     if(mp<35) baseRate=0.05;
     else if(mp<40) baseRate=0.08;
     else baseRate=unlocked?ar/100:0.15;
-    if(isCont) baseRate=Math.min(baseRate,0.10);
+    if(isCont) baseRate = unlocked ? ar/100 : 0.15;
   }
 
   const expBase=isExp&&pv>0?Math.max(0,cv-pv):0;
