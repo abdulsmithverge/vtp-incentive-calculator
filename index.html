@@ -26,21 +26,12 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Roboto',sans-serif;background:#f0f0f8;min-height:100vh;padding:32px 16px}
 .wrap{max-width:740px;margin:0 auto;border-radius:20px;overflow:hidden;box-shadow:0 8px 40px rgba(13,19,25,.18)}
-
-/* ── Header ── */
 .header{background:var(--dark);padding:28px 32px 24px;position:relative;overflow:hidden}
-.header-accent{position:absolute;top:0;right:0;width:180px;height:4px;background:linear-gradient(90deg,var(--blue),var(--magenta),var(--green))}
+.header-accent{position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--blue),var(--magenta),var(--green))}
 .header-inner{display:flex;align-items:center;justify-content:space-between}
 .header-text .eyebrow{font-family:'Poppins',sans-serif;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:6px}
-.header-text h1{font-family:'Poppins',sans-serif;font-size:22px;font-weight:700;color:#ffffff;line-height:1.2}
-
-/* Diamond logo mark */
-.logo-mark{flex-shrink:0}
-
-/* ── Body ── */
+.header-text h1{font-family:'Poppins',sans-serif;font-size:22px;font-weight:700;color:#fff;line-height:1.2}
 .body{background:var(--surface);padding:28px 32px 36px}
-
-/* Inputs card */
 .inputs{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:18px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .field label{display:block;font-family:'Poppins',sans-serif;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
@@ -53,10 +44,10 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
 .tier-badge{margin-top:14px;border-radius:9px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px}
 .section-label{font-family:'Poppins',sans-serif;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:16px 0 8px}
 .months{display:flex;gap:6px;flex-wrap:wrap}
-.mbtn{padding:6px 14px;border-radius:7px;border:1.5px solid var(--border);background:white;color:var(--muted);font-weight:600;font-size:12px;cursor:pointer;font-family:'Roboto',sans-serif;transition:all .15s}
+.mbtn{padding:6px 14px;border-radius:7px;border:1.5px solid var(--border);background:white;color:var(--muted);font-weight:600;font-size:12px;cursor:pointer;font-family:'Roboto',sans-serif}
 .mbtn.active{border-color:var(--blue);background:var(--blue);color:white}
 .class-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
-.class-card{padding:10px 12px;border-radius:9px;border:1.5px solid var(--border);background:white;cursor:pointer;transition:all .15s}
+.class-card{padding:10px 12px;border-radius:9px;border:1.5px solid var(--border);background:white;cursor:pointer}
 .class-card.active{border-color:var(--blue);background:var(--blue-light)}
 .class-card .ctitle{font-family:'Poppins',sans-serif;font-size:11px;font-weight:600;color:var(--muted)}
 .class-card.active .ctitle{color:var(--blue)}
@@ -65,7 +56,7 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
 .two-key-title{font-family:'Poppins',sans-serif;font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
 .key-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .key-row:last-of-type{margin-bottom:0}
-.key-toggle{width:18px;height:18px;border-radius:4px;border:2px solid var(--hint);background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.key-toggle{width:18px;height:18px;border-radius:4px;border:2px solid var(--hint);background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .key-toggle.on{background:var(--blue);border-color:var(--blue)}
 .key-toggle .ck{color:white;font-size:10px;font-weight:700;display:none}
 .key-toggle.on .ck{display:block}
@@ -77,8 +68,6 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
 .unlocked-note{margin-top:10px;background:var(--green-light);border:1px solid var(--green-border);border-radius:8px;padding:8px 12px;font-size:11px;color:#0a6b63;font-weight:500;display:none}
 .cont-note{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e;margin-top:14px;display:none}
 .prior-wrap{display:none;margin-top:14px}
-
-/* Summary cards */
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
 .card{border-radius:12px;padding:16px}
 .card-dark{background:var(--dark);color:white}
@@ -94,14 +83,10 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
 .card-green .cval{color:#0a6b63}
 .card .csub{font-size:11px;opacity:.6}
 .card-dark .csub{color:rgba(255,255,255,.7);opacity:1}
-
-/* Tabs */
 .tabs{display:flex;margin-bottom:18px;background:var(--surface2);border-radius:11px;border:1px solid var(--border);overflow:hidden}
-.tab-btn{flex:1;padding:11px 8px;border:none;border-right:1px solid var(--border);cursor:pointer;font-family:'Poppins',sans-serif;font-size:11px;font-weight:600;background:transparent;color:var(--muted);transition:all .15s}
+.tab-btn{flex:1;padding:11px 8px;border:none;border-right:1px solid var(--border);cursor:pointer;font-family:'Poppins',sans-serif;font-size:11px;font-weight:600;background:transparent;color:var(--muted)}
 .tab-btn:last-child{border-right:none}
 .tab-btn.active{background:var(--dark);color:white}
-
-/* Tables */
 .table-wrap{background:white;border:1px solid var(--border);border-radius:11px;overflow:hidden;margin-bottom:14px}
 .th{padding:10px 18px;border-bottom:1px solid var(--surface2);display:grid;gap:8px;background:var(--surface2)}
 .th span{font-family:'Poppins',sans-serif;font-size:9px;font-weight:700;color:var(--hint);text-transform:uppercase;letter-spacing:.08em}
@@ -109,7 +94,6 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
 .tr.stripe{border-bottom:1px solid var(--surface2)}
 .tr.pool-row{background:var(--magenta-light)}
 .tr.tier-sub{padding:6px 18px 6px 34px;background:var(--magenta-light);border-top:1px solid var(--magenta-border)}
-.tr.ops-row{}
 .tr.total{background:var(--surface2);border-top:1px solid var(--border)}
 .tr.hl{background:var(--green-light)}
 .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block}
@@ -122,8 +106,6 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
 .c3b{grid-template-columns:1fr 60px 90px}
 .c3c{grid-template-columns:1fr 1fr 90px}
 .c3d{grid-template-columns:90px 50px 1fr}
-
-/* Scenario / notes */
 .scenario-box{background:#fffbeb;border:1px solid #fde68a;border-radius:11px;padding:14px;margin-bottom:14px}
 .scenario-box .stitle{font-family:'Poppins',sans-serif;font-size:10px;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
 .si{margin-bottom:8px;padding:8px 10px;background:white;border-radius:8px;border:1px solid #fde68a}
@@ -134,8 +116,6 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
 .success-note{background:var(--green-light);border:1px solid var(--green-border);border-radius:9px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#0a6b63;font-weight:500}
 .warn-note{background:#fef2f2;border:1px solid #fecaca;border-radius:9px;padding:10px 14px;font-size:12px;color:#7f1d1d}
 .warn-box{background:#fef2f2;border:1px solid #fecaca;border-radius:11px;padding:14px;margin-bottom:12px;display:flex;gap:10px}
-
-/* Quarter calendar */
 .qcal{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
 .qcal-item{border-radius:9px;padding:10px 8px;text-align:center;border:1px solid var(--border);background:white}
 .qcal-item.active{border-color:var(--blue);background:var(--blue-light)}
@@ -146,8 +126,6 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
 .qcal-item.active .qcal-arrow{color:var(--green)}
 .qcal-payout{font-size:10px;font-weight:600;color:var(--muted)}
 .qcal-item.active .qcal-payout{color:var(--blue)}
-
-/* Footer */
 .footer{background:var(--dark);padding:20px 32px;display:flex;align-items:center;justify-content:space-between}
 .footer-text{font-size:11px;color:rgba(255,255,255,.4);letter-spacing:.04em}
 .footer-mark{display:flex;align-items:center;gap:6px}
@@ -155,8 +133,6 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
 </head>
 <body>
 <div class="wrap">
-
-  <!-- Header -->
   <div class="header">
     <div class="header-accent"></div>
     <div class="header-inner">
@@ -164,15 +140,13 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
         <div class="eyebrow">Verge Talent Partners</div>
         <h1>Sales Incentive<br>Calculator</h1>
       </div>
-      <div class="logo-mark">
+      <div>
         <img src="Verge-mark.png" alt="Verge logo mark" style="height:60px;width:auto"/>
       </div>
     </div>
   </div>
 
-  <!-- Body -->
   <div class="body">
-
     <div class="inputs">
       <div class="grid2">
         <div class="field">
@@ -199,7 +173,7 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
       <div class="class-grid">
         <div class="class-card active" id="cls-netnew" onclick="setClass('netnew')"><div class="ctitle">Net New</div><div class="cdesc">New client, no prior engagement</div></div>
         <div class="class-card" id="cls-inbound" onclick="setClass('inbound')"><div class="ctitle">Inbound / Firm Source</div><div class="cdesc">Via website/marketing, no clear owner</div></div>
-        <div class="class-card" id="cls-cont" onclick="setClass('cont')"><div class="ctitle">Known Continuation</div><div class="cdesc">Phase 2 — anticipated follow-on</div></div>
+        <div class="class-card" id="cls-cont" onclick="setClass('cont')"><div class="ctitle">Known Continuation</div><div class="cdesc">Combined Phase 1 + 2 engagement</div></div>
         <div class="class-card" id="cls-expansion" onclick="setClass('expansion')"><div class="ctitle">Expansion / Renewal</div><div class="cdesc">Existing client, not anticipated</div></div>
       </div>
 
@@ -213,7 +187,7 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
         </div>
         <div id="expansionNote" style="font-size:11px;color:var(--hint);margin-top:6px"></div>
       </div>
-      <div class="cont-note" id="contNote"><strong>Known Continuation:</strong> Phase 2 pool at 10% of profit. Tiered cap still applies.</div>
+      <div class="cont-note" id="contNote"><strong>Known Continuation:</strong> Enter the combined Phase 1 + Phase 2 contract value and margin above. Standard 15% pool rate applies to the combined profit — one calculation, no double-dipping.</div>
 
       <div class="two-key">
         <div class="two-key-title">Variable Pool Rate — Two-Key Rule</div>
@@ -252,26 +226,20 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
     <div id="panel-buckets"></div>
     <div id="panel-pool" style="display:none"></div>
     <div id="panel-payout" style="display:none"></div>
+  </div>
 
-  </div><!-- /body -->
-
-  <!-- Footer -->
   <div class="footer">
     <div class="footer-text">Sales Incentive Plan &nbsp;·&nbsp; Internal Use Only &nbsp;·&nbsp; 2026</div>
     <div class="footer-mark">
-      <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="8" y="20" width="28" height="28" rx="2" transform="rotate(-45 22 34)" fill="#E918C2" opacity="0.9"/>
-        <rect x="28" y="20" width="28" height="28" rx="2" transform="rotate(-45 42 34)" fill="#1AE5D0" opacity="0.9"/>
-        <rect x="18" y="22" width="28" height="28" rx="2" transform="rotate(-45 32 36)" fill="#18169E"/>
-      </svg>
+      <img src="Verge-mark.png" alt="Verge" style="height:24px;width:auto"/>
       <span style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:rgba(255,255,255,.85)">verge</span>
     </div>
   </div>
-
-</div><!-- /wrap -->
+</div>
 
 <script>
 const fmt = n => "$" + Math.round(n).toLocaleString();
+
 const MONTHS=[3,4,6,9,12];
 const QUARTERS=[
   {label:"Q1",range:"Jan–Mar",payout:"Paid end of Q2 (Jun 30)"},
@@ -281,15 +249,15 @@ const QUARTERS=[
 ];
 const Q_PAYOUT=["Jun 30","Sep 30","Dec 31","Mar 31 (next yr)"];
 const ROLES=[
-  {label:"Relationship Source",        pct:10,desc:"Originated or owned the client relationship"},
-  {label:"Proposal / Conversion Lead", pct:60,desc:"Ran the proposal process, closed the deal"},
-  {label:"Active Contributors",        pct:30,desc:"Calls, writing, research (min 3 hrs)"},
+  {label:"Relationship Source",        pct:10, desc:"Originated or owned the client relationship"},
+  {label:"Proposal / Conversion Lead", pct:60, desc:"Ran the proposal process, closed the deal"},
+  {label:"Active Contributors",        pct:30, desc:"Calls, writing, research (min 3 hrs)"},
 ];
 const MARGIN_TIERS=[
-  {range:"Below 30%",rate:0,    signal:"No pool — firm absorbing delivery cost"},
-  {range:"30–34%",   rate:0.05, signal:"Minimal reward"},
-  {range:"35–39%",   rate:0.08, signal:"Partial reward"},
-  {range:"40%+",     rate:null, signal:"Full pool — rate set by Two-Key Rule"},
+  {range:"Below 30%", rate:0,    signal:"No pool — firm absorbing delivery cost"},
+  {range:"30–34%",    rate:0.05, signal:"Minimal reward"},
+  {range:"35–39%",    rate:0.08, signal:"Partial reward"},
+  {range:"40%+",      rate:null, signal:"Full pool — rate set by Two-Key Rule"},
 ];
 const CLS_LABELS={netnew:"Net New",inbound:"Inbound / Firm",cont:"Known Continuation",expansion:"Expansion"};
 
@@ -297,10 +265,10 @@ let keys={k1:false,k2:false};
 let state={cv:100000,mp:45,cls:"netnew",pv:0,months:6,tab:"buckets",rate:15,startQ:0};
 
 function getMarginTier(m){
-  if(m<30) return {rate:0,    label:"No Pool",           color:"#dc2626",bg:"#fef2f2",border:"#fecaca",msg:"Below 30% — firm absorbing delivery cost. No pool."};
-  if(m<35) return {rate:0.05, label:"Minimal Pool (5%)", color:"#92400e",bg:"#fffbeb",border:"#fde68a",msg:"30–34% — below floor. Minimal reward."};
-  if(m<40) return {rate:0.08, label:"Partial Pool (8%)", color:"var(--blue)",bg:"var(--blue-light)",border:"var(--blue-border)",msg:"35–39% — below target. Partial reward."};
-  return         {rate:null,  label:"Full Pool",         color:"#0a6b63",bg:"var(--green-light)",border:"var(--green-border)",msg:"40%+ — full pool active."};
+  if(m<30) return{rate:0,    label:"No Pool",           color:"#dc2626",bg:"#fef2f2",border:"#fecaca",msg:"Below 30% — firm absorbing delivery cost. No pool."};
+  if(m<35) return{rate:0.05, label:"Minimal Pool (5%)", color:"#d97706",bg:"#fffbeb",border:"#fde68a",msg:"30–34% — below floor. Minimal reward."};
+  if(m<40) return{rate:0.08, label:"Partial Pool (8%)", color:"var(--blue)",bg:"var(--blue-light)",border:"var(--blue-border)",msg:"35–39% — below target. Partial reward."};
+  return        {rate:null,  label:"Full Pool",         color:"#0a6b63",bg:"var(--green-light)",border:"var(--green-border)",msg:"40%+ — full pool active."};
 }
 
 function calcPool(profit,baseRate){
@@ -368,56 +336,69 @@ function setStartQ(q){
 
 (function(){
   const mw=document.getElementById('monthBtns');
-  MONTHS.forEach(m=>{const b=document.createElement('button');b.className='mbtn'+(m===6?' active':'');b.textContent=m+'mo';b.dataset.m=m;b.onclick=()=>setMonth(m);mw.appendChild(b);});
+  MONTHS.forEach(m=>{
+    const b=document.createElement('button');
+    b.className='mbtn'+(m===6?' active':'');
+    b.textContent=m+'mo';b.dataset.m=m;
+    b.onclick=()=>setMonth(m);
+    mw.appendChild(b);
+  });
   const qw=document.getElementById('qBtns');
-  QUARTERS.forEach((q,i)=>{const b=document.createElement('button');b.className='mbtn qbtn'+(i===0?' active':'');b.textContent=q.label;b.dataset.q=i;b.onclick=()=>setStartQ(i);qw.appendChild(b);});
+  QUARTERS.forEach((q,i)=>{
+    const b=document.createElement('button');
+    b.className='mbtn qbtn'+(i===0?' active':'');
+    b.textContent=q.label;b.dataset.q=i;
+    b.onclick=()=>setStartQ(i);
+    qw.appendChild(b);
+  });
 })();
 
 function update(){
-  const cv=parseFloat(document.getElementById('contractValue').value)||0;
-  const mp=parseInt(document.getElementById('marginSlider').value)||0;
-  const pv=parseFloat(document.getElementById('priorValue').value)||0;
-  const ar=parseInt(document.getElementById('rateSlider').value)||15;
-  state.cv=cv;state.mp=mp;state.pv=pv;state.rate=ar;
+  const cv  = parseFloat(document.getElementById('contractValue').value)||0;
+  const mp  = parseInt(document.getElementById('marginSlider').value)||0;
+  const pv  = parseFloat(document.getElementById('priorValue').value)||0;
+  const ar  = parseInt(document.getElementById('rateSlider').value)||15;
+  state.cv=cv; state.mp=mp; state.pv=pv; state.rate=ar;
 
-  const unlocked=keys.k1&&keys.k2;
-  const tier=getMarginTier(mp);
-  const profit=cv*(mp/100);
-  const noPool=mp<30;
-  const isExp=state.cls==='expansion';
-  const isCont=state.cls==='cont';
+  const unlocked = keys.k1&&keys.k2;
+  const tier     = getMarginTier(mp);
+  const profit   = cv*(mp/100);
+  const noPool   = mp<30;
+  const isExp    = state.cls==='expansion';
 
+  // Base rate — Known Continuation now uses full standard rate (same as Net New)
   let baseRate=0;
   if(!noPool){
-    if(mp<35) baseRate=0.05;
+    if(mp<35)      baseRate=0.05;
     else if(mp<40) baseRate=0.08;
-    else baseRate=unlocked?ar/100:0.15;
-    if(isCont) baseRate = unlocked ? ar/100 : 0.15;
+    else           baseRate=unlocked ? ar/100 : 0.15;
+    // No special rate for Known Continuation — same as standard
   }
 
-  const expBase=isExp&&pv>0?Math.max(0,cv-pv):0;
-  const{pool:salesPool,breakdown}=isExp
-    ?{pool:expBase*0.05,breakdown:[{label:"5% of incremental value",rate:5,amount:expBase*0.05}]}
-    :calcPool(profit,baseRate);
+  const expBase   = isExp&&pv>0 ? Math.max(0,cv-pv) : 0;
+  const {pool:salesPool,breakdown} = isExp
+    ? {pool:expBase*0.05, breakdown:[{label:"5% of incremental value",rate:5,amount:expBase*0.05}]}
+    : calcPool(profit,baseRate);
 
-  const opsCost=profit-salesPool;
-  const monthlyBill=cv/state.months;
-  const sourceSlice=salesPool*0.10;
-  const lcPool=salesPool*0.90;
-  const payEvents=getPayoutSchedule(state.startQ,state.months);
-  const perEvent=payEvents.length>0?lcPool/payEvents.length:0;
-  const isShort=state.months<=3;
+  const opsCost     = profit-salesPool;
+  const monthlyBill = cv/state.months;
+  const sourceSlice = salesPool*0.10;
+  const lcPool      = salesPool*0.90;
+  const payEvents   = getPayoutSchedule(state.startQ,state.months);
+  const perEvent    = payEvents.length>0 ? lcPool/payEvents.length : 0;
+  const isShort     = state.months<=3;
 
+  // UI updates
   document.getElementById('marginLabel').textContent=mp+'%';
   document.getElementById('marginLabel').style.color=noPool?'#dc2626':'var(--green)';
   document.getElementById('rateLabel').textContent=ar+'%';
 
   const fullLabel=mp>=40?`Full Pool (${unlocked?ar:15}%)`:tier.label;
   document.getElementById('tierBadge').style.cssText=`margin-top:14px;border-radius:9px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;background:${tier.bg};border:1px solid ${tier.border}`;
-  document.getElementById('tierBadge').innerHTML=`<span style="font-size:12px;font-weight:500;color:${tier.color};font-family:'Roboto',sans-serif">${tier.msg}</span><span style="font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;color:${tier.color};white-space:nowrap">${fullLabel}</span>`;
+  document.getElementById('tierBadge').innerHTML=`<span style="font-size:12px;font-weight:500;color:${tier.color}">${tier.msg}</span><span style="font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;color:${tier.color};white-space:nowrap">${fullLabel}</span>`;
 
   if(unlocked) document.getElementById('unlockedNote').textContent=`Both conditions met — pool rate set to ${ar}%. Applies to all deals closing this period.`;
-  if(isExp) document.getElementById('expansionNote').textContent=`Expansion bonus = 5% of incremental value (${fmt(expBase)})`;
+  if(isExp)    document.getElementById('expansionNote').textContent=`Expansion bonus = 5% of incremental value (${fmt(expBase)})`;
 
   document.getElementById('summaryCards').innerHTML=`
     <div class="card card-dark"><div class="clabel">Contract Value</div><div class="cval">${fmt(cv)}</div><div class="csub">${fmt(monthlyBill)}/mo · ${state.months} months</div></div>
@@ -443,7 +424,7 @@ function update(){
       <span class="r" style="font-size:12px;font-weight:600;color:var(--magenta)">${fmt(row.amount)}</span>
     </div>`;
   });
-  bk+=`<div class="tr ops-row c3a" style="border-bottom:none">
+  bk+=`<div class="tr c3a" style="border-bottom:none">
     <div>
       <div class="rtitle"><span class="dot" style="background:var(--blue)"></span><span class="rname">Operating Costs</span></div>
       <div class="rnote">Payroll, contractors, taxes, tooling, reserves — managed at firm level</div>
