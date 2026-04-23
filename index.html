@@ -7,21 +7,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --dark:#0d1319;
-  --magenta:#E918C2;
-  --blue:#18169E;
-  --green:#1AE5D0;
-  --magenta-light:#fce8f9;
-  --magenta-border:#f0a8e8;
-  --blue-light:#e8e8f9;
-  --blue-border:#a8a7e0;
-  --green-light:#e4fdfb;
-  --green-border:#8af0e8;
-  --surface:#ffffff;
-  --surface2:#f8f8fe;
-  --border:#e8e8f2;
-  --muted:#5a5a7a;
-  --hint:#9999b8;
+  --dark:#0d1319;--magenta:#E918C2;--blue:#18169E;--green:#1AE5D0;
+  --magenta-light:#fce8f9;--magenta-border:#f0a8e8;
+  --blue-light:#e8e8f9;--blue-border:#a8a7e0;
+  --green-light:#e4fdfb;--green-border:#8af0e8;
+  --surface:#fff;--surface2:#f8f8fe;--border:#e8e8f2;--muted:#5a5a7a;--hint:#9999b8;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Roboto',sans-serif;background:#f0f0f8;min-height:100vh;padding:32px 16px}
@@ -29,8 +19,8 @@ body{font-family:'Roboto',sans-serif;background:#f0f0f8;min-height:100vh;padding
 .header{background:var(--dark);padding:28px 32px 24px;position:relative;overflow:hidden}
 .header-accent{position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--blue),var(--magenta),var(--green))}
 .header-inner{display:flex;align-items:center;justify-content:space-between}
-.header-text .eyebrow{font-family:'Poppins',sans-serif;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:6px}
-.header-text h1{font-family:'Poppins',sans-serif;font-size:22px;font-weight:700;color:#fff;line-height:1.2}
+.eyebrow{font-family:'Poppins',sans-serif;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:6px}
+h1{font-family:'Poppins',sans-serif;font-size:22px;font-weight:700;color:#fff;line-height:1.2}
 .body{background:var(--surface);padding:28px 32px 36px}
 .inputs{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:18px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -52,6 +42,9 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
 .class-card .ctitle{font-family:'Poppins',sans-serif;font-size:11px;font-weight:600;color:var(--muted)}
 .class-card.active .ctitle{color:var(--blue)}
 .class-card .cdesc{font-size:11px;color:var(--hint);margin-top:2px}
+.ctx-note{border-radius:8px;padding:10px 14px;font-size:12px;margin-top:14px;display:none}
+.ctx-note.yellow{background:#fffbeb;border:1px solid #fde68a;color:#92400e}
+.ctx-note.blue{background:var(--blue-light);border:1px solid var(--blue-border);color:var(--blue)}
 .two-key{background:var(--blue-light);border:1px solid var(--blue-border);border-radius:11px;padding:14px;margin-top:14px}
 .two-key-title{font-family:'Poppins',sans-serif;font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
 .key-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
@@ -66,11 +59,9 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
 .rate-note{font-size:11px;color:var(--muted);margin-top:4px}
 .locked-note{margin-top:10px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:8px 12px;font-size:11px;color:#7f1d1d}
 .unlocked-note{margin-top:10px;background:var(--green-light);border:1px solid var(--green-border);border-radius:8px;padding:8px 12px;font-size:11px;color:#0a6b63;font-weight:500;display:none}
-.cont-note{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e;margin-top:14px;display:none}
-.prior-wrap{display:none;margin-top:14px}
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
 .card{border-radius:12px;padding:16px}
-.card-dark{background:var(--dark);color:white}
+.card-dark{background:var(--dark)}
 .card-light{background:white;border:1px solid var(--border)}
 .card-green{background:var(--green-light);border:1px solid var(--green-border)}
 .card .clabel{font-family:'Poppins',sans-serif;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px}
@@ -136,13 +127,11 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
   <div class="header">
     <div class="header-accent"></div>
     <div class="header-inner">
-      <div class="header-text">
+      <div>
         <div class="eyebrow">Verge Talent Partners</div>
         <h1>Sales Incentive<br>Calculator</h1>
       </div>
-      <div>
-        <img src="Verge-mark.png" alt="Verge logo mark" style="height:60px;width:auto"/>
-      </div>
+      <img src="Verge-mark.png" alt="Verge" style="height:60px;width:auto"/>
     </div>
   </div>
 
@@ -172,13 +161,17 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
       <div class="section-label">Engagement Classification</div>
       <div class="class-grid">
         <div class="class-card active" id="cls-netnew" onclick="setClass('netnew')"><div class="ctitle">Net New</div><div class="cdesc">New client, no prior engagement</div></div>
-        <div class="class-card" id="cls-inbound" onclick="setClass('inbound')"><div class="ctitle">Inbound / Firm Source</div><div class="cdesc">Via website/marketing, no clear owner</div></div>
+        <div class="class-card" id="cls-inbound" onclick="setClass('inbound')"><div class="ctitle">Inbound / Org Source</div><div class="cdesc">Via website/marketing, no clear owner</div></div>
         <div class="class-card" id="cls-cont" onclick="setClass('cont')"><div class="ctitle">Known Continuation</div><div class="cdesc">Combined Phase 1 + 2 engagement</div></div>
-        <div class="class-card" id="cls-expansion" onclick="setClass('expansion')"><div class="ctitle">Expansion / Renewal</div><div class="cdesc">Existing client, not anticipated</div></div>
+        <div class="class-card" id="cls-expansion" onclick="setClass('expansion')"><div class="ctitle">Organic Growth / Extension</div><div class="cdesc">Existing client, not anticipated</div></div>
       </div>
 
-      <div id="expNote" class="cont-note" style="display:none"><strong>Organic Growth / Extension:</strong> Bonus pool calculated at 8% of net profit. Same quarterly payout cycle applies. If contributors are contractors, their slice splits 50/50 between relationship owner and project lead.</div>
-      <div class="cont-note" id="contNote"><strong>Known Continuation:</strong> Enter the combined Phase 1 + Phase 2 contract value and margin above. Standard 15% pool rate applies to the combined profit — one calculation.</div>
+      <div class="ctx-note yellow" id="note-cont">
+        <strong>Known Continuation:</strong> Enter the combined Phase 1 + Phase 2 contract value and margin. Standard 15% pool rate applies to combined profit — one calculation.
+      </div>
+      <div class="ctx-note blue" id="note-expansion">
+        <strong>Organic Growth / Extension:</strong> Bonus pool = 8% of net profit. If contributors are contractors, their slice splits 50/50 between relationship owner and project lead.
+      </div>
 
       <div class="two-key">
         <div class="two-key-title">Variable Pool Rate — Two-Key Rule</div>
@@ -220,7 +213,7 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
   </div>
 
   <div class="footer">
-    <div class="footer-text">Sales Incentive Plan &nbsp;·&nbsp; Internal Use Only &nbsp;·&nbsp; 2026</div>
+    <div class="footer-text">Sales Incentive Plan · Internal Use Only · 2026</div>
     <div class="footer-mark">
       <img src="Verge-mark.png" alt="Verge" style="height:24px;width:auto"/>
       <span style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:rgba(255,255,255,.85)">verge</span>
@@ -230,7 +223,6 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
 
 <script>
 const fmt = n => "$" + Math.round(n).toLocaleString();
-
 const MONTHS=[3,4,6,9,12];
 const QUARTERS=[
   {label:"Q1",range:"Jan–Mar",payout:"Paid end of Q2 (Jun 30)"},
@@ -241,22 +233,27 @@ const QUARTERS=[
 const Q_PAYOUT=["Jun 30","Sep 30","Dec 31","Mar 31 (next yr)"];
 const ROLES=[
   {label:"Relationship Source",        pct:10, desc:"Originated or owned the client relationship"},
-  {label:"Proposal / Conversion Lead", pct:60, desc:"Ran the proposal process, closed the deal"},
+  {label:"Proposal / Conversion Lead", pct:60, desc:"Ran the proposal process, closed the engagement"},
   {label:"Active Contributors",        pct:30, desc:"Calls, writing, research (min 3 hrs)"},
 ];
+const EXPANSION_ROLES=[
+  {label:"Relationship Owner", pct:33, desc:"Maintained the client relationship"},
+  {label:"Project Lead",       pct:33, desc:"Led the extended scope of work"},
+  {label:"Contributors",       pct:33, desc:"Shared across those who contributed"},
+];
 const MARGIN_TIERS=[
-  {range:"Below 30%", rate:0,    signal:"No pool — firm absorbing delivery cost"},
+  {range:"Below 30%", rate:0,    signal:"No pool — org absorbing delivery cost"},
   {range:"30–34%",    rate:0.05, signal:"Minimal reward"},
   {range:"35–39%",    rate:0.08, signal:"Partial reward"},
   {range:"40%+",      rate:null, signal:"Full pool — rate set by Two-Key Rule"},
 ];
-const CLS_LABELS={netnew:"Net New",inbound:"Inbound / Firm",cont:"Known Continuation",expansion:"Expansion"};
+const CLS_LABELS={netnew:"Net New",inbound:"Inbound / Org",cont:"Known Continuation",expansion:"Organic Growth"};
 
 let keys={k1:false,k2:false};
-let state={cv:100000,mp:45,cls:"netnew",pv:0,months:6,tab:"buckets",rate:15,startQ:0};
+let state={cv:100000,mp:45,cls:"netnew",months:6,tab:"buckets",rate:15,startQ:0};
 
 function getMarginTier(m){
-  if(m<30) return{rate:0,    label:"No Pool",           color:"#dc2626",bg:"#fef2f2",border:"#fecaca",msg:"Below 30% — firm absorbing delivery cost. No pool."};
+  if(m<30) return{rate:0,    label:"No Pool",           color:"#dc2626",bg:"#fef2f2",border:"#fecaca",msg:"Below 30% — org absorbing delivery cost. No pool."};
   if(m<35) return{rate:0.05, label:"Minimal Pool (5%)", color:"#d97706",bg:"#fffbeb",border:"#fde68a",msg:"30–34% — below floor. Minimal reward."};
   if(m<40) return{rate:0.08, label:"Partial Pool (8%)", color:"var(--blue)",bg:"var(--blue-light)",border:"var(--blue-border)",msg:"35–39% — below target. Partial reward."};
   return        {rate:null,  label:"Full Pool",         color:"#0a6b63",bg:"var(--green-light)",border:"var(--green-border)",msg:"40%+ — full pool active."};
@@ -300,8 +297,8 @@ function setClass(c){
   state.cls=c;
   document.querySelectorAll('.class-card').forEach(el=>el.classList.remove('active'));
   document.getElementById('cls-'+c).classList.add('active');
-  document.getElementById('expNote').style.display = isExp ? 'block' : 'none';
-  document.getElementById('contNote').style.display=c==='cont'?'block':'none';
+  document.getElementById('note-cont').style.display=c==='cont'?'block':'none';
+  document.getElementById('note-expansion').style.display=c==='expansion'?'block':'none';
   update();
 }
 
@@ -347,9 +344,8 @@ function setStartQ(q){
 function update(){
   const cv  = parseFloat(document.getElementById('contractValue').value)||0;
   const mp  = parseInt(document.getElementById('marginSlider').value)||0;
-  const pv  = parseFloat(document.getElementById('priorValue').value)||0;
   const ar  = parseInt(document.getElementById('rateSlider').value)||15;
-  state.cv=cv; state.mp=mp; state.pv=pv; state.rate=ar;
+  state.cv=cv; state.mp=mp; state.rate=ar;
 
   const unlocked = keys.k1&&keys.k2;
   const tier     = getMarginTier(mp);
@@ -357,29 +353,28 @@ function update(){
   const noPool   = mp<30;
   const isExp    = state.cls==='expansion';
 
-  // Base rate — Known Continuation now uses full standard rate (same as Net New)
   let baseRate=0;
   if(!noPool){
     if(mp<35)      baseRate=0.05;
     else if(mp<40) baseRate=0.08;
-    else           baseRate=unlocked ? ar/100 : 0.15;
-    // No special rate for Known Continuation — same as standard
+    else           baseRate=unlocked?ar/100:0.15;
   }
 
-  const expBase   = isExp ? profit * 0.08 : 0;
-  const {pool:salesPool,breakdown} = isExp
-    ? {pool:expBase, breakdown:[{label:"8% of net profit",rate:8,amount:expBase}]}
-    : calcPool(profit,baseRate);
+  // Pool calculation
+  const salesPool    = isExp ? profit*0.08 : calcPool(profit,baseRate).pool;
+  const breakdown    = isExp
+    ? [{label:"8% of net profit",rate:8,amount:salesPool}]
+    : calcPool(profit,baseRate).breakdown;
+  const opsCost      = profit-salesPool;
+  const monthlyBill  = cv/state.months;
+  const roles        = isExp ? EXPANSION_ROLES : ROLES;
+  const sourceSlice  = isExp ? 0 : salesPool*0.10;
+  const lcPool       = isExp ? salesPool : salesPool*0.90;
+  const payEvents    = getPayoutSchedule(state.startQ,state.months);
+  const perEvent     = payEvents.length>0 ? lcPool/payEvents.length : 0;
+  const isShort      = state.months<=3;
 
-  const opsCost     = profit-salesPool;
-  const monthlyBill = cv/state.months;
-  const sourceSlice = salesPool*0.10;
-  const lcPool      = salesPool*0.90;
-  const payEvents   = getPayoutSchedule(state.startQ,state.months);
-  const perEvent    = payEvents.length>0 ? lcPool/payEvents.length : 0;
-  const isShort     = state.months<=3;
-
-  // UI updates
+  // Labels
   document.getElementById('marginLabel').textContent=mp+'%';
   document.getElementById('marginLabel').style.color=noPool?'#dc2626':'var(--green)';
   document.getElementById('rateLabel').textContent=ar+'%';
@@ -387,28 +382,27 @@ function update(){
   const fullLabel=mp>=40?`Full Pool (${unlocked?ar:15}%)`:tier.label;
   document.getElementById('tierBadge').style.cssText=`margin-top:14px;border-radius:9px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;background:${tier.bg};border:1px solid ${tier.border}`;
   document.getElementById('tierBadge').innerHTML=`<span style="font-size:12px;font-weight:500;color:${tier.color}">${tier.msg}</span><span style="font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;color:${tier.color};white-space:nowrap">${fullLabel}</span>`;
+  if(unlocked) document.getElementById('unlockedNote').textContent=`Both conditions met — pool rate set to ${ar}%. Applies to all engagements closing this period.`;
 
-  if(unlocked) document.getElementById('unlockedNote').textContent=`Both conditions met — pool rate set to ${ar}%. Applies to all deals closing this period.`;
-  if(isExp)    document.getElementById('expansionNote').textContent=`Expansion bonus = 5% of incremental value (${fmt(expBase)})`;
-
+  // Summary cards
   document.getElementById('summaryCards').innerHTML=`
     <div class="card card-dark"><div class="clabel">Contract Value</div><div class="cval">${fmt(cv)}</div><div class="csub">${fmt(monthlyBill)}/mo · ${state.months} months</div></div>
     <div class="card card-light"><div class="clabel">Total Profit</div><div class="cval">${fmt(profit)}</div><div class="csub">${mp}% margin</div></div>
-    <div class="card card-green"><div class="clabel">Sales Pool</div><div class="cval">${fmt(salesPool)}</div><div class="csub">${noPool?"No pool at this margin":CLS_LABELS[state.cls]}</div></div>`;
+    <div class="card card-green"><div class="clabel">Incentive Pool</div><div class="cval">${fmt(salesPool)}</div><div class="csub">${noPool?"No pool at this margin":CLS_LABELS[state.cls]}</div></div>`;
 
   // ── BUCKETS ──
   let bk=`<div class="table-wrap">
     <div class="th c3a"><span>Allocation</span><span class="r">Rate</span><span class="r">Amount</span></div>
     <div class="tr pool-row c3a">
       <div>
-        <div class="rtitle"><span class="dot" style="background:var(--magenta)"></span><span class="rname">Sales Incentive Pool</span>
+        <div class="rtitle"><span class="dot" style="background:var(--magenta)"></span><span class="rname">Incentive Pool</span>
         <span class="badge" style="background:var(--magenta-light);color:var(--magenta)">${CLS_LABELS[state.cls]}</span></div>
-        <div class="rnote">Tiered by profit size — see breakdown below</div>
+        <div class="rnote">${isExp?'8% of net profit':'Tiered by profit size — see breakdown below'}</div>
       </div>
-      <div class="r" style="font-size:13px;font-weight:700;color:var(--magenta)">Tiered</div>
+      <div class="r" style="font-size:13px;font-weight:700;color:var(--magenta)">${isExp?'8%':'Tiered'}</div>
       <div class="r" style="font-size:14px;font-weight:700;color:var(--magenta)">${fmt(salesPool)}</div>
     </div>`;
-  breakdown.forEach(row=>{
+  if(!isExp) breakdown.forEach(row=>{
     bk+=`<div class="tr tier-sub c3a">
       <span style="font-size:11px;color:var(--magenta)">${row.label}</span>
       <span class="r" style="font-size:11px;color:var(--magenta)">${row.rate}%</span>
@@ -416,10 +410,8 @@ function update(){
     </div>`;
   });
   bk+=`<div class="tr c3a" style="border-bottom:none">
-    <div>
-      <div class="rtitle"><span class="dot" style="background:var(--blue)"></span><span class="rname">Operating Costs</span></div>
-      <div class="rnote">Payroll, contractors, taxes, tooling, reserves — managed at firm level</div>
-    </div>
+    <div><div class="rtitle"><span class="dot" style="background:var(--blue)"></span><span class="rname">Operating Costs</span></div>
+    <div class="rnote">Payroll, contractors, taxes, tooling, reserves — managed at org level</div></div>
     <div class="r" style="font-size:13px;font-weight:600;color:var(--muted)">—</div>
     <div class="r" style="font-size:14px;font-weight:700;color:var(--blue)">${fmt(opsCost)}</div>
   </div>
@@ -444,10 +436,10 @@ function update(){
 
   // ── POOL ──
   let pl='';
-  if(noPool) pl+=`<div class="warn-box"><div style="font-size:16px">⚠</div><div><div style="font-family:'Poppins',sans-serif;font-weight:700;color:#dc2626;font-size:12px">No Pool at This Margin</div><div style="font-size:12px;color:#7f1d1d;margin-top:2px">Below 30% the firm is absorbing delivery cost.</div></div></div>`;
+  if(noPool) pl+=`<div class="warn-box"><div style="font-size:16px">⚠</div><div><div style="font-family:'Poppins',sans-serif;font-weight:700;color:#dc2626;font-size:12px">No Pool at This Margin</div><div style="font-size:12px;color:#7f1d1d;margin-top:2px">Below 30% the org is absorbing delivery cost.</div></div></div>`;
   pl+=`<div class="table-wrap"><div class="th c3b"><span>Role</span><span class="r">%</span><span class="r">Amount</span></div>`;
-  ROLES.forEach((r,i)=>{
-    pl+=`<div class="tr c3b${i<2?' stripe':''}">
+  roles.forEach((r,i)=>{
+    pl+=`<div class="tr c3b${i<roles.length-1?' stripe':''}">
       <div><div class="rname">${r.label}</div><div style="font-size:11px;color:var(--hint);margin-top:1px">${r.desc}</div></div>
       <div class="r" style="font-size:13px;font-weight:600;color:var(--muted)">${r.pct}%</div>
       <div class="r" style="font-size:14px;font-weight:700;color:var(--blue)">${fmt(salesPool*(r.pct/100))}</div>
@@ -458,7 +450,7 @@ function update(){
     <span class="r" style="font-size:12px;font-weight:700;color:var(--dark)">100%</span>
     <span class="r" style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:var(--dark)">${fmt(salesPool)}</span>
   </div></div>`;
-  pl+=`<div class="scenario-box"><div class="stitle">Common Scenarios</div>
+  if(!isExp) pl+=`<div class="scenario-box"><div class="stitle">Common Scenarios</div>
     ${[
       {label:"Network person sources + leads",    note:`Source: ${fmt(salesPool*.10)} · Lead: ${fmt(salesPool*.60)} · Contributors: ${fmt(salesPool*.30)}`},
       {label:"Source and lead are same person",   note:`That person earns ${fmt(salesPool*.70)} (70% of pool)`},
@@ -470,7 +462,7 @@ function update(){
   // ── PAYOUT ──
   let py='';
   if(noPool) py+=`<div class="warn-note" style="margin-bottom:12px"><strong>No pool at this margin.</strong> Adjust the slider above 30% to see payout schedule.</div>`;
-  py+=`<div class="info-note"><strong>How it works:</strong> The Relationship Source (10%) is paid at contract signing. The Lead + Contributor pool (90%) is distributed at the end of the quarter following each quarter of active work.</div>`;
+  py+=`<div class="info-note"><strong>How it works:</strong> ${isExp?'All roles paid on the same quarterly cycle.':'The Relationship Source (10%) is paid at contract signing. The Lead + Contributor pool (90%) is distributed at the end of the quarter following each quarter of active work.'}</div>`;
   py+=`<div class="qcal">`;
   QUARTERS.forEach((q,i)=>{
     const active=i===state.startQ;
@@ -482,19 +474,20 @@ function update(){
     </div>`;
   });
   py+=`</div>`;
-  if(isShort) py+=`<div class="success-note"><strong>Short engagement carve-out applies.</strong> Full Lead + Contributor balance settled at the next scheduled payout date.</div>`;
-
+  if(isShort) py+=`<div class="success-note"><strong>Short engagement carve-out applies.</strong> Full balance settled at the next scheduled payout date.</div>`;
   const pColors=["var(--blue)","var(--magenta)","#0a6b63","#92400e"];
   py+=`<div class="table-wrap"><div class="th c3c"><span>Event</span><span>Payout Date</span><span class="r">Amount</span></div>`;
-  py+=`<div class="tr stripe c3c">
-    <div class="rname" style="font-size:12px">Contract signed</div>
-    <div style="font-size:12px;color:var(--muted)">At signing — Relationship Source (10%)</div>
-    <div class="r" style="font-size:14px;font-weight:700;color:var(--magenta)">${fmt(sourceSlice)}</div>
-  </div>`;
+  if(!isExp){
+    py+=`<div class="tr stripe c3c">
+      <div class="rname" style="font-size:12px">Contract signed</div>
+      <div style="font-size:12px;color:var(--muted)">At signing — Relationship Source (10%)</div>
+      <div class="r" style="font-size:14px;font-weight:700;color:var(--magenta)">${fmt(sourceSlice)}</div>
+    </div>`;
+  }
   payEvents.forEach((ev,i)=>{
     py+=`<div class="tr${i<payEvents.length-1?' stripe':''} c3c${ev.isShort?' hl':''}">
       <div class="rname" style="font-size:12px">${ev.label}</div>
-      <div style="font-size:12px;color:var(--muted)">${ev.payoutDate} — 1/${payEvents.length} of Lead + Contributor pool</div>
+      <div style="font-size:12px;color:var(--muted)">${ev.payoutDate} — 1/${payEvents.length} of ${isExp?'bonus pool':'Lead + Contributor pool'}</div>
       <div class="r" style="font-size:14px;font-weight:700;color:${pColors[i%pColors.length]}">${fmt(perEvent)}</div>
     </div>`;
   });
