@@ -170,7 +170,7 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
         <strong>Known Continuation:</strong> Enter the combined Phase 1 + Phase 2 contract value and margin. Standard 15% pool rate applies to combined profit — one calculation.
       </div>
       <div class="ctx-note blue" id="note-expansion">
-        <strong>Organic Growth / Extension:</strong> Bonus pool = 8% of net profit. Roles: Account Lead (10%) · Delivery / Client Lead (45%) · Contributors (45%). If contributors are contractors, their slice is reallocated between account lead and delivery lead based on actual involvement.
+        <strong>Organic Growth / Extension:</strong> Bonus pool = 8% of net profit. Roles: Account Lead (20%) · Delivery / Client Lead (40%) · Contributors (40%). If contributors are contractors, their slice is reallocated between account lead and delivery lead based on actual involvement.
       </div>
 
       <div class="two-key">
@@ -223,30 +223,35 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
 
 <script>
 const fmt = n => "$" + Math.round(n).toLocaleString();
+
 const MONTHS=[3,4,6,9,12];
 const QUARTERS=[
-  {label:"Q1",range:"Jan–Mar",payout:"Paid end of Q2 (Jun 30)"},
-  {label:"Q2",range:"Apr–Jun",payout:"Paid end of Q3 (Sep 30)"},
-  {label:"Q3",range:"Jul–Sep",payout:"Paid end of Q4 (Dec 31)"},
-  {label:"Q4",range:"Oct–Dec",payout:"Paid end of Q1 next yr (Mar 31)"},
+  {label:"Q1",range:"Jan–Mar",payout:"Paid April 30"},
+  {label:"Q2",range:"Apr–Jun",payout:"Paid July 31"},
+  {label:"Q3",range:"Jul–Sep",payout:"Paid October 31"},
+  {label:"Q4",range:"Oct–Dec",payout:"Paid January 31"},
 ];
-const Q_PAYOUT=["Jun 30","Sep 30","Dec 31","Mar 31 (next yr)"];
+const Q_PAYOUT=["April 30","July 31","October 31","January 31"];
+
 const ROLES=[
   {label:"Relationship Source",        pct:10, desc:"Originated or owned the client relationship"},
   {label:"Proposal / Conversion Lead", pct:60, desc:"Ran the proposal process, closed the engagement"},
   {label:"Active Contributors",        pct:30, desc:"Calls, writing, research (min 3 hrs)"},
 ];
+
 const EXPANSION_ROLES=[
   {label:"Account Lead",           pct:20, desc:"Exec sponsor / relationship maintenance role"},
   {label:"Delivery / Client Lead", pct:40, desc:"Led the extended scope of work"},
   {label:"Contributors",           pct:40, desc:"Shared across those delivering the work"},
 ];
+
 const MARGIN_TIERS=[
   {range:"Below 30%", rate:0,    signal:"No pool — org absorbing delivery cost"},
   {range:"30–34%",    rate:0.05, signal:"Minimal reward"},
   {range:"35–39%",    rate:0.08, signal:"Partial reward"},
   {range:"40%+",      rate:null, signal:"Full pool — rate set by Two-Key Rule"},
 ];
+
 const CLS_LABELS={netnew:"Net New",inbound:"Inbound / Org",cont:"Known Continuation",expansion:"Organic Growth"};
 
 let keys={k1:false,k2:false};
@@ -360,7 +365,6 @@ function update(){
     else           baseRate=unlocked?ar/100:0.15;
   }
 
-  // Pool calculation
   const salesPool    = isExp ? profit*0.08 : calcPool(profit,baseRate).pool;
   const breakdown    = isExp
     ? [{label:"8% of net profit",rate:8,amount:salesPool}]
@@ -374,7 +378,6 @@ function update(){
   const perEvent     = payEvents.length>0 ? lcPool/payEvents.length : 0;
   const isShort      = state.months<=3;
 
-  // Labels
   document.getElementById('marginLabel').textContent=mp+'%';
   document.getElementById('marginLabel').style.color=noPool?'#dc2626':'var(--green)';
   document.getElementById('rateLabel').textContent=ar+'%';
@@ -384,7 +387,6 @@ function update(){
   document.getElementById('tierBadge').innerHTML=`<span style="font-size:12px;font-weight:500;color:${tier.color}">${tier.msg}</span><span style="font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;color:${tier.color};white-space:nowrap">${fullLabel}</span>`;
   if(unlocked) document.getElementById('unlockedNote').textContent=`Both conditions met — pool rate set to ${ar}%. Applies to all engagements closing this period.`;
 
-  // Summary cards
   document.getElementById('summaryCards').innerHTML=`
     <div class="card card-dark"><div class="clabel">Contract Value</div><div class="cval">${fmt(cv)}</div><div class="csub">${fmt(monthlyBill)}/mo · ${state.months} months</div></div>
     <div class="card card-light"><div class="clabel">Total Profit</div><div class="cval">${fmt(profit)}</div><div class="csub">${mp}% margin</div></div>
@@ -462,7 +464,7 @@ function update(){
   // ── PAYOUT ──
   let py='';
   if(noPool) py+=`<div class="warn-note" style="margin-bottom:12px"><strong>No pool at this margin.</strong> Adjust the slider above 30% to see payout schedule.</div>`;
-  py+=`<div class="info-note"><strong>How it works:</strong> ${isExp?'All roles paid on the same quarterly cycle.':'The Relationship Source (10%) is paid at contract signing. The Lead + Contributor pool (90%) is distributed at the end of the quarter following each quarter of active work.'}</div>`;
+  py+=`<div class="info-note"><strong>How it works:</strong> ${isExp?'All roles paid on the same quarterly cycle.':'The Relationship Source (10%) is paid at contract signing. The Lead + Contributor pool (90%) is distributed at the end of the month following each quarter of active work.'}</div>`;
   py+=`<div class="qcal">`;
   QUARTERS.forEach((q,i)=>{
     const active=i===state.startQ;
