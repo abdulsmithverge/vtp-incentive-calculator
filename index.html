@@ -170,7 +170,7 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
         <strong>Known Continuation:</strong> Enter the combined Phase 1 + Phase 2 contract value and margin. Standard 15% pool rate applies to combined profit — one calculation.
       </div>
       <div class="ctx-note blue" id="note-expansion">
-        <strong>Organic Growth / Extension:</strong> Bonus pool = 8% of net profit. If contributors are contractors, their slice splits 50/50 between relationship owner and project lead.
+        <strong>Organic Growth / Extension:</strong> Bonus pool = 8% of net profit. Roles: Account Lead (10%) · Delivery / Client Lead (45%) · Contributors (45%). If contributors are contractors, their slice is reallocated between account lead and delivery lead based on actual involvement.
       </div>
 
       <div class="two-key">
@@ -237,9 +237,9 @@ const ROLES=[
   {label:"Active Contributors",        pct:30, desc:"Calls, writing, research (min 3 hrs)"},
 ];
 const EXPANSION_ROLES=[
-  {label:"Relationship Owner", pct:33, desc:"Maintained the client relationship"},
-  {label:"Project Lead",       pct:33, desc:"Led the extended scope of work"},
-  {label:"Contributors",       pct:33, desc:"Shared across those who contributed"},
+  {label:"Account Lead",           pct:20, desc:"Exec sponsor / relationship maintenance role"},
+  {label:"Delivery / Client Lead", pct:40, desc:"Led the extended scope of work"},
+  {label:"Contributors",           pct:40, desc:"Shared across those delivering the work"},
 ];
 const MARGIN_TIERS=[
   {range:"Below 30%", rate:0,    signal:"No pool — org absorbing delivery cost"},
