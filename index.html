@@ -233,12 +233,14 @@ const QUARTERS=[
 ];
 const Q_PAYOUT=["April 30","July 31","October 31","January 31"];
 
+// CONFIRMED SPLITS: 10 / 60 / 30
 const ROLES=[
-  {label:"Relationship Source",        pct:10, desc:"Originated or owned the client relationship"},
+  {label:"Relationship Source",        pct:10, desc:"Originated or owned the client relationship — paid at signing"},
   {label:"Proposal / Conversion Lead", pct:60, desc:"Ran the proposal process, closed the engagement"},
-  {label:"Active Contributors",        pct:30, desc:"Calls, writing, research (min 3 hrs)"},
+  {label:"Active Contributors",        pct:30, desc:"Calls, writing, research (min 3 hrs) — shared pool"},
 ];
 
+// EXPANSION UNCHANGED: 20 / 40 / 40
 const EXPANSION_ROLES=[
   {label:"Account Lead",           pct:20, desc:"Exec sponsor / relationship maintenance role"},
   {label:"Delivery / Client Lead", pct:40, desc:"Led the extended scope of work"},
@@ -365,18 +367,22 @@ function update(){
     else           baseRate=unlocked?ar/100:0.15;
   }
 
-  const salesPool    = isExp ? profit*0.08 : calcPool(profit,baseRate).pool;
-  const breakdown    = isExp
+  const salesPool = isExp ? profit*0.08 : calcPool(profit,baseRate).pool;
+  const breakdown = isExp
     ? [{label:"8% of net profit",rate:8,amount:salesPool}]
     : calcPool(profit,baseRate).breakdown;
   const opsCost      = profit-salesPool;
   const monthlyBill  = cv/state.months;
   const roles        = isExp ? EXPANSION_ROLES : ROLES;
-  const sourceSlice  = isExp ? 0 : salesPool*0.10;
-  const lcPool       = isExp ? salesPool : salesPool*0.90;
-  const payEvents    = getPayoutSchedule(state.startQ,state.months);
-  const perEvent     = payEvents.length>0 ? lcPool/payEvents.length : 0;
-  const isShort      = state.months<=3;
+
+  // Source = 10% of pool, paid at signing
+  // Lead + Contributors = remaining 90%, paid over quarterly events
+  const sourceSlice = isExp ? 0 : salesPool * 0.10;
+  const lcPool      = isExp ? salesPool : salesPool * 0.90;
+
+  const payEvents = getPayoutSchedule(state.startQ,state.months);
+  const perEvent  = payEvents.length>0 ? lcPool/payEvents.length : 0;
+  const isShort   = state.months<=3;
 
   document.getElementById('marginLabel').textContent=mp+'%';
   document.getElementById('marginLabel').style.color=noPool?'#dc2626':'var(--green)';
@@ -392,7 +398,7 @@ function update(){
     <div class="card card-light"><div class="clabel">Total Profit</div><div class="cval">${fmt(profit)}</div><div class="csub">${mp}% margin</div></div>
     <div class="card card-green"><div class="clabel">Incentive Pool</div><div class="cval">${fmt(salesPool)}</div><div class="csub">${noPool?"No pool at this margin":CLS_LABELS[state.cls]}</div></div>`;
 
-  // ── BUCKETS ──
+  // ── BUCKETS TAB ──
   let bk=`<div class="table-wrap">
     <div class="th c3a"><span>Allocation</span><span class="r">Rate</span><span class="r">Amount</span></div>
     <div class="tr pool-row c3a">
@@ -436,7 +442,7 @@ function update(){
   bk+=`</div>`;
   document.getElementById('panel-buckets').innerHTML=bk;
 
-  // ── POOL ──
+  // ── POOL TAB ──
   let pl='';
   if(noPool) pl+=`<div class="warn-box"><div style="font-size:16px">⚠</div><div><div style="font-family:'Poppins',sans-serif;font-weight:700;color:#dc2626;font-size:12px">No Pool at This Margin</div><div style="font-size:12px;color:#7f1d1d;margin-top:2px">Below 30% the org is absorbing delivery cost.</div></div></div>`;
   pl+=`<div class="table-wrap"><div class="th c3b"><span>Role</span><span class="r">%</span><span class="r">Amount</span></div>`;
@@ -454,17 +460,17 @@ function update(){
   </div></div>`;
   if(!isExp) pl+=`<div class="scenario-box"><div class="stitle">Common Scenarios</div>
     ${[
-      {label:"Network person sources + leads",    note:`Source: ${fmt(salesPool*.10)} · Lead: ${fmt(salesPool*.60)} · Contributors: ${fmt(salesPool*.30)}`},
-      {label:"Source and lead are same person",   note:`That person earns ${fmt(salesPool*.70)} (70% of pool)`},
-      {label:"Lead only, no network source",      note:`Lead earns ${fmt(salesPool*.60)} · Contributors share ${fmt(salesPool*.30)}`},
+      {label:"Source and lead are different people",    note:`Source: ${fmt(salesPool*.10)} · Lead: ${fmt(salesPool*.60)} · Contributors share: ${fmt(salesPool*.30)}`},
+      {label:"Same person sources and leads the deal",  note:`That person earns ${fmt(salesPool*.70)} (70% of pool) · Contributors share: ${fmt(salesPool*.30)}`},
+      {label:"Lead only — no network source",           note:`Lead earns: ${fmt(salesPool*.60)} · Contributors share: ${fmt(salesPool*.30)} · Source 10% rolls to org pool`},
     ].map(s=>`<div class="si"><div class="sl">${s.label}</div><div class="sn">${s.note}</div></div>`).join('')}
   </div>`;
   document.getElementById('panel-pool').innerHTML=pl;
 
-  // ── PAYOUT ──
+  // ── PAYOUT TAB ──
   let py='';
   if(noPool) py+=`<div class="warn-note" style="margin-bottom:12px"><strong>No pool at this margin.</strong> Adjust the slider above 30% to see payout schedule.</div>`;
-  py+=`<div class="info-note"><strong>How it works:</strong> ${isExp?'All roles paid on the same quarterly cycle.':'The Relationship Source (10%) is paid at contract signing. The Lead + Contributor pool (90%) is distributed at the end of the month following each quarter of active work.'}</div>`;
+  py+=`<div class="info-note"><strong>How it works:</strong> ${isExp?'All roles paid on the same quarterly cycle.':'The Relationship Source (10% of pool) is paid at contract signing. The remaining 90% — Lead + Contributors — is distributed at the end of the month following each quarter of active work.'}</div>`;
   py+=`<div class="qcal">`;
   QUARTERS.forEach((q,i)=>{
     const active=i===state.startQ;
@@ -481,21 +487,23 @@ function update(){
   py+=`<div class="table-wrap"><div class="th c3c"><span>Event</span><span>Payout Date</span><span class="r">Amount</span></div>`;
   if(!isExp){
     py+=`<div class="tr stripe c3c">
-      <div class="rname" style="font-size:12px">Contract signed</div>
-      <div style="font-size:12px;color:var(--muted)">At signing — Relationship Source (10%)</div>
+      <div class="rname" style="font-size:12px">Contract signed — Relationship Source</div>
+      <div style="font-size:12px;color:var(--muted)">At signing · 10% of pool</div>
       <div class="r" style="font-size:14px;font-weight:700;color:var(--magenta)">${fmt(sourceSlice)}</div>
     </div>`;
   }
   payEvents.forEach((ev,i)=>{
-    py+=`<div class="tr${i<payEvents.length-1?' stripe':''} c3c${ev.isShort?' hl':''}">
+    py+=`<div class="tr${i<payEvents.length-1?' stripe':''} c3c">
       <div class="rname" style="font-size:12px">${ev.label}</div>
-      <div style="font-size:12px;color:var(--muted)">${ev.payoutDate} — 1/${payEvents.length} of ${isExp?'bonus pool':'Lead + Contributor pool'}</div>
+      <div style="font-size:12px;color:var(--muted)">${ev.payoutDate} · 1/${payEvents.length} of ${isExp?'bonus pool':'Lead + Contributor pool (90%)'}</div>
       <div class="r" style="font-size:14px;font-weight:700;color:${pColors[i%pColors.length]}">${fmt(perEvent)}</div>
     </div>`;
   });
+  const totalPaid = isExp ? salesPool : sourceSlice + (perEvent * payEvents.length);
   py+=`<div class="tr total c3c">
-    <span style="font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;color:var(--dark)">Total Pool</span><span></span>
-    <span class="r" style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:var(--dark)">${fmt(salesPool)}</span>
+    <span style="font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;color:var(--dark)">Total Paid Out</span>
+    <span style="font-size:11px;color:var(--hint)">${Math.round(totalPaid)===Math.round(salesPool)?'✓ matches pool':''}</span>
+    <span class="r" style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:var(--dark)">${fmt(totalPaid)}</span>
   </div></div>`;
   py+=`<div class="info-note" style="margin-bottom:12px"><strong>W-2 employees only.</strong> Contractors are not eligible for SIP distributions.</div>`;
   py+=`<div class="warn-note"><strong>Early cancellation rule:</strong> Payouts already made are retained. No further distributions beyond what's been proportionally earned.</div>`;
