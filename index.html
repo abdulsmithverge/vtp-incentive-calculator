@@ -492,14 +492,22 @@ function update(){
       <div class="r" style="font-size:14px;font-weight:700;color:var(--magenta)">${fmt(sourceSlice)}</div>
     </div>`;
   }
+  // Rounding fix: standard installment is floored to whole dollars;
+  // final payment absorbs any remainder so displayed amounts always sum to pool exactly.
+  const stdInstallment = Math.floor(perEvent);
+  const paidInEarlier  = stdInstallment * (payEvents.length - 1);
+  const finalInstallment = Math.round(lcPool) - paidInEarlier;
+
   payEvents.forEach((ev,i)=>{
-    py+=`<div class="tr${i<payEvents.length-1?' stripe':''} c3c">
-      <div class="rname" style="font-size:12px">${ev.label}</div>
+    const isLast = i === payEvents.length - 1;
+    const displayAmt = isLast ? finalInstallment : stdInstallment;
+    py+=`<div class="tr${!isLast?' stripe':''} c3c">
+      <div class="rname" style="font-size:12px">${ev.label}${isLast?' (final)':''}</div>
       <div style="font-size:12px;color:var(--muted)">${ev.payoutDate} · 1/${payEvents.length} of ${isExp?'bonus pool':'Lead + Contributor pool (90%)'}</div>
-      <div class="r" style="font-size:14px;font-weight:700;color:${pColors[i%pColors.length]}">${fmt(perEvent)}</div>
+      <div class="r" style="font-size:14px;font-weight:700;color:${pColors[i%pColors.length]}">${fmt(displayAmt)}</div>
     </div>`;
   });
-  const totalPaid = isExp ? salesPool : sourceSlice + (perEvent * payEvents.length);
+  const totalPaid = isExp ? salesPool : Math.round(sourceSlice) + Math.round(lcPool);
   py+=`<div class="tr total c3c">
     <span style="font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;color:var(--dark)">Total Paid Out</span>
     <span style="font-size:11px;color:var(--hint)">${Math.round(totalPaid)===Math.round(salesPool)?'✓ matches pool':''}</span>
