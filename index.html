@@ -31,6 +31,9 @@ input[type=number]{width:100%;padding:9px 9px 9px 24px;border:1.5px solid var(--
 input[type=number]:focus{outline:none;border-color:var(--blue)}
 input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue)}
 .range-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--hint);margin-top:2px}
+.input-wrap .suffix{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:500;font-size:14px}
+.margin-hint{font-size:10px;color:var(--hint);margin-top:5px}
+.margin-hint span{font-weight:600;color:var(--muted)}
 .tier-badge{margin-top:14px;border-radius:9px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px}
 .section-label{font-family:'Poppins',sans-serif;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:16px 0 8px}
 .months{display:flex;gap:6px;flex-wrap:wrap}
@@ -146,14 +149,13 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
           </div>
         </div>
         <div class="field">
-          <label>Margin: <span id="marginLabel" style="color:var(--green);font-weight:700">45%</span></label>
-          <input type="range" id="marginSlider" min="20" max="70" value="45" oninput="update()"/>
-          <div class="range-labels">
-            <span>20%</span>
-            <span style="color:var(--magenta);font-weight:600">30% min</span>
-            <span style="color:var(--magenta);font-weight:600">40% target</span>
-            <span>70%</span>
+          <label>Gross Margin %</label>
+          <div class="input-wrap">
+            <input type="number" id="marginInput" value="45" min="0" max="100" step="0.01"
+              style="padding:9px 28px 9px 9px;text-align:right" oninput="update()"/>
+            <span class="suffix">%</span>
           </div>
+          <div class="margin-hint">Exact figure, e.g. <span>45.38</span> &nbsp;·&nbsp; min <span>30%</span> &nbsp;·&nbsp; target <span>40%+</span></div>
         </div>
       </div>
       <div id="tierBadge" class="tier-badge"></div>
@@ -350,7 +352,7 @@ function setStartQ(q){
 
 function update(){
   const cv  = parseFloat(document.getElementById('contractValue').value)||0;
-  const mp  = parseInt(document.getElementById('marginSlider').value)||0;
+  const mp  = parseFloat(document.getElementById('marginInput').value)||0;
   const ar  = parseInt(document.getElementById('rateSlider').value)||15;
   state.cv=cv; state.mp=mp; state.rate=ar;
 
@@ -384,8 +386,6 @@ function update(){
   const perEvent  = payEvents.length>0 ? lcPool/payEvents.length : 0;
   const isShort   = state.months<=3;
 
-  document.getElementById('marginLabel').textContent=mp+'%';
-  document.getElementById('marginLabel').style.color=noPool?'#dc2626':'var(--green)';
   document.getElementById('rateLabel').textContent=ar+'%';
 
   const fullLabel=mp>=40?`Full Pool (${unlocked?ar:15}%)`:tier.label;
@@ -395,7 +395,7 @@ function update(){
 
   document.getElementById('summaryCards').innerHTML=`
     <div class="card card-dark"><div class="clabel">Contract Value</div><div class="cval">${fmt(cv)}</div><div class="csub">${fmt(monthlyBill)}/mo · ${state.months} months</div></div>
-    <div class="card card-light"><div class="clabel">Total Profit</div><div class="cval">${fmt(profit)}</div><div class="csub">${mp}% margin</div></div>
+    <div class="card card-light"><div class="clabel">Total Profit</div><div class="cval">${fmt(profit)}</div><div class="csub">${mp.toFixed(2)}% margin</div></div>
     <div class="card card-green"><div class="clabel">Incentive Pool</div><div class="cval">${fmt(salesPool)}</div><div class="csub">${noPool?"No pool at this margin":CLS_LABELS[state.cls]}</div></div>`;
 
   // ── BUCKETS TAB ──
@@ -469,7 +469,7 @@ function update(){
 
   // ── PAYOUT TAB ──
   let py='';
-  if(noPool) py+=`<div class="warn-note" style="margin-bottom:12px"><strong>No pool at this margin.</strong> Adjust the slider above 30% to see payout schedule.</div>`;
+  if(noPool) py+=`<div class="warn-note" style="margin-bottom:12px"><strong>No pool at this margin.</strong> A minimum of 30% margin is required for a pool to apply.</div>`;
   py+=`<div class="info-note"><strong>How it works:</strong> ${isExp?'All roles paid on the same quarterly cycle.':'The Relationship Source (10% of pool) is paid at contract signing. The remaining 90% — Lead + Contributors — is distributed at the end of the month following each quarter of active work.'}</div>`;
   py+=`<div class="qcal">`;
   QUARTERS.forEach((q,i)=>{
