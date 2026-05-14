@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>VTP Sales Incentive Calculator</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 :root{
   --dark:#0d1319;--magenta:#E918C2;--blue:#18169E;--green:#1AE5D0;
@@ -15,7 +15,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Roboto',sans-serif;background:#f0f0f8;min-height:100vh;padding:32px 16px}
-.wrap{max-width:740px;margin:0 auto;border-radius:20px;overflow:hidden;box-shadow:0 8px 40px rgba(13,19,25,.18)}
+.wrap{max-width:760px;margin:0 auto;border-radius:20px;overflow:hidden;box-shadow:0 8px 40px rgba(13,19,25,.18)}
 .header{background:var(--dark);padding:28px 32px 24px;position:relative;overflow:hidden}
 .header-accent{position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--blue),var(--magenta),var(--green))}
 .header-inner{display:flex;align-items:center;justify-content:space-between}
@@ -27,11 +27,12 @@ h1{font-family:'Poppins',sans-serif;font-size:22px;font-weight:700;color:#fff;li
 .field label{display:block;font-family:'Poppins',sans-serif;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
 .input-wrap{position:relative}
 .input-wrap .prefix{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:500;font-size:14px}
+.input-wrap .suffix{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:500;font-size:14px}
 input[type=number]{width:100%;padding:9px 9px 9px 24px;border:1.5px solid var(--border);border-radius:9px;font-size:15px;font-weight:600;font-family:'Roboto',sans-serif;color:var(--blue);background:white}
 input[type=number]:focus{outline:none;border-color:var(--blue)}
+input[type=number].no-prefix{padding-left:12px}
+input[type=number].suffix-pad{padding-right:28px;padding-left:12px;text-align:right}
 input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue)}
-.range-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--hint);margin-top:2px}
-.input-wrap .suffix{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:500;font-size:14px}
 .margin-hint{font-size:10px;color:var(--hint);margin-top:5px}
 .margin-hint span{font-weight:600;color:var(--muted)}
 .tier-badge{margin-top:14px;border-radius:9px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px}
@@ -59,6 +60,7 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
 .key-label{font-size:12px;color:var(--blue)}
 .rate-row{margin-top:14px;padding-top:14px;border-top:1px solid var(--blue-border)}
 .rate-row .rl{font-family:'Poppins',sans-serif;font-size:11px;font-weight:600;color:var(--blue);display:flex;justify-content:space-between;margin-bottom:6px}
+.range-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--hint);margin-top:2px}
 .rate-note{font-size:11px;color:var(--muted);margin-top:4px}
 .locked-note{margin-top:10px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:8px 12px;font-size:11px;color:#7f1d1d}
 .unlocked-note{margin-top:10px;background:var(--green-light);border:1px solid var(--green-border);border-radius:8px;padding:8px 12px;font-size:11px;color:#0a6b63;font-weight:500;display:none}
@@ -120,6 +122,30 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
 .qcal-item.active .qcal-arrow{color:var(--green)}
 .qcal-payout{font-size:10px;font-weight:600;color:var(--muted)}
 .qcal-item.active .qcal-payout{color:var(--blue)}
+/* contributor toggle */
+.contrib-toggle{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin:16px 0 10px;display:flex;align-items:center;gap:14px}
+.contrib-toggle label{font-family:'Poppins',sans-serif;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+.contrib-toggle input{width:64px;padding:6px 8px;border:1.5px solid var(--border);border-radius:7px;font-size:14px;font-weight:700;font-family:'Roboto',sans-serif;color:var(--blue);background:white;text-align:center}
+.contrib-toggle input:focus{outline:none;border-color:var(--blue)}
+.contrib-note{font-size:11px;color:var(--hint)}
+/* breakdown table */
+.bd-section-label{font-family:'Poppins',sans-serif;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin:16px 0 8px}
+.breakdown-wrap{background:white;border:1px solid var(--border);border-radius:11px;overflow:hidden;margin-bottom:14px}
+.bdhdr{padding:10px 18px;display:grid;gap:8px;background:var(--dark)}
+.bdhdr span{font-family:'Poppins',sans-serif;font-size:9px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em}
+.bdhdr span.r{text-align:right}
+.bdrow{padding:11px 18px;display:grid;gap:8px;align-items:center;border-bottom:1px solid var(--surface2)}
+.bdrow:last-child{border-bottom:none}
+.bdrow-name{font-family:'Poppins',sans-serif;font-size:11px;font-weight:600;color:var(--blue)}
+.bdrow-sub{font-size:10px;color:var(--hint);margin-top:1px}
+.bdrow .pct{font-size:11px;font-weight:600;color:var(--muted);text-align:right}
+.bdrow .amt{font-size:12px;font-weight:700;color:var(--dark);text-align:right;font-family:'Roboto Mono',monospace}
+.bdrow .amt.hi{color:var(--blue)}
+.bdrow .amt.dim{color:var(--hint);font-weight:400}
+.bdrow .amt.sign{color:var(--magenta)}
+.bdtotal{padding:11px 18px;display:grid;gap:8px;align-items:center;background:var(--dark)}
+.bdtotal-label{font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;color:white}
+.bdtotal .amt{font-size:12px;font-weight:700;color:white;text-align:right;font-family:'Roboto Mono',monospace}
 .footer{background:var(--dark);padding:20px 32px;display:flex;align-items:center;justify-content:space-between}
 .footer-text{font-size:11px;color:rgba(255,255,255,.4);letter-spacing:.04em}
 .footer-mark{display:flex;align-items:center;gap:6px}
@@ -152,10 +178,10 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
           <label>Gross Margin %</label>
           <div class="input-wrap">
             <input type="number" id="marginInput" value="45" min="0" max="100" step="0.01"
-              style="padding:9px 28px 9px 9px;text-align:right" oninput="update()"/>
+              class="suffix-pad" oninput="update()"/>
             <span class="suffix">%</span>
           </div>
-          <div class="margin-hint">Exact figure, e.g. <span>45.38</span> &nbsp;·&nbsp; min <span>30%</span> &nbsp;·&nbsp; target <span>40%+</span></div>
+          <div class="margin-hint">Exact figure e.g. <span>45.38</span> &nbsp;·&nbsp; min <span>30%</span> &nbsp;·&nbsp; target <span>40%+</span></div>
         </div>
       </div>
       <div id="tierBadge" class="tier-badge"></div>
@@ -178,11 +204,11 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
       <div class="two-key">
         <div class="two-key-title">Variable Pool Rate — Two-Key Rule</div>
         <div class="key-row">
-          <div class="key-toggle" id="key1" onclick="toggleKey(1)"><span class="ck">✓</span></div>
-          <div class="key-label">Trailing 3-month P&L is at or above breakeven</div>
+          <div class="key-toggle" id="key1" onclick="toggleKey(1)"><span class="ck">&#10003;</span></div>
+          <div class="key-label">Trailing 3-month P&amp;L is at or above breakeven</div>
         </div>
         <div class="key-row">
-          <div class="key-toggle" id="key2" onclick="toggleKey(2)"><span class="ck">✓</span></div>
+          <div class="key-toggle" id="key2" onclick="toggleKey(2)"><span class="ck">&#10003;</span></div>
           <div class="key-label">EOY projection or 6-month runway points to breakeven or net profit</div>
         </div>
         <div class="rate-row" id="rateRow" style="display:none">
@@ -215,7 +241,7 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
   </div>
 
   <div class="footer">
-    <div class="footer-text">Sales Incentive Plan · Internal Use Only · 2026</div>
+    <div class="footer-text">Sales Incentive Plan &middot; Internal Use Only &middot; 2026</div>
     <div class="footer-mark">
       <img src="Verge-mark.png" alt="Verge" style="height:24px;width:auto"/>
       <span style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:rgba(255,255,255,.85)">verge</span>
@@ -225,24 +251,25 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
 
 <script>
 const fmt = n => "$" + Math.round(n).toLocaleString();
+const fmtD = n => "$" + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,",");
 
 const MONTHS=[1,2,3,4,5,6,7,8,9,10,11,12];
 const QUARTERS=[
-  {label:"Q1",range:"Jan–Mar",payout:"Paid April 30"},
-  {label:"Q2",range:"Apr–Jun",payout:"Paid July 31"},
-  {label:"Q3",range:"Jul–Sep",payout:"Paid October 31"},
-  {label:"Q4",range:"Oct–Dec",payout:"Paid January 31"},
+  {label:"Q1",range:"Jan\u2013Mar",payout:"Paid April 30"},
+  {label:"Q2",range:"Apr\u2013Jun",payout:"Paid July 31"},
+  {label:"Q3",range:"Jul\u2013Sep",payout:"Paid October 31"},
+  {label:"Q4",range:"Oct\u2013Dec",payout:"Paid January 31"},
 ];
 const Q_PAYOUT=["April 30","July 31","October 31","January 31"];
 
 // CONFIRMED SPLITS: 10 / 60 / 30
 const ROLES=[
-  {label:"Relationship Source",        pct:10, desc:"Originated or owned the client relationship — paid at signing"},
+  {label:"Relationship Source",        pct:10, desc:"Originated or owned the client relationship \u2014 paid at signing"},
   {label:"Proposal / Conversion Lead", pct:60, desc:"Ran the proposal process, closed the engagement"},
-  {label:"Active Contributors",        pct:30, desc:"Calls, writing, research (min 3 hrs) — shared pool"},
+  {label:"Active Contributors",        pct:30, desc:"Calls, writing, research (min 3 hrs) \u2014 shared pool"},
 ];
 
-// EXPANSION UNCHANGED: 20 / 40 / 40
+// EXPANSION ROLES: 20 / 40 / 40
 const EXPANSION_ROLES=[
   {label:"Account Lead",           pct:20, desc:"Exec sponsor / relationship maintenance role"},
   {label:"Delivery / Client Lead", pct:40, desc:"Led the extended scope of work"},
@@ -250,22 +277,22 @@ const EXPANSION_ROLES=[
 ];
 
 const MARGIN_TIERS=[
-  {range:"Below 30%", rate:0,    signal:"No pool — org absorbing delivery cost"},
-  {range:"30–34%",    rate:0.05, signal:"Minimal reward"},
-  {range:"35–39%",    rate:0.08, signal:"Partial reward"},
-  {range:"40%+",      rate:null, signal:"Full pool — rate set by Two-Key Rule"},
+  {range:"Below 30%", rate:0,    signal:"No pool \u2014 org absorbing delivery cost"},
+  {range:"30\u201334%",    rate:0.05, signal:"Minimal reward"},
+  {range:"35\u201339%",    rate:0.08, signal:"Partial reward"},
+  {range:"40%+",      rate:null, signal:"Full pool \u2014 rate set by Two-Key Rule"},
 ];
 
 const CLS_LABELS={netnew:"Net New",inbound:"Inbound / Org",cont:"Known Continuation",expansion:"Organic Growth"};
 
 let keys={k1:false,k2:false};
-let state={cv:100000,mp:45,cls:"netnew",months:6,tab:"buckets",rate:15,startQ:0};
+let state={cv:100000,mp:45,cls:"netnew",months:6,tab:"buckets",rate:15,startQ:0,numContributors:1};
 
 function getMarginTier(m){
-  if(m<30) return{rate:0,    label:"No Pool",           color:"#dc2626",bg:"#fef2f2",border:"#fecaca",msg:"Below 30% — org absorbing delivery cost. No pool."};
-  if(m<35) return{rate:0.05, label:"Minimal Pool (5%)", color:"#d97706",bg:"#fffbeb",border:"#fde68a",msg:"30–34% — below floor. Minimal reward."};
-  if(m<40) return{rate:0.08, label:"Partial Pool (8%)", color:"var(--blue)",bg:"var(--blue-light)",border:"var(--blue-border)",msg:"35–39% — below target. Partial reward."};
-  return        {rate:null,  label:"Full Pool",         color:"#0a6b63",bg:"var(--green-light)",border:"var(--green-border)",msg:"40%+ — full pool active."};
+  if(m<30) return{rate:0,    label:"No Pool",           color:"#dc2626",bg:"#fef2f2",border:"#fecaca",msg:"Below 30% \u2014 org absorbing delivery cost. No pool."};
+  if(m<35) return{rate:0.05, label:"Minimal Pool (5%)", color:"#d97706",bg:"#fffbeb",border:"#fde68a",msg:"30\u201334% \u2014 below floor. Minimal reward."};
+  if(m<40) return{rate:0.08, label:"Partial Pool (8%)", color:"var(--blue)",bg:"var(--blue-light)",border:"var(--blue-border)",msg:"35\u201339% \u2014 below target. Partial reward."};
+  return        {rate:null,  label:"Full Pool",         color:"#0a6b63",bg:"var(--green-light)",border:"var(--green-border)",msg:"40%+ \u2014 full pool active."};
 }
 
 function calcPool(profit,baseRate){
@@ -273,9 +300,9 @@ function calcPool(profit,baseRate){
   const t1=Math.min(profit,150000),t2=Math.min(Math.max(profit-150000,0),150000),t3=Math.max(profit-300000,0);
   const r1=baseRate,r2=Math.min(baseRate,0.08),r3=Math.min(baseRate,0.05);
   const a1=t1*r1,a2=t2*r2,a3=t3*r3;
-  const bd=[{label:`First ${fmt(t1)} of profit`,rate:+(r1*100).toFixed(1),amount:a1}];
-  if(t2>0) bd.push({label:`Next ${fmt(t2)} of profit`,rate:+(r2*100).toFixed(1),amount:a2});
-  if(t3>0) bd.push({label:`Above $300K`,rate:+(r3*100).toFixed(1),amount:a3});
+  const bd=[{label:"First "+fmt(t1)+" of profit",rate:+(r1*100).toFixed(1),amount:a1}];
+  if(t2>0) bd.push({label:"Next "+fmt(t2)+" of profit",rate:+(r2*100).toFixed(1),amount:a2});
+  if(t3>0) bd.push({label:"Above $300K",rate:+(r3*100).toFixed(1),amount:a3});
   return{pool:a1+a2+a3,breakdown:bd};
 }
 
@@ -351,9 +378,10 @@ function setStartQ(q){
 })();
 
 function update(){
-  const cv  = parseFloat(document.getElementById('contractValue').value)||0;
-  const mp  = parseFloat(document.getElementById('marginInput').value)||0;
-  const ar  = parseInt(document.getElementById('rateSlider').value)||15;
+  const cv   = parseFloat(document.getElementById('contractValue').value)||0;
+  const mp   = parseFloat(document.getElementById('marginInput').value)||0;
+  const ar   = parseInt(document.getElementById('rateSlider').value)||15;
+  const nc   = Math.max(1, state.numContributors||1);
   state.cv=cv; state.mp=mp; state.rate=ar;
 
   const unlocked = keys.k1&&keys.k2;
@@ -369,152 +397,208 @@ function update(){
     else           baseRate=unlocked?ar/100:0.15;
   }
 
-  const salesPool = isExp ? profit*0.08 : calcPool(profit,baseRate).pool;
-  const breakdown = isExp
-    ? [{label:"8% of net profit",rate:8,amount:salesPool}]
-    : calcPool(profit,baseRate).breakdown;
+  // pool calculations
+  const salesPool    = isExp ? profit*0.08 : calcPool(profit,baseRate).pool;
+  const breakdown    = isExp ? [{label:"8% of net profit",rate:8,amount:salesPool}] : calcPool(profit,baseRate).breakdown;
   const opsCost      = profit-salesPool;
   const monthlyBill  = cv/state.months;
   const roles        = isExp ? EXPANSION_ROLES : ROLES;
 
-  // Source = 10% of pool, paid at signing
-  // Lead + Contributors = remaining 90%, paid over quarterly events
-  const sourceSlice = isExp ? 0 : salesPool * 0.10;
-  const lcPool      = isExp ? salesPool : salesPool * 0.90;
+  // payout splits
+  const sourceSlice  = isExp ? 0 : salesPool*0.10;
+  const lcPool       = isExp ? salesPool : salesPool*0.90;
+  const payEvents    = getPayoutSchedule(state.startQ,state.months);
+  const nEvents      = payEvents.length||1;
+  const perEvent     = lcPool/nEvents;
+  const isShort      = state.months<=3;
 
-  const payEvents = getPayoutSchedule(state.startQ,state.months);
-  const perEvent  = payEvents.length>0 ? lcPool/payEvents.length : 0;
-  const isShort   = state.months<=3;
+  // rounding fix — final installment absorbs remainder
+  const stdInstallment   = Math.floor(perEvent);
+  const finalInstallment = Math.round(lcPool) - stdInstallment*(nEvents-1);
 
   document.getElementById('rateLabel').textContent=ar+'%';
 
-  const fullLabel=mp>=40?`Full Pool (${unlocked?ar:15}%)`:tier.label;
-  document.getElementById('tierBadge').style.cssText=`margin-top:14px;border-radius:9px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;background:${tier.bg};border:1px solid ${tier.border}`;
-  document.getElementById('tierBadge').innerHTML=`<span style="font-size:12px;font-weight:500;color:${tier.color}">${tier.msg}</span><span style="font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;color:${tier.color};white-space:nowrap">${fullLabel}</span>`;
-  if(unlocked) document.getElementById('unlockedNote').textContent=`Both conditions met — pool rate set to ${ar}%. Applies to all engagements closing this period.`;
+  const fullLabel=mp>=40?"Full Pool ("+(unlocked?ar:15)+"%)":tier.label;
+  document.getElementById('tierBadge').style.cssText="margin-top:14px;border-radius:9px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;background:"+tier.bg+";border:1px solid "+tier.border;
+  document.getElementById('tierBadge').innerHTML='<span style="font-size:12px;font-weight:500;color:'+tier.color+'">'+tier.msg+'</span><span style="font-family:\'Poppins\',sans-serif;font-size:11px;font-weight:700;color:'+tier.color+';white-space:nowrap">'+fullLabel+'</span>';
+  if(unlocked) document.getElementById('unlockedNote').textContent="Both conditions met \u2014 pool rate set to "+ar+"%. Applies to all engagements closing this period.";
 
-  document.getElementById('summaryCards').innerHTML=`
-    <div class="card card-dark"><div class="clabel">Contract Value</div><div class="cval">${fmt(cv)}</div><div class="csub">${fmt(monthlyBill)}/mo · ${state.months} months</div></div>
-    <div class="card card-light"><div class="clabel">Total Profit</div><div class="cval">${fmt(profit)}</div><div class="csub">${mp.toFixed(2)}% margin</div></div>
-    <div class="card card-green"><div class="clabel">Incentive Pool</div><div class="cval">${fmt(salesPool)}</div><div class="csub">${noPool?"No pool at this margin":CLS_LABELS[state.cls]}</div></div>`;
+  document.getElementById('summaryCards').innerHTML=
+    '<div class="card card-dark"><div class="clabel">Contract Value</div><div class="cval">'+fmt(cv)+'</div><div class="csub">'+fmt(monthlyBill)+'/mo \u00b7 '+state.months+' months</div></div>'+
+    '<div class="card card-light"><div class="clabel">Total Profit</div><div class="cval">'+fmt(profit)+'</div><div class="csub">'+mp.toFixed(2)+'% margin</div></div>'+
+    '<div class="card card-green"><div class="clabel">Incentive Pool</div><div class="cval">'+fmt(salesPool)+'</div><div class="csub">'+(noPool?"No pool at this margin":CLS_LABELS[state.cls])+'</div></div>';
 
   // ── BUCKETS TAB ──
-  let bk=`<div class="table-wrap">
-    <div class="th c3a"><span>Allocation</span><span class="r">Rate</span><span class="r">Amount</span></div>
-    <div class="tr pool-row c3a">
-      <div>
-        <div class="rtitle"><span class="dot" style="background:var(--magenta)"></span><span class="rname">Incentive Pool</span>
-        <span class="badge" style="background:var(--magenta-light);color:var(--magenta)">${CLS_LABELS[state.cls]}</span></div>
-        <div class="rnote">${isExp?'8% of net profit':'Tiered by profit size — see breakdown below'}</div>
-      </div>
-      <div class="r" style="font-size:13px;font-weight:700;color:var(--magenta)">${isExp?'8%':'Tiered'}</div>
-      <div class="r" style="font-size:14px;font-weight:700;color:var(--magenta)">${fmt(salesPool)}</div>
-    </div>`;
-  if(!isExp) breakdown.forEach(row=>{
-    bk+=`<div class="tr tier-sub c3a">
-      <span style="font-size:11px;color:var(--magenta)">${row.label}</span>
-      <span class="r" style="font-size:11px;color:var(--magenta)">${row.rate}%</span>
-      <span class="r" style="font-size:12px;font-weight:600;color:var(--magenta)">${fmt(row.amount)}</span>
-    </div>`;
+  let bk='<div class="table-wrap"><div class="th c3a"><span>Allocation</span><span class="r">Rate</span><span class="r">Amount</span></div><div class="tr pool-row c3a"><div><div class="rtitle"><span class="dot" style="background:var(--magenta)"></span><span class="rname">Incentive Pool</span><span class="badge" style="background:var(--magenta-light);color:var(--magenta)">'+CLS_LABELS[state.cls]+'</span></div><div class="rnote">'+(isExp?'8% of net profit':'Tiered by profit size \u2014 see breakdown below')+'</div></div><div class="r" style="font-size:13px;font-weight:700;color:var(--magenta)">'+(isExp?'8%':'Tiered')+'</div><div class="r" style="font-size:14px;font-weight:700;color:var(--magenta)">'+fmt(salesPool)+'</div></div>';
+  if(!isExp) breakdown.forEach(function(row){
+    bk+='<div class="tr tier-sub c3a"><span style="font-size:11px;color:var(--magenta)">'+row.label+'</span><span class="r" style="font-size:11px;color:var(--magenta)">'+row.rate+'%</span><span class="r" style="font-size:12px;font-weight:600;color:var(--magenta)">'+fmt(row.amount)+'</span></div>';
   });
-  bk+=`<div class="tr c3a" style="border-bottom:none">
-    <div><div class="rtitle"><span class="dot" style="background:var(--blue)"></span><span class="rname">Operating Costs</span></div>
-    <div class="rnote">Payroll, taxes, tooling & general operating expenses — managed at org level</div></div>
-    <div class="r" style="font-size:13px;font-weight:600;color:var(--muted)">—</div>
-    <div class="r" style="font-size:14px;font-weight:700;color:var(--blue)">${fmt(opsCost)}</div>
-  </div>
-  <div class="tr total c3a">
-    <span style="font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;color:var(--dark)">Total Profit</span>
-    <span class="r" style="font-size:12px;font-weight:700;color:var(--dark)">100%</span>
-    <span class="r" style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:var(--dark)">${fmt(profit)}</span>
-  </div></div>`;
-  bk+=`<div class="table-wrap"><div class="th c3d"><span>Margin</span><span class="r">Pool</span><span>Signal</span></div>`;
-  MARGIN_TIERS.forEach((t,i)=>{
+  bk+='<div class="tr c3a" style="border-bottom:none"><div><div class="rtitle"><span class="dot" style="background:var(--blue)"></span><span class="rname">Operating Costs</span></div><div class="rnote">Payroll, taxes, tooling &amp; general operating expenses</div></div><div class="r" style="font-size:13px;font-weight:600;color:var(--muted)">\u2014</div><div class="r" style="font-size:14px;font-weight:700;color:var(--blue)">'+fmt(opsCost)+'</div></div><div class="tr total c3a"><span style="font-family:\'Poppins\',sans-serif;font-size:12px;font-weight:700;color:var(--dark)">Total Profit</span><span class="r" style="font-size:12px;font-weight:700;color:var(--dark)">100%</span><span class="r" style="font-family:\'Poppins\',sans-serif;font-size:14px;font-weight:700;color:var(--dark)">'+fmt(profit)+'</span></div></div>';
+  bk+='<div class="table-wrap"><div class="th c3d"><span>Margin</span><span class="r">Pool</span><span>Signal</span></div>';
+  MARGIN_TIERS.forEach(function(t,i){
     const active=(t.rate===0&&mp<30)||(t.rate===0.05&&mp>=30&&mp<35)||(t.rate===0.08&&mp>=35&&mp<40)||(t.rate===null&&mp>=40);
-    const rl=t.rate===null?(unlocked?`${ar}%`:'15%'):(t.rate*100)+'%';
+    const rl=t.rate===null?(unlocked?ar+"%":"15%"):(t.rate*100)+"%";
     const tc=active?tier.color:'var(--hint)';
-    bk+=`<div class="tr c3d" style="background:${active?tier.bg:'white'};border-bottom:${i<3?'1px solid var(--surface2)':'none'}">
-      <span style="font-size:12px;font-weight:${active?700:400};color:${active?tier.color:'var(--muted)'}">${t.range}</span>
-      <span class="r" style="font-size:12px;font-weight:700;color:${tc}">${rl}</span>
-      <span style="font-size:11px;color:${tc}">${t.signal}${active?' ◀ current':''}</span>
-    </div>`;
+    bk+='<div class="tr c3d" style="background:'+(active?tier.bg:'white')+';border-bottom:'+(i<3?'1px solid var(--surface2)':'none')+'"><span style="font-size:12px;font-weight:'+(active?700:400)+';color:'+(active?tier.color:'var(--muted)')+'">'+t.range+'</span><span class="r" style="font-size:12px;font-weight:700;color:'+tc+'">'+rl+'</span><span style="font-size:11px;color:'+tc+'">'+t.signal+(active?' \u25c4 current':'')+'</span></div>';
   });
-  bk+=`</div>`;
+  bk+='</div>';
   document.getElementById('panel-buckets').innerHTML=bk;
 
   // ── POOL TAB ──
   let pl='';
-  if(noPool) pl+=`<div class="warn-box"><div style="font-size:16px">⚠</div><div><div style="font-family:'Poppins',sans-serif;font-weight:700;color:#dc2626;font-size:12px">No Pool at This Margin</div><div style="font-size:12px;color:#7f1d1d;margin-top:2px">Below 30% the org is absorbing delivery cost.</div></div></div>`;
-  pl+=`<div class="table-wrap"><div class="th c3b"><span>Role</span><span class="r">%</span><span class="r">Amount</span></div>`;
-  roles.forEach((r,i)=>{
-    pl+=`<div class="tr c3b${i<roles.length-1?' stripe':''}">
-      <div><div class="rname">${r.label}</div><div style="font-size:11px;color:var(--hint);margin-top:1px">${r.desc}</div></div>
-      <div class="r" style="font-size:13px;font-weight:600;color:var(--muted)">${r.pct}%</div>
-      <div class="r" style="font-size:14px;font-weight:700;color:var(--blue)">${fmt(salesPool*(r.pct/100))}</div>
-    </div>`;
+  if(noPool) pl+='<div class="warn-box"><div style="font-size:16px">\u26a0</div><div><div style="font-family:\'Poppins\',sans-serif;font-weight:700;color:#dc2626;font-size:12px">No Pool at This Margin</div><div style="font-size:12px;color:#7f1d1d;margin-top:2px">Below 30% the org is absorbing delivery cost.</div></div></div>';
+  pl+='<div class="table-wrap"><div class="th c3b"><span>Role</span><span class="r">%</span><span class="r">Amount</span></div>';
+  roles.forEach(function(r,i){
+    pl+='<div class="tr c3b'+(i<roles.length-1?' stripe':'')+'"><div><div class="rname">'+r.label+'</div><div style="font-size:11px;color:var(--hint);margin-top:1px">'+r.desc+'</div></div><div class="r" style="font-size:13px;font-weight:600;color:var(--muted)">'+r.pct+'%</div><div class="r" style="font-size:14px;font-weight:700;color:var(--blue)">'+fmt(salesPool*(r.pct/100))+'</div></div>';
   });
-  pl+=`<div class="tr total c3b">
-    <span style="font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;color:var(--dark)">Total Pool</span>
-    <span class="r" style="font-size:12px;font-weight:700;color:var(--dark)">100%</span>
-    <span class="r" style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:var(--dark)">${fmt(salesPool)}</span>
-  </div></div>`;
-  if(!isExp) pl+=`<div class="scenario-box"><div class="stitle">Common Scenarios</div>
-    ${[
-      {label:"Source and lead are different people",    note:`Source: ${fmt(salesPool*.10)} · Lead: ${fmt(salesPool*.60)} · Contributors share: ${fmt(salesPool*.30)}`},
-      {label:"Same person sources and leads the deal",  note:`That person earns ${fmt(salesPool*.70)} (70% of pool) · Contributors share: ${fmt(salesPool*.30)}`},
-      {label:"Lead only — no network source",           note:`Lead earns: ${fmt(salesPool*.60)} · Contributors share: ${fmt(salesPool*.30)} · Source 10% rolls to org pool`},
-    ].map(s=>`<div class="si"><div class="sl">${s.label}</div><div class="sn">${s.note}</div></div>`).join('')}
-  </div>`;
+  pl+='<div class="tr total c3b"><span style="font-family:\'Poppins\',sans-serif;font-size:12px;font-weight:700;color:var(--dark)">Total Pool</span><span class="r" style="font-size:12px;font-weight:700;color:var(--dark)">100%</span><span class="r" style="font-family:\'Poppins\',sans-serif;font-size:14px;font-weight:700;color:var(--dark)">'+fmt(salesPool)+'</span></div></div>';
+  if(!isExp) pl+='<div class="scenario-box"><div class="stitle">Common Scenarios</div>'+[
+    {label:"Source and lead are different people",   note:"Source: "+fmt(salesPool*.10)+" \u00b7 Lead: "+fmt(salesPool*.60)+" \u00b7 Contributors share: "+fmt(salesPool*.30)},
+    {label:"Same person sources and leads the deal", note:"That person earns "+fmt(salesPool*.70)+" (70% of pool) \u00b7 Contributors share: "+fmt(salesPool*.30)},
+    {label:"Lead only \u2014 no network source",     note:"Lead earns: "+fmt(salesPool*.60)+" \u00b7 Contributors share: "+fmt(salesPool*.30)+" \u00b7 Source 10% rolls to org pool"},
+  ].map(function(s){return '<div class="si"><div class="sl">'+s.label+'</div><div class="sn">'+s.note+'</div></div>';}).join('')+'</div>';
   document.getElementById('panel-pool').innerHTML=pl;
 
   // ── PAYOUT TAB ──
   let py='';
-  if(noPool) py+=`<div class="warn-note" style="margin-bottom:12px"><strong>No pool at this margin.</strong> A minimum of 30% margin is required for a pool to apply.</div>`;
-  py+=`<div class="info-note"><strong>How it works:</strong> ${isExp?'All roles paid on the same quarterly cycle.':'The Relationship Source (10% of pool) is paid at contract signing. The remaining 90% — Lead + Contributors — is distributed at the end of the month following each quarter of active work.'}</div>`;
-  py+=`<div class="qcal">`;
-  QUARTERS.forEach((q,i)=>{
+  if(noPool) py+='<div class="warn-note" style="margin-bottom:12px"><strong>No pool at this margin.</strong> A minimum of 30% margin is required for a pool to apply.</div>';
+  py+='<div class="info-note"><strong>How it works:</strong> '+(isExp?'All roles paid on the same quarterly cycle.':'The Relationship Source (10% of pool) is paid at contract signing. The remaining 90% \u2014 Lead + Contributors \u2014 is distributed at the end of the month following each quarter of active work.')+'</div>';
+  py+='<div class="qcal">';
+  QUARTERS.forEach(function(q,i){
     const active=i===state.startQ;
-    py+=`<div class="qcal-item${active?' active':''}">
-      <div class="qcal-q">${q.label}</div>
-      <div class="qcal-range">${q.range}</div>
-      <div class="qcal-arrow">↓</div>
-      <div class="qcal-payout">${q.payout}</div>
-    </div>`;
+    py+='<div class="qcal-item'+(active?' active':'')+'"><div class="qcal-q">'+q.label+'</div><div class="qcal-range">'+q.range+'</div><div class="qcal-arrow">\u2193</div><div class="qcal-payout">'+q.payout+'</div></div>';
   });
-  py+=`</div>`;
-  if(isShort) py+=`<div class="success-note"><strong>Short engagement carve-out applies.</strong> Full balance settled at the next scheduled payout date.</div>`;
-  const pColors=["var(--blue)","var(--magenta)","#0a6b63","#92400e"];
-  py+=`<div class="table-wrap"><div class="th c3c"><span>Event</span><span>Payout Date</span><span class="r">Amount</span></div>`;
-  if(!isExp){
-    py+=`<div class="tr stripe c3c">
-      <div class="rname" style="font-size:12px">Contract signed — Relationship Source</div>
-      <div style="font-size:12px;color:var(--muted)">At signing · 10% of pool</div>
-      <div class="r" style="font-size:14px;font-weight:700;color:var(--magenta)">${fmt(sourceSlice)}</div>
-    </div>`;
-  }
-  // Rounding fix: standard installment is floored to whole dollars;
-  // final payment absorbs any remainder so displayed amounts always sum to pool exactly.
-  const stdInstallment = Math.floor(perEvent);
-  const paidInEarlier  = stdInstallment * (payEvents.length - 1);
-  const finalInstallment = Math.round(lcPool) - paidInEarlier;
+  py+='</div>';
+  if(isShort) py+='<div class="success-note"><strong>Short engagement carve-out applies.</strong> Full balance settled at the next scheduled payout date.</div>';
 
-  payEvents.forEach((ev,i)=>{
-    const isLast = i === payEvents.length - 1;
-    const displayAmt = isLast ? finalInstallment : stdInstallment;
-    py+=`<div class="tr${!isLast?' stripe':''} c3c">
-      <div class="rname" style="font-size:12px">${ev.label}${isLast?' (final)':''}</div>
-      <div style="font-size:12px;color:var(--muted)">${ev.payoutDate} · 1/${payEvents.length} of ${isExp?'bonus pool':'Lead + Contributor pool (90%)'}</div>
-      <div class="r" style="font-size:14px;font-weight:700;color:${pColors[i%pColors.length]}">${fmt(displayAmt)}</div>
-    </div>`;
+  // quarterly total table
+  const pColors=["var(--blue)","var(--magenta)","#0a6b63","#92400e"];
+  py+='<div class="table-wrap"><div class="th c3c"><span>Event</span><span>Payout Date</span><span class="r">Amount</span></div>';
+  if(!isExp){
+    py+='<div class="tr stripe c3c"><div class="rname" style="font-size:12px">Contract signed \u2014 Relationship Source</div><div style="font-size:12px;color:var(--muted)">At signing \u00b7 10% of pool</div><div class="r" style="font-size:14px;font-weight:700;color:var(--magenta)">'+fmt(sourceSlice)+'</div></div>';
+  }
+  payEvents.forEach(function(ev,i){
+    const isLast=i===nEvents-1;
+    const displayAmt=isLast?finalInstallment:stdInstallment;
+    py+='<div class="tr'+(isLast?'':' stripe')+' c3c"><div class="rname" style="font-size:12px">'+ev.label+(isLast?' (final)':'')+'</div><div style="font-size:12px;color:var(--muted)">'+ev.payoutDate+' \u00b7 1/'+nEvents+' of '+(isExp?'bonus pool':'Lead + Contributor pool (90%)')+'</div><div class="r" style="font-size:14px;font-weight:700;color:'+pColors[i%pColors.length]+'">'+fmt(displayAmt)+'</div></div>';
   });
-  const totalPaid = isExp ? salesPool : Math.round(sourceSlice) + Math.round(lcPool);
-  py+=`<div class="tr total c3c">
-    <span style="font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;color:var(--dark)">Total Paid Out</span>
-    <span style="font-size:11px;color:var(--hint)">${Math.round(totalPaid)===Math.round(salesPool)?'✓ matches pool':''}</span>
-    <span class="r" style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:var(--dark)">${fmt(totalPaid)}</span>
-  </div></div>`;
-  py+=`<div class="info-note" style="margin-bottom:12px"><strong>W-2 employees only.</strong> Contractors are not eligible for SIP distributions.</div>`;
-  py+=`<div class="warn-note"><strong>Early cancellation rule:</strong> Payouts already made are retained. No further distributions beyond what's been proportionally earned.</div>`;
+  const totalPaid=isExp?salesPool:Math.round(sourceSlice)+Math.round(lcPool);
+  py+='<div class="tr total c3c"><span style="font-family:\'Poppins\',sans-serif;font-size:12px;font-weight:700;color:var(--dark)">Total Paid Out</span><span style="font-size:11px;color:var(--hint)">'+(Math.round(totalPaid)===Math.round(salesPool)?'\u2713 matches pool':'')+'</span><span class="r" style="font-family:\'Poppins\',sans-serif;font-size:14px;font-weight:700;color:var(--dark)">'+fmt(totalPaid)+'</span></div></div>';
+  py+='<div class="info-note" style="margin-bottom:12px"><strong>W-2 employees only.</strong> Contractors are not eligible for SIP distributions.</div>';
+  py+='<div class="warn-note"><strong>Early cancellation rule:</strong> Payouts already made are retained. No further distributions beyond what\'s been proportionally earned.</div>';
+
+  // ── ROLE BREAKDOWN SECTION (only when pool > 0) ──
+  if(salesPool>0){
+    py+='<div class="contrib-toggle"><label>Active contributors</label><input type="number" value="'+nc+'" min="1" max="20" step="1" onchange="state.numContributors=Math.max(1,parseInt(this.value)||1);update()"/><span class="contrib-note">'+(isExp?'Contributors pool (40%)':'Contributors pool (30%)')+' split '+(nc>1?nc+' ways':'to 1 person')+'</span></div>';
+
+    if(!isExp){
+      // Standard breakdown
+      // source: paid at signing
+      // lead: 60% over nEvents quarters
+      // contributors total: 30% over nEvents quarters
+      // per contributor: 30%/nc over nEvents quarters
+      const leadTotal=salesPool*0.60;
+      const contTotal=salesPool*0.30;
+      const ppTotal  =salesPool*0.30/nc;
+
+      const leadStd  =Math.floor(leadTotal/nEvents); const leadFin=Math.round(leadTotal)-leadStd*(nEvents-1);
+      const contStd  =Math.floor(contTotal/nEvents); const contFin=Math.round(contTotal)-contStd*(nEvents-1);
+      const ppStd    =Math.floor(ppTotal/nEvents);   const ppFin  =Math.round(ppTotal)-ppStd*(nEvents-1);
+
+      const qLabels=payEvents.map(function(ev){return ev.label.replace(' activity','');});
+      const gridStyle='grid-template-columns:1fr 44px repeat('+nEvents+',1fr)';
+
+      py+='<div class="bd-section-label">Role-by-role quarterly breakdown</div>';
+      py+='<div class="breakdown-wrap">';
+
+      // header
+      py+='<div class="bdhdr" style="'+gridStyle+'"><span>Role</span><span class="r">%</span>'+qLabels.map(function(q){return '<span class="r">'+q+'</span>';}).join('')+'</div>';
+
+      // Source row
+      py+='<div class="bdrow" style="'+gridStyle+'"><div><div class="bdrow-name">Relationship Source</div><div class="bdrow-sub">Paid at contract signing</div></div><div class="pct">10%</div>';
+      qLabels.forEach(function(_,i){
+        py+=i===0?'<div class="amt sign">'+fmt(sourceSlice)+'<div style="font-size:9px;color:var(--magenta);font-family:Roboto,sans-serif;font-weight:400">at signing</div></div>':'<div class="amt dim">\u2014</div>';
+      });
+      py+='</div>';
+
+      // Lead row
+      py+='<div class="bdrow" style="'+gridStyle+';background:var(--surface2)"><div><div class="bdrow-name">Proposal / Conversion Lead</div><div class="bdrow-sub">Paid quarterly</div></div><div class="pct">60%</div>';
+      payEvents.forEach(function(_,i){
+        const isLast=i===nEvents-1;
+        py+='<div class="amt">'+fmt(isLast?leadFin:leadStd)+'</div>';
+      });
+      py+='</div>';
+
+      // Contributors total row
+      py+='<div class="bdrow" style="'+gridStyle+'"><div><div class="bdrow-name">Active Contributors (total)</div><div class="bdrow-sub">Shared across '+nc+' contributor'+(nc>1?'s':'')+'</div></div><div class="pct">30%</div>';
+      payEvents.forEach(function(_,i){
+        const isLast=i===nEvents-1;
+        py+='<div class="amt">'+fmt(isLast?contFin:contStd)+'</div>';
+      });
+      py+='</div>';
+
+      // Per contributor row
+      py+='<div class="bdrow" style="'+gridStyle+';background:var(--surface2)"><div><div class="bdrow-name">Per contributor</div><div class="bdrow-sub">\u00f7 '+nc+' person'+(nc>1?'s':'')+'</div></div><div class="pct" style="font-size:10px">'+(30/nc).toFixed(1)+'%</div>';
+      payEvents.forEach(function(_,i){
+        const isLast=i===nEvents-1;
+        py+='<div class="amt hi">'+fmt(isLast?ppFin:ppStd)+'</div>';
+      });
+      py+='</div>';
+
+      // Total row
+      py+='<div class="bdtotal" style="'+gridStyle+'"><div class="bdtotal-label">Total quarterly payout</div><div class="amt" style="color:rgba(255,255,255,.5);text-align:right">90%</div>';
+      payEvents.forEach(function(_,i){
+        const isLast=i===nEvents-1;
+        const t=(isLast?leadFin:leadStd)+(isLast?contFin:contStd);
+        py+='<div class="amt">'+fmt(t)+'</div>';
+      });
+      py+='</div>';
+      py+='</div>'; // breakdown-wrap
+
+    } else {
+      // Expansion breakdown: 20 / 40 / 40
+      const alTotal=salesPool*0.20; const dlTotal=salesPool*0.40;
+      const ecTotal=salesPool*0.40; const ppTotal =salesPool*0.40/nc;
+
+      const alStd=Math.floor(alTotal/nEvents); const alFin=Math.round(alTotal)-alStd*(nEvents-1);
+      const dlStd=Math.floor(dlTotal/nEvents); const dlFin=Math.round(dlTotal)-dlStd*(nEvents-1);
+      const ecStd=Math.floor(ecTotal/nEvents); const ecFin=Math.round(ecTotal)-ecStd*(nEvents-1);
+      const ppStd=Math.floor(ppTotal/nEvents); const ppFin=Math.round(ppTotal)-ppStd*(nEvents-1);
+
+      const qLabels=payEvents.map(function(ev){return ev.label.replace(' activity','');});
+      const gridStyle='grid-template-columns:1fr 44px repeat('+nEvents+',1fr)';
+
+      py+='<div class="bd-section-label">Role-by-role quarterly breakdown \u2014 Expansion</div>';
+      py+='<div class="breakdown-wrap">';
+      py+='<div class="bdhdr" style="'+gridStyle+'"><span>Role</span><span class="r">%</span>'+qLabels.map(function(q){return '<span class="r">'+q+'</span>';}).join('')+'</div>';
+
+      var expRoles=[
+        {name:"Account Lead",         sub:"Relationship maintenance",           pct:"20%", std:alStd, fin:alFin, hi:false},
+        {name:"Delivery / Client Lead",sub:"Led scope of work",                 pct:"40%", std:dlStd, fin:dlFin, hi:false},
+        {name:"Contributors (total)",  sub:"Shared across "+nc+" contributor"+(nc>1?"s":""), pct:"40%", std:ecStd, fin:ecFin, hi:false},
+        {name:"Per contributor",       sub:"\u00f7 "+nc+" person"+(nc>1?"s":""), pct:(40/nc).toFixed(1)+"%", std:ppStd, fin:ppFin, hi:true},
+      ];
+      expRoles.forEach(function(role,ri){
+        const bg=ri%2===0?'':'background:var(--surface2)';
+        py+='<div class="bdrow" style="'+gridStyle+';'+bg+'"><div><div class="bdrow-name'+(role.hi?' hi':'')+'">'+ role.name+'</div><div class="bdrow-sub">'+role.sub+'</div></div><div class="pct">'+role.pct+'</div>';
+        payEvents.forEach(function(_,i){
+          const isLast=i===nEvents-1;
+          py+='<div class="amt'+(role.hi?' hi':'')+'">'+fmt(isLast?role.fin:role.std)+'</div>';
+        });
+        py+='</div>';
+      });
+
+      py+='<div class="bdtotal" style="'+gridStyle+'"><div class="bdtotal-label">Total quarterly payout</div><div class="amt" style="color:rgba(255,255,255,.5);text-align:right">100%</div>';
+      payEvents.forEach(function(_,i){
+        const isLast=i===nEvents-1;
+        const t=(isLast?alFin:alStd)+(isLast?dlFin:dlStd)+(isLast?ecFin:ecStd);
+        py+='<div class="amt">'+fmt(t)+'</div>';
+      });
+      py+='</div>';
+      py+='</div>'; // breakdown-wrap
+    }
+  }
+
   document.getElementById('panel-payout').innerHTML=py;
 }
 
