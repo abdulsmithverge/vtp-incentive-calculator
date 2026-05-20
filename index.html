@@ -35,6 +35,13 @@ input[type=number].suffix-pad{padding-right:28px;padding-left:12px;text-align:ri
 input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue)}
 .margin-hint{font-size:10px;color:var(--hint);margin-top:5px}
 .margin-hint span{font-weight:600;color:var(--muted)}
+.mode-toggle{display:flex;gap:0;margin-bottom:14px;background:var(--surface2);border:1.5px solid var(--border);border-radius:9px;overflow:hidden}
+.mode-btn{flex:1;padding:8px 12px;border:none;background:transparent;font-family:'Poppins',sans-serif;font-size:10px;font-weight:600;color:var(--muted);cursor:pointer;letter-spacing:.06em;text-transform:uppercase;transition:all .15s}
+.mode-btn.active{background:var(--blue);color:white}
+.field-disabled input{color:var(--hint)!important;background:#f4f4f8!important;border-color:var(--border)!important}
+.field-disabled label{color:var(--hint)!important}
+.field-disabled .suffix,.field-disabled .prefix{color:var(--hint)!important}
+.derived-tag{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green);background:rgba(26,229,208,.12);border:1px solid rgba(26,229,208,.3);border-radius:4px;padding:1px 6px;margin-left:6px;vertical-align:middle}
 .tier-badge{margin-top:14px;border-radius:9px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px}
 .section-label{font-family:'Poppins',sans-serif;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:16px 0 8px}
 .months{display:flex;gap:6px;flex-wrap:wrap}
@@ -166,15 +173,19 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
 
   <div class="body">
     <div class="inputs">
-      <div class="grid2">
-        <div class="field">
-          <label>Contract Value</label>
-          <div class="input-wrap">
-            <span class="prefix">$</span>
-            <input type="number" id="contractValue" value="100000" oninput="update()"/>
-          </div>
+      <div class="field" style="margin-bottom:14px">
+        <label>Contract Value</label>
+        <div class="input-wrap">
+          <span class="prefix">$</span>
+          <input type="number" id="contractValue" value="100000" oninput="update()"/>
         </div>
-        <div class="field">
+      </div>
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="modeA" onclick="setInputMode('A')">I know the margin</button>
+        <button class="mode-btn" id="modeB" onclick="setInputMode('B')">I know the cost</button>
+      </div>
+      <div class="grid2">
+        <div class="field" id="fieldMargin">
           <label>Gross Margin %</label>
           <div class="input-wrap">
             <input type="number" id="marginInput" value="45" min="0" max="100" step="0.01"
@@ -182,6 +193,15 @@ input[type=range]{width:100%;margin:4px 0;cursor:pointer;accent-color:var(--blue
             <span class="suffix">%</span>
           </div>
           <div class="margin-hint">Exact figure e.g. <span>45.38</span> &nbsp;·&nbsp; min <span>30%</span> &nbsp;·&nbsp; target <span>40%+</span></div>
+        </div>
+        <div class="field" id="fieldCost">
+          <label>Total Cost ($)</label>
+          <div class="input-wrap">
+            <span class="prefix">$</span>
+            <input type="number" id="costInput" value="" min="0" step="100"
+              oninput="update()" placeholder="0"/>
+          </div>
+          <div class="margin-hint">Margin % calculated automatically</div>
         </div>
       </div>
       <div id="tierBadge" class="tier-badge"></div>
@@ -286,7 +306,21 @@ const MARGIN_TIERS=[
 const CLS_LABELS={netnew:"Net New",inbound:"Inbound / Org",cont:"Known Continuation",expansion:"Organic Growth"};
 
 let keys={k1:false,k2:false};
-let state={cv:100000,mp:45,cls:"netnew",months:6,tab:"buckets",rate:15,startQ:0,numContributors:1};
+let state={cv:100000,mp:45,cls:"netnew",months:6,tab:"buckets",rate:15,startQ:0,numContributors:1,inputMode:"A"};
+
+function setInputMode(mode){
+  state.inputMode=mode;
+  document.getElementById('modeA').classList.toggle('active',mode==='A');
+  document.getElementById('modeB').classList.toggle('active',mode==='B');
+  const mA=mode==='A'; const mB=mode==='B';
+  // Mode A: margin active, cost disabled
+  document.getElementById('fieldMargin').classList.toggle('field-disabled',!mA);
+  document.getElementById('marginInput').disabled=!mA;
+  // Mode B: cost active, margin disabled
+  document.getElementById('fieldCost').classList.toggle('field-disabled',!mB);
+  document.getElementById('costInput').disabled=!mB;
+  update();
+}
 
 function getMarginTier(m){
   if(m<30) return{rate:0,    label:"No Pool",           color:"#dc2626",bg:"#fef2f2",border:"#fecaca",msg:"Below 30% \u2014 org absorbing delivery cost. No pool."};
@@ -602,6 +636,7 @@ function update(){
   document.getElementById('panel-payout').innerHTML=py;
 }
 
+setInputMode("A");
 update();
 </script>
 </body>
