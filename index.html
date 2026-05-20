@@ -412,10 +412,19 @@ function setStartQ(q){
 })();
 
 function update(){
-  const cv   = parseFloat(document.getElementById('contractValue').value)||0;
-  const mp   = parseFloat(document.getElementById('marginInput').value)||0;
-  const ar   = parseInt(document.getElementById('rateSlider').value)||15;
-  const nc   = Math.max(1, state.numContributors||1);
+  const cv  = parseFloat(document.getElementById('contractValue').value)||0;
+  const ar  = parseInt(document.getElementById('rateSlider').value)||15;
+  const nc  = Math.max(1, state.numContributors||1);
+  let mp;
+  if(state.inputMode==='B'){
+    const tc = parseFloat(document.getElementById('costInput').value)||0;
+    mp = cv>0 ? ((cv-tc)/cv)*100 : 0;
+    document.getElementById('marginInput').value = mp.toFixed(2);
+  } else {
+    mp = parseFloat(document.getElementById('marginInput').value)||0;
+    const derivedCost = cv*(1-(mp/100));
+    document.getElementById('costInput').value = derivedCost>0 ? Math.round(derivedCost) : '';
+  }
   state.cv=cv; state.mp=mp; state.rate=ar;
 
   const unlocked = keys.k1&&keys.k2;
